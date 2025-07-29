@@ -1,0 +1,71 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pathfinder Character Generator</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  </head> 
+  <body>
+    <div id="app" class="container-fluid py-4">
+      <main-page 
+        v-if="showMainPage" 
+        @create-character="showStepperComponent"
+        class="mb-4">
+      </main-page>
+      <div v-if="showStepper" class="row justify-content-center">
+        <div class="col-md-6 mb-3">
+          <stepper 
+            class="stepper-panel card p-3"
+            @finished="onStepperFinished"
+            @update-character="updateCharacter"
+          ></stepper>
+        </div>
+        <div class="col-md-6 mb-3">
+          <character-sheet 
+            class="card p-3"
+            :character="currentCharacter"
+          ></character-sheet>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/vue.js"></script>
+    <script src="js/components/main-page.js"></script>
+    <script src="js/components/stepper/stepper.js"></script>
+    <script src="js/components/stepper/step-ability-scores.js"></script>
+    <script src="js/components/stepper/ability-scores/point-buy-method.js"></script>
+    <script src="js/components/stepper/ability-scores/standard-array-method.js"></script>
+    <script src="js/components/stepper/ability-scores/roll-dice-method.js"></script>
+    <script src="js/components/stepper/step-details.js"></script>
+    <script src="js/components/stepper/step-class.js"></script>
+    <script src="js/components/stepper/step-race.js"></script>
+    <script src="js/components/stepper/step-skills.js"></script>
+    <script src="js/components/stepper/step-feats.js"></script>
+    <script src="js/components/stepper/step-equipment.js"></script>
+    <script src="js/components/character-sheet/character-sheet.js"></script>
+    <script>
+    new Vue({
+      el: '#app',
+      data: {
+        showMainPage: true,
+        showStepper: false,
+        currentCharacter: {}
+      },
+      methods: {
+        showStepperComponent() {
+          this.showMainPage = false;
+          this.showStepper = true;
+          this.currentCharacter = {}; // Reset for new character
+        },
+        updateCharacter(character) {
+          this.currentCharacter = character;
+        },
+        onStepperFinished() {
+          this.showStepper = false;
+          this.showMainPage = true;
+        }
+      }
+    });
+    </script>
+  </body>
+</html>
