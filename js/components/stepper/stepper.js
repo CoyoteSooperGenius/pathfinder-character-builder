@@ -16,7 +16,11 @@ Vue.component('stepper', {
         </div>
       </div>
       <div class="step-content mb-4">
-        <component :is="steps[currentStep].component"></component>
+        <component 
+          :is="steps[currentStep].component" 
+          @step-complete="onStepComplete"
+          ref="currentStepComponent">
+        </component>
       </div>
       <div class="d-flex justify-content-between">
         <button 
@@ -31,6 +35,7 @@ Vue.component('stepper', {
           v-if="currentStep < steps.length - 1" 
           @click="nextStep" 
           class="btn btn-primary"
+          :disabled="!canProceed"
         >
           Next
         </button>
@@ -47,6 +52,7 @@ Vue.component('stepper', {
   data() {
     return {
       currentStep: 0,
+      canProceed: true,
       steps: [
         { title: 'Determine Ability Scores', component: 'step-ability-scores' },
         { title: 'Pick Your Race', component: 'step-race' },
@@ -59,18 +65,37 @@ Vue.component('stepper', {
     };
   },
   methods: {
+    onStepComplete(isComplete) {
+      this.canProceed = isComplete;
+    },
     nextStep() {
-      if (this.currentStep < this.steps.length - 1) {
+      if (this.currentStep < this.steps.length - 1 && this.canProceed) {
+        // Save ability scores if we're leaving the ability scores step
+        if (this.currentStep === 0) {
+          this.saveAbilityScores();
+        }
         this.currentStep++;
+        this.canProceed = true; // Reset for next step
       }
     },
     prevStep() {
       if (this.currentStep > 0) {
         this.currentStep--;
+        this.canProceed = this.currentStep > 0; // Allow going back except from ability scores
+      }
+    },
+    saveAbilityScores() {
+      if (this.$refs.currentStepComponent && this.$refs.currentStepComponent.getAbilityScores) {
+        const abilityScores = this.$refs.currentStepComponent.getAbilityScores();
+        localStorage.setItem('currentAbilityScores', JSON.stringify(abilityScores));
       }
     },
     finish() {
       this.$emit('finished');
     }
+  },
+  mounted() {
+    // Start with Next disabled for ability scores step
+    this.canProceed = false;
   }
 });
