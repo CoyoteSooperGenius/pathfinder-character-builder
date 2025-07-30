@@ -3,6 +3,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pathfinder Character Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="css/sandstone.css">
   </head> 
   <body>
@@ -17,13 +18,15 @@
           <stepper 
             class="stepper-panel card p-3"
             @finished="onStepperFinished"
-            @update-character="updateCharacter"
+            @ability-scores-saved="onAbilityScoresSaved"
+            @race-data-saved="onRaceDataSaved"
           ></stepper>
         </div>
         <div class="col-md-6 mb-3">
           <character-sheet 
             class="card p-3"
             :character="currentCharacter"
+            ref="characterSheet"
           ></character-sheet>
         </div>
       </div>
@@ -39,6 +42,11 @@
     <script src="js/components/stepper/step-details.js"></script>
     <script src="js/components/stepper/step-class.js"></script>
     <script src="js/components/stepper/step-race.js"></script>
+    <script src="js/components/stepper/race/available-races-card.js"></script>
+    <script src="js/components/stepper/race/ability-adjustments-card.js"></script>
+    <script src="js/components/stepper/race/favored-class-card.js"></script>
+    <script src="js/components/stepper/race/languages-card.js"></script>
+    <script src="js/components/stepper/race/racial-traits-card.js"></script>
     <script src="js/components/stepper/step-skills.js"></script>
     <script src="js/components/stepper/step-feats.js"></script>
     <script src="js/components/stepper/step-equipment.js"></script>
@@ -63,6 +71,18 @@
         onStepperFinished() {
           this.showStepper = false;
           this.showMainPage = true;
+        },
+        onAbilityScoresSaved() {
+          // Call the character sheet's update method
+          if (this.$refs.characterSheet) {
+            this.$refs.characterSheet.updateAbilityScores();
+          }
+        },
+        onRaceDataSaved() {
+          // Call the character sheet's update method for all race-related data
+          if (this.$refs.characterSheet) {
+            this.$refs.characterSheet.updateFromLocalStorage();
+          }
         }
       }
     });
