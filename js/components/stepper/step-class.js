@@ -1,16 +1,16 @@
 Vue.component('step-class', {
   template: `
     <div>
-      <h3>Class Selection</h3>
-      <p>Step 3: Choose your character's class.</p>
-      
       <!-- Class Selection Section -->
       <div class="card mb-4">
-        <div class="card-header">
-          <h5 class="mb-0">Available Classes</h5>
+        <div class="card-header" @click="toggleClassSelection" style="cursor: pointer;">
+          <h5 class="mb-0">
+            Available Classes
+            <i class="fas" :class="showClassSelection ? 'fa-chevron-up' : 'fa-chevron-down'" style="float: right;"></i>
+          </h5>
         </div>
-        <div class="card-body">
-          <div class="row">
+        <div class="card-body" v-show="showClassSelection">
+          <div class="row" v-if="coreClasses.length > 0">
             <div 
               v-for="classOption in coreClasses" 
               :key="classOption.name"
@@ -34,6 +34,9 @@ Vue.component('step-class', {
                 </div>
               </div>
             </div>
+          </div>
+          <div v-else class="text-center">
+            <i class="fas fa-spinner fa-spin"></i> Loading classes...
           </div>
         </div>
       </div>
@@ -69,32 +72,34 @@ Vue.component('step-class', {
         </div>
       </div>
 
-      <!-- 1st Level Options Placeholder -->
+      <!-- 1st Level Options -->
       <div v-if="selectedClass" class="card">
         <div class="card-header">
           <h5 class="mb-0">1st Level Options</h5>
         </div>
         <div class="card-body">
-          <div class="alert alert-info">
+          <!-- Fighter Bonus Feat Selection -->
+          <div v-if="selectedClass === 'Fighter'" class="mb-3">
+            <fighter-bonus-feat 
+              :selected-bonus-feat="selectedBonusFeat" 
+              @feat-selected="onFeatSelected">
+            </fighter-bonus-feat>
+          </div>
+          
+          <!-- Placeholder for other classes -->
+          <div v-else-if="isSpellcaster()" class="alert alert-info">
             <i class="fas fa-info-circle me-2"></i>
-            <strong>Coming Soon:</strong> 1st level class-specific options such as spell selection, 
-            domains, schools, bloodlines, and other class features will be implemented here.
+            <strong>Coming Soon:</strong> Spell selection for {{ selectedClass }} will be implemented here.
           </div>
           
-          <!-- Placeholder sections for different class types -->
-          <div v-if="isSpellcaster()" class="mb-3">
-            <h6>Spell Selection</h6>
-            <p class="text-muted">Choose your starting spells and cantrips.</p>
+          <div v-else-if="hasSpecialization()" class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>Coming Soon:</strong> {{ getSpecializationText() }}
           </div>
           
-          <div v-if="hasSpecialization()" class="mb-3">
-            <h6>Specialization</h6>
-            <p class="text-muted">{{ getSpecializationText() }}</p>
-          </div>
-          
-          <div class="mb-3">
-            <h6>Starting Equipment</h6>
-            <p class="text-muted">Your class grants specific starting equipment and gold.</p>
+          <div v-else class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>Coming Soon:</strong> 1st level class-specific options for {{ selectedClass }} will be implemented here.
           </div>
         </div>
       </div>
@@ -103,146 +108,45 @@ Vue.component('step-class', {
   data() {
     return {
       selectedClass: null,
-      coreClasses: [
-        {
-          name: 'Barbarian',
-          description: 'A fierce warrior who can enter a battle rage.',
-          hitDie: 12,
-          skillPoints: 4,
-          baseAttackBonus: 'High',
-          saves: { fortitude: 'High', reflex: 'Low', will: 'Low' },
-          classFeatures: ['Rage', 'Fast Movement'],
-          weaponProficiencies: 'Simple and martial weapons',
-          armorProficiencies: 'Light and medium armor, shields',
-          classSkills: ['Acrobatics', 'Climb', 'Craft', 'Handle Animal', 'Intimidate', 'Knowledge (nature)', 'Perception', 'Ride', 'Survival', 'Swim']
-        },
-        {
-          name: 'Bard',
-          description: 'A master of song, speech, and the magic they contain.',
-          hitDie: 8,
-          skillPoints: 6,
-          baseAttackBonus: 'Medium',
-          saves: { fortitude: 'Low', reflex: 'High', will: 'High' },
-          classFeatures: ['Bardic Knowledge', 'Bardic Performance', 'Cantrips', 'Spells', 'Countersong', 'Distraction', 'Fascinate', 'Inspire Courage +1'],
-          weaponProficiencies: 'Simple weapons, longsword, rapier, sap, short sword, shortbow, whip',
-          armorProficiencies: 'Light armor, shields',
-          classSkills: ['Acrobatics', 'Appraise', 'Bluff', 'Climb', 'Craft', 'Diplomacy', 'Disguise', 'Escape Artist', 'Intimidate', 'Knowledge (all)', 'Linguistics', 'Perception', 'Perform', 'Profession', 'Sense Motive', 'Sleight of Hand', 'Spellcraft', 'Stealth', 'Use Magic Device']
-        },
-        {
-          name: 'Cleric',
-          description: 'A devout follower of a deity who wields divine magic.',
-          hitDie: 8,
-          skillPoints: 2,
-          baseAttackBonus: 'Medium',
-          saves: { fortitude: 'High', reflex: 'Low', will: 'High' },
-          classFeatures: ['Aura', 'Channel Energy 1d6', 'Domains', 'Orisons', 'Spells'],
-          weaponProficiencies: 'Simple weapons, Deity\'s favored weapon',
-          armorProficiencies: 'Light and medium armor, shields',
-          classSkills: ['Appraise', 'Craft', 'Diplomacy', 'Heal', 'Knowledge (arcana)', 'Knowledge (history)', 'Knowledge (nobility)', 'Knowledge (planes)', 'Knowledge (religion)', 'Linguistics', 'Profession', 'Sense Motive', 'Spellcraft']
-        },
-        {
-          name: 'Druid',
-          description: 'A servant of nature who commands elemental forces and animal companions.',
-          hitDie: 8,
-          skillPoints: 4,
-          baseAttackBonus: 'Medium',
-          saves: { fortitude: 'High', reflex: 'Low', will: 'High' },
-          classFeatures: ['Nature Bond', 'Nature Sense', 'Orisons', 'Spells', 'Wild Empathy'],
-          weaponProficiencies: 'Clubs, daggers, darts, javelins, maces, quarterstaffs, scimitars, sickles, slings, spears',
-          armorProficiencies: 'Light and medium non-metal armor, non-metal shields',
-          classSkills: ['Climb', 'Craft', 'Fly', 'Handle Animal', 'Heal', 'Knowledge (geography)', 'Knowledge (nature)', 'Perception', 'Profession', 'Ride', 'Spellcraft', 'Survival', 'Swim']
-        },
-        {
-          name: 'Fighter',
-          description: 'A master of martial combat skilled with a variety of weapons and armor.',
-          hitDie: 10,
-          skillPoints: 2,
-          baseAttackBonus: 'High',
-          saves: { fortitude: 'High', reflex: 'Low', will: 'Low' },
-          classFeatures: ['Bonus Feat'],
-          weaponProficiencies: 'Simple and martial weapons',
-          armorProficiencies: 'All armor and shields',
-          classSkills: ['Climb', 'Craft', 'Handle Animal', 'Intimidate', 'Knowledge (dungeoneering)', 'Knowledge (engineering)', 'Profession', 'Ride', 'Survival', 'Swim']
-        },
-        {
-          name: 'Monk',
-          description: 'A master of martial arts, harnessing inner power.',
-          hitDie: 8,
-          skillPoints: 4,
-          baseAttackBonus: 'Medium',
-          saves: { fortitude: 'High', reflex: 'High', will: 'High' },
-          classFeatures: ['Bonus Feat','AC Bonus', 'Flurry of Blows', 'Stunning Fist', 'Unarmed Strike', 'Unarmed Damage'],
-          weaponProficiencies: 'Club, crossbow (light or heavy), dagger, handaxe, javelin, kama, nunchaku, quarterstaff, sai, shortspear, short sword, shuriken, siangham, sling',
-          armorProficiencies: 'None',
-          classSkills: ['Acrobatics', 'Climb', 'Craft', 'Escape Artist', 'Intimidate', 'Knowledge (history)', 'Knowledge (religion)', 'Perception', 'Perform', 'Profession', 'Ride', 'Sense Motive', 'Stealth', 'Swim']
-        },
-        {
-          name: 'Paladin',
-          description: 'A holy champion who smites evil with divine power.',
-          hitDie: 10,
-          skillPoints: 2,
-          baseAttackBonus: 'High',
-          saves: { fortitude: 'High', reflex: 'Low', will: 'High' },
-          classFeatures: ['Aura of Good', 'Detect Evil', 'Smite Evil'],
-          weaponProficiencies: 'Simple and martial weapons',
-          armorProficiencies: 'All armor and shields',
-          classSkills: ['Craft', 'Diplomacy', 'Handle Animal', 'Heal', 'Knowledge (nobility)', 'Knowledge (religion)', 'Profession', 'Ride', 'Sense Motive', 'Spellcraft']
-        },
-        {
-          name: 'Ranger',
-          description: 'A skilled hunter and tracker who dwells on the edges of civilization.',
-          hitDie: 10,
-          skillPoints: 6,
-          baseAttackBonus: 'High',
-          saves: { fortitude: 'High', reflex: 'High', will: 'Low' },
-          classFeatures: ['1st Favored Enemy', 'Track', 'Wild Empathy'],
-          weaponProficiencies: 'Simple and martial weapons',
-          armorProficiencies: 'Light and medium armor, shields',
-          classSkills: ['Climb', 'Craft', 'Handle Animal', 'Heal', 'Intimidate', 'Knowledge (dungeoneering)', 'Knowledge (geography)', 'Knowledge (nature)', 'Perception', 'Profession', 'Ride', 'Spellcraft', 'Stealth', 'Survival', 'Swim']
-        },
-        {
-          name: 'Rogue',
-          description: 'A scoundrel who uses stealth and trickery to overcome obstacles.',
-          hitDie: 8,
-          skillPoints: 8,
-          baseAttackBonus: 'Medium',
-          saves: { fortitude: 'Low', reflex: 'High', will: 'Low' },
-          classFeatures: ['Sneak Attack 1d6', 'Trapfinding'],
-          weaponProficiencies: 'Simple weapons, hand crossbow, rapier, sap, shortbow, short sword',
-          armorProficiencies: 'Light armor',
-          classSkills: ['Acrobatics', 'Appraise', 'Bluff', 'Climb', 'Craft', 'Diplomacy', 'Disable Device', 'Disguise', 'Escape Artist', 'Intimidate', 'Knowledge (dungeoneering)', 'Knowledge (local)', 'Linguistics', 'Perception', 'Perform', 'Profession', 'Sense Motive', 'Sleight of Hand', 'Stealth', 'Swim', 'Use Magic Device']
-        },
-        {
-          name: 'Sorcerer',
-          description: 'A spellcaster who draws on inherent magic from a draconic or other exotic bloodline.',
-          hitDie: 6,
-          skillPoints: 2,
-          baseAttackBonus: 'Low',
-          saves: { fortitude: 'Low', reflex: 'Low', will: 'High' },
-          classFeatures: ['Bloodline', 'Cantrips', 'Eschew Materials', 'Spells'],
-          weaponProficiencies: 'Simple weapons',
-          armorProficiencies: 'None',
-          classSkills: ['Appraise', 'Bluff', 'Craft', 'Fly', 'Intimidate', 'Knowledge (arcana)', 'Profession', 'Spellcraft', 'Use Magic Device']
-        },
-        {
-          name: 'Wizard',
-          description: 'A potent spellcaster schooled in the arcane arts.',
-          hitDie: 6,
-          skillPoints: 2,
-          baseAttackBonus: 'Low',
-          saves: { fortitude: 'Low', reflex: 'Low', will: 'High' },
-          classFeatures: ['Arcane Bond', 'Arcane School', 'Cantrips', 'Scribe Scroll', 'Spells'],
-          weaponProficiencies: 'Club, dagger, heavy crossbow, light crossbow, quarterstaff',
-          armorProficiencies: 'None',
-          classSkills: ['Appraise', 'Craft', 'Fly', 'Knowledge (all)', 'Linguistics', 'Profession', 'Spellcraft']
-        }
-      ]
+      showClassSelection: true,
+      selectedBonusFeat: null,
+      coreClasses: []
     };
   },
   methods: {
+    async loadData() {
+      try {
+        // Load classes data
+        const classesResponse = await fetch('data/classes.json');
+        const classesData = await classesResponse.json();
+        this.coreClasses = classesData.coreClasses;
+        
+      } catch (error) {
+        console.error('Error loading data:', error);
+        alert('Error loading class data. Please refresh the page.');
+      }
+    },
     selectClass(className) {
       this.selectedClass = className;
-      this.$emit('step-complete', true);
+      this.selectedBonusFeat = null; // Reset feat selection when changing class
+      this.showClassSelection = false;
+      this.updateStepComplete();
+    },
+    onFeatSelected(featName) {
+      this.selectedBonusFeat = featName;
+      this.updateStepComplete();
+    },
+    updateStepComplete() {
+      // For Fighter, need both class and bonus feat selected
+      if (this.selectedClass === 'Fighter') {
+        this.$emit('step-complete', this.selectedClass && this.selectedBonusFeat);
+      } else {
+        // For other classes, just need class selected (until their 1st level options are implemented)
+        this.$emit('step-complete', !!this.selectedClass);
+      }
+    },
+    toggleClassSelection() {
+      this.showClassSelection = !this.showClassSelection;
     },
     getSelectedClassData() {
       return this.coreClasses.find(c => c.name === this.selectedClass) || {};
@@ -268,28 +172,42 @@ Vue.component('step-class', {
     getClassData() {
       if (!this.selectedClass) return null;
       
-      return {
+      const data = {
         selectedClass: this.selectedClass,
         classData: this.getSelectedClassData()
       };
+      
+      // Add Fighter-specific data
+      if (this.selectedClass === 'Fighter' && this.selectedBonusFeat) {
+        data.bonusFeat = this.selectedBonusFeat;
+      }
+      
+      return data;
     }
   },
-  mounted() {
-    // Check if we already have a saved class
+  async mounted() {
+    // Load external data first
+    await this.loadData();
+    
+    // Check if we already have saved data
     const savedBasicInfo = localStorage.getItem('currentBasicInfo');
     if (savedBasicInfo) {
       try {
         const basicInfo = JSON.parse(savedBasicInfo);
         if (basicInfo.class) {
           this.selectedClass = basicInfo.class;
-          this.$emit('step-complete', true);
+          this.showClassSelection = false;
+          
+          // Restore Fighter bonus feat if saved
+          if (basicInfo.bonusFeat) {
+            this.selectedBonusFeat = basicInfo.bonusFeat;
+          }
         }
       } catch (e) {
         console.warn('Error loading saved class data:', e);
       }
     }
     
-    // Initially disable next button
-    this.$emit('step-complete', false);
+    this.updateStepComplete();
   }
 });

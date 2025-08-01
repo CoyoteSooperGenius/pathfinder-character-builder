@@ -1,0 +1,136 @@
+{
+  "coreClasses": [
+    {
+      "name": "Barbarian",
+      "description": "A fierce warrior who can enter a battle rage.",
+      "hitDie": 12,
+      "skillPoints": 4,
+      "baseAttackBonus": "High",
+      "saves": { "fortitude": "High", "reflex": "Low", "will": "Low" },
+      "classFeatures": ["Rage", "Fast Movement"],
+      "weaponProficiencies": "Simple and martial weapons",
+      "armorProficiencies": "Light and medium armor, shields",
+      "classSkills": ["Acrobatics", "Climb", "Craft", "Handle Animal", "Intimidate", "Knowledge (nature)", "Perception", "Ride", "Survival", "Swim"]
+    },
+    {
+      "name": "Bard",
+      "description": "A master of song, speech, and the magic they contain.",
+      "hitDie": 8,
+      "skillPoints": 6,
+      "baseAttackBonus": "Medium",
+      "saves": { "fortitude": "Low", "reflex": "High", "will": "High" },
+      "classFeatures": ["Bardic Knowledge", "Bardic Performance", "Cantrips", "Spells", "Countersong", "Distraction", "Fascinate", "Inspire Courage +1"],
+      "weaponProficiencies": "Simple weapons, longsword, rapier, sap, short sword, shortbow, whip",
+      "armorProficiencies": "Light armor, shields",
+      "classSkills": ["Acrobatics", "Appraise", "Bluff", "Climb", "Craft", "Diplomacy", "Disguise", "Escape Artist", "Intimidate", "Knowledge (all)", "Linguistics", "Perception", "Perform", "Profession", "Sense Motive", "Sleight of Hand", "Spellcraft", "Stealth", "Use Magic Device"]
+    },
+    {
+      "name": "Cleric",
+      "description": "A devout follower of a deity who wields divine magic.",
+      "hitDie": 8,
+      "skillPoints": 2,
+      "baseAttackBonus": "Medium",
+      "saves": { "fortitude": "High", "reflex": "Low", "will": "High" },
+      "classFeatures": ["Aura", "Channel Energy 1d6", "Domains", "Orisons", "Spells"],
+      "weaponProficiencies": "Simple weapons, Deity's favored weapon",
+      "armorProficiencies": "Light and medium armor, shields",
+      "classSkills": ["Appraise", "Craft", "Diplomacy", "Heal", "Knowledge (arcana)", "Knowledge (history)", "Knowledge (nobility)", "Knowledge (planes)", "Knowledge (religion)", "Linguistics", "Profession", "Sense Motive", "Spellcraft"]
+    },
+    {
+      "name": "Druid",
+      "description": "A servant of nature who commands elemental forces and animal companions.",
+      "hitDie": 8,
+      "skillPoints": 4,
+      "baseAttackBonus": "Medium",
+      "saves": { "fortitude": "High", "reflex": "Low", "will": "High" },
+      "classFeatures": ["Nature Bond", "Nature Sense", "Orisons", "Spells", "Wild Empathy"],
+      "weaponProficiencies": "Clubs, daggers, darts, javelins, maces, quarterstaffs, scimitars, sickles, slings, spears",
+      "armorProficiencies": "Light and medium non-metal armor, non-metal shields",
+      "classSkills": ["Climb", "Craft", "Fly", "Handle Animal", "Heal", "Knowledge (geography)", "Knowledge (nature)", "Perception", "Profession", "Ride", "Spellcraft", "Survival", "Swim"]
+    },
+    {
+      "name": "Fighter",
+      "description": "A master of martial combat skilled with a variety of weapons and armor.",
+      "hitDie": 10,
+      "skillPoints": 2,
+      "baseAttackBonus": "High",
+      "saves": { "fortitude": "High", "reflex": "Low", "will": "Low" },
+      "classFeatures": ["Bonus Feat"],
+      "weaponProficiencies": "Simple and martial weapons",
+      "armorProficiencies": "All armor and shields",
+      "classSkills": ["Climb", "Craft", "Handle Animal", "Intimidate", "Knowledge (dungeoneering)", "Knowledge (engineering)", "Profession", "Ride", "Survival", "Swim"]
+    },
+    {
+      "name": "Monk",
+      "description": "A master of martial arts, harnessing inner power.",
+      "hitDie": 8,
+      "skillPoints": 4,
+      "baseAttackBonus": "Medium",
+      "saves": { "fortitude": "High", "reflex": "High", "will": "High" },
+      "classFeatures": ["Bonus Feat","AC Bonus", "Flurry of Blows", "Stunning Fist", "Unarmed Strike", "Unarmed Damage"],
+      "weaponProficiencies": "Club, crossbow (light or heavy), dagger, handaxe, javelin, kama, nunchaku, quarterstaff, sai, shortspear, short sword, shuriken, siangham, sling",
+      "armorProficiencies": "None",
+      "classSkills": ["Acrobatics", "Climb", "Craft", "Escape Artist", "Intimidate", "Knowledge (history)", "Knowledge (religion)", "Perception", "Perform", "Profession", "Ride", "Sense Motive", "Stealth", "Swim"]
+    },
+    {
+      "name": "Paladin",
+      "description": "A holy champion who smites evil with divine power.",
+      "hitDie": 10,
+      "skillPoints": 2,
+      "baseAttackBonus": "High",
+      "saves": { "fortitude": "High", "reflex": "Low", "will": "High" },
+      "classFeatures": ["Aura of Good", "Detect Evil", "Smite Evil"],
+      "weaponProficiencies": "Simple and martial weapons",
+      "armorProficiencies": "All armor and shields",
+      "classSkills": ["Craft", "Diplomacy", "Handle Animal", "Heal", "Knowledge (nobility)", "Knowledge (religion)", "Profession", "Ride", "Sense Motive", "Spellcraft"]
+    },
+    {
+      "name": "Ranger",
+      "description": "A skilled hunter and tracker who dwells on the edges of civilization.",
+      "hitDie": 10,
+      "skillPoints": 6,
+      "baseAttackBonus": "High",
+      "saves": { "fortitude": "High", "reflex": "High", "will": "Low" },
+      "classFeatures": ["1st Favored Enemy", "Track", "Wild Empathy"],
+      "weaponProficiencies": "Simple and martial weapons",
+      "armorProficiencies": "Light and medium armor, shields",
+      "classSkills": ["Climb", "Craft", "Handle Animal", "Heal", "Intimidate", "Knowledge (dungeoneering)", "Knowledge (geography)", "Knowledge (nature)", "Perception", "Profession", "Ride", "Spellcraft", "Stealth", "Survival", "Swim"]
+    },
+    {
+      "name": "Rogue",
+      "description": "A scoundrel who uses stealth and trickery to overcome obstacles.",
+      "hitDie": 8,
+      "skillPoints": 8,
+      "baseAttackBonus": "Medium",
+      "saves": { "fortitude": "Low", "reflex": "High", "will": "Low" },
+      "classFeatures": ["Sneak Attack 1d6", "Trapfinding"],
+      "weaponProficiencies": "Simple weapons, hand crossbow, rapier, sap, shortbow, short sword",
+      "armorProficiencies": "Light armor",
+      "classSkills": ["Acrobatics", "Appraise", "Bluff", "Climb", "Craft", "Diplomacy", "Disable Device", "Disguise", "Escape Artist", "Intimidate", "Knowledge (dungeoneering)", "Knowledge (local)", "Linguistics", "Perception", "Perform", "Profession", "Sense Motive", "Sleight of Hand", "Stealth", "Swim", "Use Magic Device"]
+    },
+    {
+      "name": "Sorcerer",
+      "description": "A spellcaster who draws on inherent magic from a draconic or other exotic bloodline.",
+      "hitDie": 6,
+      "skillPoints": 2,
+      "baseAttackBonus": "Low",
+      "saves": { "fortitude": "Low", "reflex": "Low", "will": "High" },
+      "classFeatures": ["Bloodline", "Cantrips", "Eschew Materials", "Spells"],
+      "weaponProficiencies": "Simple weapons",
+      "armorProficiencies": "None",
+      "classSkills": ["Appraise", "Bluff", "Craft", "Fly", "Intimidate", "Knowledge (arcana)", "Profession", "Spellcraft", "Use Magic Device"]
+    },
+    {
+      "name": "Wizard",
+      "description": "A potent spellcaster schooled in the arcane arts.",
+      "hitDie": 6,
+      "skillPoints": 2,
+      "baseAttackBonus": "Low",
+      "saves": { "fortitude": "Low", "reflex": "Low", "will": "High" },
+      "classFeatures": ["Arcane Bond", "Arcane School", "Cantrips", "Scribe Scroll", "Spells"],
+      "weaponProficiencies": "Club, dagger, heavy crossbow, light crossbow, quarterstaff",
+      "armorProficiencies": "None",
+      "classSkills": ["Appraise", "Craft", "Fly", "Knowledge (all)", "Linguistics", "Profession", "Spellcraft"]
+    }
+  ]
+}

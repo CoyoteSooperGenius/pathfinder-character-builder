@@ -1,0 +1,72 @@
+{
+  "fighterBonusFeats": [
+    {
+      "name": "Blind-Fight",
+      "description": "Reduces penalties for fighting while unable to see."
+    },
+    {
+      "name": "Combat Expertise",
+      "description": "Trade attack bonus for AC bonus when fighting defensively."
+    },
+    {
+      "name": "Combat Reflexes",
+      "description": "Make additional attacks of opportunity based on Dex modifier."
+    },
+    {
+      "name": "Deadly Aim",
+      "description": "Trade attack bonus for damage bonus with ranged weapons."
+    },
+    {
+      "name": "Dodge",
+      "description": "Gain +1 dodge bonus to AC against one designated opponent."
+    },
+    {
+      "name": "Improved Initiative",
+      "description": "Gain +4 bonus on initiative checks."
+    },
+    {
+      "name": "Improved Unarmed Strike",
+      "description": "Deal lethal damage with unarmed strikes without penalty."
+    },
+    {
+      "name": "Point-Blank Shot",
+      "description": "Gain +1 bonus on attack and damage rolls with ranged weapons at close range."
+    },
+    {
+      "name": "Power Attack",
+      "description": "Trade attack bonus for damage bonus with melee weapons."
+    },
+    {
+      "name": "Precise Shot",
+      "description": "Shoot into melee without penalty (requires Point-Blank Shot)."
+    },
+    {
+      "name": "Quick Draw",
+      "description": "Draw weapons as a free action."
+    },
+    {
+      "name": "Rapid Shot",
+      "description": "Make one extra ranged attack per round at -2 penalty."
+    },
+    {
+      "name": "Shot on the Run",
+      "description": "Move, shoot, and move again as a full-round action."
+    },
+    {
+      "name": "Toughness",
+      "description": "Gain +3 hit points, +1 per HD beyond 3rd."
+    },
+    {
+      "name": "Two-Weapon Fighting",
+      "description": "Reduce penalties for fighting with two weapons."
+    },
+    {
+      "name": "Weapon Finesse",
+      "description": "Use Dex modifier instead of Str for attack rolls with light weapons."
+    },
+    {
+      "name": "Weapon Focus",
+      "description": "Gain +1 bonus on attack rolls with one weapon type."
+    }
+  ]
+}
