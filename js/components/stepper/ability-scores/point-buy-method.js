@@ -1,10 +1,10 @@
 Vue.component('point-buy-method', {
   data() {
     return {
-      abilities: ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'],
-      currentValues: [10, 10, 10, 10, 10, 10],
       totalPoints: 20,
-      remainingPoints: 20,
+      currentScores: {
+        STR: 10, DEX: 10, CON: 10, INT: 10, WIS: 10, CHA: 10
+      },
       pointBuyOptions: [
         { value: 15, label: '15 Points (Low Fantasy)' },
         { value: 20, label: '20 Points (Standard Fantasy)' },
@@ -18,86 +18,36 @@ Vue.component('point-buy-method', {
       this.resetScores();
     },
     resetScores() {
-      this.currentValues = [10, 10, 10, 10, 10, 10];
-      this.remainingPoints = this.totalPoints;
-      this.checkCompletion();
+      this.currentScores = {
+        STR: 10, DEX: 10, CON: 10, INT: 10, WIS: 10, CHA: 10
+      };
     },
     setAll14s() {
-      // Set all abilities to 14
-      this.currentValues = [14, 14, 14, 14, 14, 14];
+      this.currentScores = {
+        STR: 14, DEX: 14, CON: 14, INT: 14, WIS: 14, CHA: 14
+      };
       
       // Calculate points needed for six 14s (6 * 5 = 30 points)
-      const pointsNeeded = 6 * this.getPointCost(14);
+      const pointsNeeded = 6 * AbilityCalculator.getPointBuyCost(14);
       
       // If we don't have enough points, automatically increase to 30 points (Epic Fantasy)
       if (pointsNeeded > this.totalPoints) {
         this.totalPoints = 30;
       }
-      
-      this.remainingPoints = this.totalPoints - pointsNeeded;
+    },
+    onScoresChanged(newScores) {
+      this.currentScores = { ...newScores };
       this.checkCompletion();
     },
-    getPointCost(score) {
-      // Point buy costs for Pathfinder
-      const costs = {
-        3: -16, 4: -12, 5: -9, 6: -6, 7: -4, 8: -2, 9: -1, 10: 0,
-        11: 1, 12: 2, 13: 3, 14: 5, 15: 7, 16: 10, 17: 13, 18: 17
-      };
-      return costs[score] || 0;
-    },
-    increaseAbility(idx) {
-      if (this.canIncrease(idx)) {
-        const currentCost = this.getPointCost(this.currentValues[idx]);
-        const newCost = this.getPointCost(this.currentValues[idx] + 1);
-        const costDifference = newCost - currentCost;
-        
-        this.currentValues[idx]++;
-        this.remainingPoints -= costDifference;
-        this.checkCompletion();
-      }
-    },
-    decreaseAbility(idx) {
-      if (this.canDecrease(idx)) {
-        const currentCost = this.getPointCost(this.currentValues[idx]);
-        const newCost = this.getPointCost(this.currentValues[idx] - 1);
-        const costDifference = currentCost - newCost;
-        
-        this.currentValues[idx]--;
-        this.remainingPoints += costDifference;
-        this.checkCompletion();
-      }
-    },
-    canIncrease(idx) {
-      if (this.currentValues[idx] >= 18) return false;
-      
-      const currentCost = this.getPointCost(this.currentValues[idx]);
-      const newCost = this.getPointCost(this.currentValues[idx] + 1);
-      const costDifference = newCost - currentCost;
-      
-      return this.remainingPoints >= costDifference;
-    },
-    canDecrease(idx) {
-      return this.currentValues[idx] > 3;
-    },
-    getBonus(score) {
-      if (score === null || score === 0) return '';
-      const bonus = Math.floor((score - 10) / 2);
-      return (bonus >= 0 ? '+' : '') + bonus;
-    },
     checkCompletion() {
-      const isComplete = this.remainingPoints === 0;
+      const totalCost = AbilityCalculator.calculatePointBuyTotal(this.currentScores);
+      const isComplete = totalCost === this.totalPoints;
+      
       if (isComplete) {
         const abilityScores = {
           method: 'point-buy',
           totalPoints: this.totalPoints,
-          scores: {
-            STR: this.currentValues[0],
-            DEX: this.currentValues[1],
-            CON: this.currentValues[2],
-            INT: this.currentValues[3],
-            WIS: this.currentValues[4],
-            CHA: this.currentValues[5]
-          }
+          scores: { ...this.currentScores }
         };
         this.$emit('complete', { isComplete: true, abilityScores });
       } else {
@@ -117,59 +67,24 @@ Vue.component('point-buy-method', {
       </div>
       
       <div class="mb-3">
-        <div class="alert alert-info">
-          <strong id="remaining-points">Remaining Points: {{ remainingPoints }}</strong>
-        </div>
         <div class="d-flex gap-2">
-          <button @click="resetScores" class="btn btn-secondary">Reset Scores</button>
           <button @click="setAll14s" class="btn btn-success">Quick Set (All 14s)</button>
         </div>
       </div>
       
-      <div class="table-responsive">
-        <table class="table table-bordered table-striped w-auto mx-auto">
-          <thead class="table-light">
-            <tr>
-              <th>Ability</th>
-              <th>Current Value<br><small>(Bonus)</small></th>
-              <th class="text-center">Adjust Points</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(ability, idx) in abilities" :key="ability">
-              <td class="fw-semibold">{{ ability }}</td>
-              <td style="min-width: 60px; background: #f8f9fa;">
-                {{ currentValues[idx] }}
-                <span>
-                  (<strong>{{ getBonus(currentValues[idx]) }}</strong>)
-                </span>
-              </td>
-              <td class="text-center">
-                <div class="btn-group" role="group">
-                  <button 
-                    :id="ability + '-decrease'"
-                    @click="decreaseAbility(idx)"
-                    :disabled="!canDecrease(idx)"
-                    class="btn btn-danger btn-sm"
-                    type="button"
-                  >
-                    −
-                  </button>
-                  <button 
-                    :id="ability + '-increase'"
-                    @click="increaseAbility(idx)"
-                    :disabled="!canIncrease(idx)"
-                    class="btn btn-success btn-sm"
-                    type="button"
-                  >
-                    +
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <ability-score-adjuster
+        :scores="currentScores"
+        mode="point-buy"
+        :total-points="totalPoints"
+        :base-score="10"
+        :min-score="7"
+        :max-score="18"
+        :show-modifiers="true"
+        :show-point-costs="true"
+        :show-remaining-points="true"
+        layout="table"
+        @scores-changed="onScoresChanged"
+      />
     </div>
   `
 });

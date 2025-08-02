@@ -60,8 +60,8 @@ This document tracks the progress of the component refactoring project.
 - [x] Create `progress-indicator.js` - Completion status display
 
 ### 3.2 Specialized Selection Components  
-- [ ] Create `feat-selector.js` - Generalized feat selection
-- [ ] Create `ability-score-adjuster.js` - Point-buy and racial adjustments
+- [x] Create `feat-selector.js` - Generalized feat selection
+- [x] Create `ability-score-adjuster.js` - Point-buy and racial adjustments
 - [ ] Create `prerequisite-display.js` - Requirements with pass/fail indicators
 
 ### 3.3 Data Display Components
@@ -72,13 +72,8 @@ This document tracks the progress of the component refactoring project.
 ### 3.4 Refactor Existing Components to Use New UI Components
 - [x] Update race components to use `collapsible-card.js`
 - [x] Update class selection to use `selection-grid.js`
-- [ ] Update fighter bonus feats to use generic `feat-selector.js`
+- [x] Update fighter bonus feats to use generic `feat-selector.js`
 - [x] Update language components to use `checkbox-group.js`
-
-### 3.5 Infrastructure Updates
-- [ ] Update `index.html` to include new UI component files
-- [ ] Test all components work correctly with new UI components
-- [ ] Remove duplicate UI code from existing components
 
 ## 🚀 Future Phases (Planned)
 
