@@ -51,7 +51,7 @@ Vue.component('stepper', {
   `,
   data() {
     return {
-      currentStep: 2,
+      currentStep: 0,
       canProceed: true,
       steps: [
         { title: 'Determine Ability Scores', component: 'step-ability-scores' },

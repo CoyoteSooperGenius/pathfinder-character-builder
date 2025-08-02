@@ -1,0 +1,48 @@
+{
+  "humanFighter": {
+    "abilityScores": {
+      "STR": 15,
+      "DEX": 14,
+      "CON": 14,
+      "INT": 14,
+      "WIS": 14,
+      "CHA": 14
+    },
+    "race": "Human",
+    "class": "Fighter",
+    "favoredClass": "Fighter",
+    "languages": ["Common", "Draconic", "Elven"],
+    "bonusFeat": "Power Attack"
+  },
+  "elfWizard": {
+    "abilityScores": {
+      "STR": 8,
+      "DEX": 14,
+      "CON": 12,
+      "INT": 17,
+      "WIS": 13,
+      "CHA": 10
+    },
+    "race": "Elf",
+    "class": "Wizard",
+    "favoredClass": "Wizard",
+    "languages": ["Common", "Elven", "Draconic", "Celestial", "Gnome"],
+    "schoolSpecialization": "Evocation"
+  },
+  "dwarfCleric": {
+    "abilityScores": {
+      "STR": 13,
+      "DEX": 10,
+      "CON": 15,
+      "INT": 12,
+      "WIS": 17,
+      "CHA": 8
+    },
+    "race": "Dwarf",
+    "class": "Cleric",
+    "favoredClass": "Cleric",
+    "languages": ["Common", "Dwarven", "Giant"],
+    "deity": "Torag",
+    "domains": ["Artifice", "Earth"]
+  }
+}

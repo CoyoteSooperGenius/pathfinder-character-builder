@@ -1,0 +1,145 @@
+# Page snapshot
+
+```yaml
+- button " Reset Data"
+- heading "Pick Your Race" [level=2]
+- progressbar: Step 2 of 7
+- heading "Available Races" [level=5]
+- radio "Human" [checked]
+- text: Human
+- radio "Dwarf"
+- text: Dwarf
+- radio "Elf"
+- text: Elf
+- radio "Gnome"
+- text: Gnome
+- radio "Half-Elf"
+- text: Half-Elf
+- radio "Half-Orc"
+- text: Half-Orc
+- radio "Halfling"
+- text: Halfling
+- heading "Ability Score Adjustments " [level=5]
+- heading "Ability Score Increases (+2)" [level=6]
+- text: Select 1
+- checkbox "STR"
+- text: STR
+- checkbox "DEX"
+- text: DEX
+- checkbox "CON"
+- text: CON
+- checkbox "INT"
+- text: INT
+- checkbox "WIS"
+- text: WIS
+- checkbox "CHA"
+- text: CHA
+- heading "Favored Class " [level=5]
+- text: Select 1 favored class
+- radio "Barbarian"
+- text: Barbarian
+- radio "Bard"
+- text: Bard
+- radio "Cleric"
+- text: Cleric
+- radio "Druid"
+- text: Druid
+- radio "Fighter"
+- text: Fighter
+- radio "Monk"
+- text: Monk
+- radio "Paladin"
+- text: Paladin
+- radio "Ranger"
+- text: Ranger
+- radio "Rogue"
+- text: Rogue
+- radio "Sorcerer"
+- text: Sorcerer
+- radio "Wizard"
+- text: Wizard
+- heading "Languages " [level=5]
+- heading " Automatic Languages" [level=6]
+- text: Common All Human characters automatically know these languages.
+- heading " Bonus Languages (Choose 2)" [level=6]
+- text: +2 Intelligence modifier grants 2 bonus languages
+- checkbox "Abyssal"
+- text: Abyssal
+- checkbox "Aklo"
+- text: Aklo
+- checkbox "Aquan"
+- text: Aquan
+- checkbox "Auran"
+- text: Auran
+- checkbox "Celestial"
+- text: Celestial
+- checkbox "Draconic"
+- text: Draconic
+- checkbox "Druidic"
+- text: Druidic
+- checkbox "Dwarven"
+- text: Dwarven
+- checkbox "Elven"
+- text: Elven
+- checkbox "Giant"
+- text: Giant
+- checkbox "Gnoll"
+- text: Gnoll
+- checkbox "Gnome"
+- text: Gnome
+- checkbox "Goblin"
+- text: Goblin
+- checkbox "Halfling"
+- text: Halfling
+- checkbox "Ignan"
+- text: Ignan
+- checkbox "Infernal"
+- text: Infernal
+- checkbox "Orc"
+- text: Orc
+- checkbox "Sylvan"
+- text: Sylvan
+- checkbox "Terran"
+- text: Terran
+- checkbox "Undercommon"
+- text: "Undercommon Selected: 0 / 2"
+- strong: "All Known Languages:"
+- text: "Common Automatic (1) Bonus (0) Total: 1"
+- heading "Human Racial Traits " [level=5]
+- list:
+  - listitem:
+    - strong: "+2 to One Ability Score:"
+    - text: Human characters get a +2 bonus to one ability score of their choice at creation to represent their varied nature.
+  - listitem:
+    - strong: "Medium:"
+    - text: Humans are Medium creatures and have no bonuses or penalties due to their size.
+  - listitem:
+    - strong: "Normal Speed:"
+    - text: Humans have a base speed of 30 feet.
+  - listitem:
+    - strong: "Bonus Feat:"
+    - text: Humans select one extra feat at 1st level.
+  - listitem:
+    - strong: "Skilled:"
+    - text: Humans gain an additional skill rank at first level and one additional rank whenever they gain a level.
+  - listitem:
+    - strong: "Languages:"
+    - text: Humans begin play speaking Common. Humans with high Intelligence scores can choose any languages they want (except secret languages, such as Druidic).
+- button "Back"
+- button "Next" [disabled]
+- heading "Untitled Character" [level=2]
+- heading " Basics" [level=5]
+- text: "Name: — Race: — Class: — Level: 1 Alignment: — Favored Class: —"
+- heading " Ability Scores" [level=5]
+- text: STR 14 +2 DEX 14 +2 CON 14 +2 INT 14 +2 WIS 14 +2 CHA 14 +2
+- heading " Skills" [level=5]
+- text: No skills allocated yet.
+- heading " Feats" [level=5]
+- text: No feats selected yet.
+- heading "Equipment" [level=5]
+- text: No equipment purchased yet.
+- heading " Details" [level=5]
+- text: "Background: — Languages: —"
+- heading " Traits" [level=5]
+- text: No racial traits yet.
+```
