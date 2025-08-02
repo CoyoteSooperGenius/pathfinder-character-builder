@@ -3,17 +3,17 @@ Vue.component('stepper', {
     <div class="stepper">
       <div class="mb-4 text-center">
         <h2 id="step-title" class="fw-bold">{{ steps[currentStep].title }}</h2>
-        <div class="progress my-3" style="height: 20px;">
-          <div 
-            class="progress-bar bg-primary" 
-            role="progressbar" 
-            :style="{ width: ((currentStep + 1) / steps.length * 100) + '%' }" 
-            :aria-valuenow="currentStep + 1" 
-            :aria-valuemin="1" 
-            :aria-valuemax="steps.length">
-            Step {{ currentStep + 1 }} of {{ steps.length }}
-          </div>
-        </div>
+        <progress-indicator
+          :current="currentStep + 1"
+          :max="steps.length"
+          :min="1"
+          mode="bar"
+          size="medium"
+          variant="primary"
+          :label="'Step ' + (currentStep + 1) + ' of ' + steps.length"
+          animated
+          class="my-3"
+        />
       </div>
       <div class="step-content mb-4">
         <component 
@@ -82,6 +82,8 @@ Vue.component('stepper', {
           this.$emit('race-data-saved');
         } else if (this.currentStep === 2) {
           this.saveClassData();
+          // Emit event to update character sheet with class data
+          this.$emit('class-data-saved');
         }
         
         this.currentStep++;

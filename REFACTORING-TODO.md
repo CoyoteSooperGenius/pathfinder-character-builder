@@ -57,7 +57,7 @@ This document tracks the progress of the component refactoring project.
 - [x] Create `collapsible-card.js` - Reusable expand/collapse card
 - [x] Create `selection-grid.js` - Generic grid for selecting options
 - [x] Create `checkbox-group.js` - Multiple selection component
-- [ ] Create `progress-indicator.js` - Completion status display
+- [x] Create `progress-indicator.js` - Completion status display
 
 ### 3.2 Specialized Selection Components  
 - [ ] Create `feat-selector.js` - Generalized feat selection
@@ -70,10 +70,10 @@ This document tracks the progress of the component refactoring project.
 - [ ] Create `tag-list.js` - Lists of tags/badges
 
 ### 3.4 Refactor Existing Components to Use New UI Components
-- [ ] Update race components to use `collapsible-card.js`
-- [ ] Update class selection to use `selection-grid.js`
+- [x] Update race components to use `collapsible-card.js`
+- [x] Update class selection to use `selection-grid.js`
 - [ ] Update fighter bonus feats to use generic `feat-selector.js`
-- [ ] Update language components to use `checkbox-group.js`
+- [x] Update language components to use `checkbox-group.js`
 
 ### 3.5 Infrastructure Updates
 - [ ] Update `index.html` to include new UI component files

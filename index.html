@@ -31,6 +31,7 @@
             @finished="onStepperFinished"
             @ability-scores-saved="onAbilityScoresSaved"
             @race-data-saved="onRaceDataSaved"
+            @class-data-saved="onClassDataSaved"
           ></stepper>
         </div>
         <div class="col-md-6 mb-3">
@@ -51,6 +52,7 @@
     <script src="js/components/ui/collapsible-card.js"></script>
     <script src="js/components/ui/selection-grid.js"></script>
     <script src="js/components/ui/checkbox-group.js"></script>
+    <script src="js/components/ui/progress-indicator.js"></script>
     <script src="js/components/main-page.js"></script>
     <script src="js/components/stepper/stepper.js"></script>
     <script src="js/components/stepper/step-ability-scores.js"></script>
@@ -115,6 +117,12 @@
         },
         onRaceDataSaved() {
           // Call the character sheet's update method for all race-related data
+          if (this.$refs.characterSheet) {
+            this.$refs.characterSheet.updateFromLocalStorage();
+          }
+        },
+        onClassDataSaved() {
+          // Call the character sheet's update method for class data
           if (this.$refs.characterSheet) {
             this.$refs.characterSheet.updateFromLocalStorage();
           }

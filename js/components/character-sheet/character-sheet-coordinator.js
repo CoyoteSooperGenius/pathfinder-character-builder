@@ -43,19 +43,20 @@ Vue.component('character-sheet-coordinator', {
       const basicInfo = CharacterDataService.getBasicInfo();
       this.feats = [];
       
-      // Add human bonus feat (placeholder)
-      if (basicInfo && basicInfo.race === 'Human') {
-        this.feats.push({
-          label: 'Human Bonus Feat',
-          description: 'Humans select one extra feat at 1st level.'
-        });
-      }
-      
-      // Add fighter bonus feat
+      // Add fighter bonus feat (if selected)
       if (basicInfo && basicInfo.class === 'Fighter' && basicInfo.bonusFeat) {
         this.feats.push({
           label: basicInfo.bonusFeat,
           description: 'Fighter bonus feat selected at 1st level.'
+        });
+      }
+      
+      // Add human bonus feat placeholder (only if no feat selected yet)
+      // For Human Fighters, the fighter bonus feat IS their human bonus feat
+      if (basicInfo && basicInfo.race === 'Human' && !basicInfo.bonusFeat) {
+        this.feats.push({
+          label: 'Human Bonus Feat',
+          description: 'Humans select one extra feat at 1st level (selection pending).'
         });
       }
     },
