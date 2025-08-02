@@ -46,7 +46,7 @@ Vue.component('character-details', {
               <div class="mb-2">
                 <span class="fw-semibold">Languages:</span>
               </div>
-              <div class="small">
+              <div id="character-sheet-languages" class="small">
                 {{ details.languages || '—' }}
               </div>
             </div>

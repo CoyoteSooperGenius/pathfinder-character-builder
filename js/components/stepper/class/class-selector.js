@@ -51,6 +51,7 @@ Vue.component('class-selector', {
             class="col-md-6 col-lg-4 mb-3"
           >
             <div 
+              :id="classOption.name + '-selector'"
               class="card h-100 class-option"
               :class="{ 'border-primary bg-light': selectedClass === classOption.name }"
               @click="selectClass(classOption.name)"

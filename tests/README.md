@@ -10,10 +10,10 @@ This project uses a **two-tier testing approach** to ensure code quality and cat
 - **Location**: `tests/unit/`
 - **Coverage**: Calculation logic, validation rules, data integrity
 
-### 2. **End-to-End Tests (Cypress)** - `npm run test:e2e` 
+### 2. **End-to-End Tests (Playwright)** - `npm run test:e2e` 
 - **Purpose**: Test complete user workflows
-- **Framework**: Cypress
-- **Location**: `cypress/e2e/`
+- **Framework**: Playwright
+- **Location**: `tests/e2e/`
 - **Coverage**: Character creation flow, component integration, bug regression
 
 ## 🚀 **Running Tests**
@@ -31,8 +31,11 @@ npm run test:unit:watch
 # Run e2e tests only
 npm run test:e2e
 
-# Open interactive Cypress runner
-npm run test:open
+# Run e2e tests with UI
+npm run test:e2e:ui
+
+# Run e2e tests in headed mode
+npm run test:e2e:headed
 ```
 
 ## 📊 **Current Test Coverage**
@@ -80,17 +83,10 @@ tests/unit/
 
 ### **E2E Test Structure**
 ```
-cypress/
-├── e2e/
-│   ├── character-creation-flow.cy.js    # Main user workflows
-│   ├── bug-regression-tests.cy.js       # Specific bug scenarios
-│   └── debug-page.cy.js                 # Development debugging
-├── support/
-│   ├── e2e.js          # Global test setup
-│   └── commands.js     # Custom Cypress commands
-├── fixtures/
-│   └── characters.json # Test data for different builds
-└── README.md          # Cypress-specific documentation
+tests/e2e/
+├── character-creation.spec.js    # Main user workflows
+├── bug-regression.spec.js        # Specific bug scenarios
+└── playwright.config.js          # Playwright configuration
 ```
 
 ## 📈 **Future Test Expansion**
@@ -116,9 +112,8 @@ cypress/
 
 ## 🚨 **Known Issues**
 
-1. **Cypress GUI** - May not work on some Linux systems (use headless mode)
-2. **E2E timing** - Some tests need longer waits for Vue component loading
-3. **Mock limitations** - Complex service interdependencies are challenging to unit test
+1. **E2E timing** - Some tests need longer waits for Vue component loading
+2. **Mock limitations** - Complex service interdependencies are challenging to unit test
 
 ## 💡 **Best Practices**
 

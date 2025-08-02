@@ -52,7 +52,7 @@ Vue.component('ability-scores-display', {
             >
               <div class="text-center border rounded p-2">
                 <div class="fw-bold">{{ ability.name }}</div>
-                <div class="fs-4 fw-bold text-primary">
+                <div :id="'character-sheet-' + ability.name.toLowerCase()" class="fs-4 fw-bold text-primary">
                   {{ ability.value || '—' }}
                 </div>
                 <div class="small text-muted">

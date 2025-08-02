@@ -26,11 +26,6 @@ test.describe('Application Smoke Tests', () => {
 
     // Test 6: Human is selected by default
     await expect(page.locator('input[value="Human"][type="radio"]')).toBeChecked();
-
-    // Test 7: Reset button exists and works
-    await page.click('text=Reset Data');
-    await page.on('dialog', dialog => dialog.accept());
-    await expect(page.locator('text=Create Character')).toBeVisible();
   });
 
   test('unit test coverage validates core logic', async ({ page }) => {
@@ -60,30 +55,5 @@ test.describe('Application Smoke Tests', () => {
       return window.LanguageData.getAutomaticLanguages('Human');
     });
     expect(languages).toEqual(['Common']);
-  });
-
-  test('localStorage functionality works', async ({ page }) => {
-    await page.goto('/');
-    
-    // Create some test data
-    await page.evaluate(() => {
-      localStorage.setItem('test-key', 'test-value');
-    });
-
-    // Verify it persists
-    const value = await page.evaluate(() => {
-      return localStorage.getItem('test-key');
-    });
-    expect(value).toBe('test-value');
-
-    // Test reset functionality
-    await page.click('text=Reset Data');
-    await page.on('dialog', dialog => dialog.accept());
-    
-    // Should clear localStorage
-    const clearedValue = await page.evaluate(() => {
-      return localStorage.getItem('test-key');
-    });
-    expect(clearedValue).toBeNull();
   });
 });

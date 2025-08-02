@@ -47,13 +47,13 @@ Vue.component('character-basics', {
             <div class="col-12">
               <div class="d-flex justify-content-between">
                 <span class="fw-semibold">Race:</span>
-                <span>{{ basicInfo.race || '—' }}</span>
+                <span id="character-sheet-race">{{ basicInfo.race || '—' }}</span>
               </div>
             </div>
             <div class="col-12">
               <div class="d-flex justify-content-between">
                 <span class="fw-semibold">Class:</span>
-                <span>{{ basicInfo.class || '—' }}</span>
+                <span id="character-sheet-class">{{ basicInfo.class || '—' }}</span>
               </div>
             </div>
             <div class="col-12">

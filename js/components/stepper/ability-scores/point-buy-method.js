@@ -118,7 +118,7 @@ Vue.component('point-buy-method', {
       
       <div class="mb-3">
         <div class="alert alert-info">
-          <strong>Remaining Points: {{ remainingPoints }}</strong>
+          <strong id="remaining-points">Remaining Points: {{ remainingPoints }}</strong>
         </div>
         <div class="d-flex gap-2">
           <button @click="resetScores" class="btn btn-secondary">Reset Scores</button>
@@ -147,6 +147,7 @@ Vue.component('point-buy-method', {
               <td class="text-center">
                 <div class="btn-group" role="group">
                   <button 
+                    :id="ability + '-decrease'"
                     @click="decreaseAbility(idx)"
                     :disabled="!canDecrease(idx)"
                     class="btn btn-danger btn-sm"
@@ -155,6 +156,7 @@ Vue.component('point-buy-method', {
                     −
                   </button>
                   <button 
+                    :id="ability + '-increase'"
                     @click="increaseAbility(idx)"
                     :disabled="!canIncrease(idx)"
                     class="btn btn-success btn-sm"

@@ -4,8 +4,6 @@
       "Bash(git add:*)",
       "Bash(npm install)",
       "Bash(mkdir:*)",
-      "Bash(npm run cypress:run:*)",
-      "Bash(timeout 60 npm run cypress:run:*)",
       "Bash(npm run test:unit:*)",
       "Bash(rm:*)",
       "Bash(npx playwright:*)",

@@ -2,7 +2,7 @@ Vue.component('stepper', {
   template: `
     <div class="stepper">
       <div class="mb-4 text-center">
-        <h2 class="fw-bold">{{ steps[currentStep].title }}</h2>
+        <h2 id="step-title" class="fw-bold">{{ steps[currentStep].title }}</h2>
         <div class="progress my-3" style="height: 20px;">
           <div 
             class="progress-bar bg-primary" 
@@ -32,6 +32,7 @@ Vue.component('stepper', {
         </button>
         <div class="flex-grow-1"></div>
         <button 
+          id="next-button"
           v-if="currentStep < steps.length - 1" 
           @click="nextStep" 
           class="btn btn-primary"

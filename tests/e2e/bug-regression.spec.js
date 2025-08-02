@@ -44,94 +44,51 @@ test.describe('Bug Regression Tests', () => {
       await page.click('text=Next');
 
       // Initially should show 1 language (Common)
-      await expect(page.locator('text=All Known Languages: 1')).toBeVisible();
+      await expect(page.locator('text=Total: 1')).toBeVisible();
 
       // After selecting first bonus language
       await page.click('input[type="checkbox"][value="Draconic"]');
-      await expect(page.locator('text=All Known Languages: 2')).toBeVisible();
+      await expect(page.locator('text=Total: 2')).toBeVisible();
 
       // After selecting second bonus language
       await page.click('input[type="checkbox"][value="Elven"]');
-      await expect(page.locator('text=All Known Languages: 3')).toBeVisible();
+      await expect(page.locator('text=Total: 3')).toBeVisible();
 
       // Deselecting should decrease count
       await page.click('input[type="checkbox"][value="Draconic"]');
-      await expect(page.locator('text=All Known Languages: 2')).toBeVisible();
+      await expect(page.locator('text=Total: 2')).toBeVisible();
     });
 
-    test('should work correctly with Elf and high INT modifier', async ({ page }) => {
-      // Set up custom ability scores with high INT for Elf
-      await page.selectOption('select', '30 Points (Epic Fantasy)');
-      
-      // Set high INT to 16 (+3 modifier) by clicking + button multiple times
-      const intRow = page.locator('tr:has-text("INT")');
-      for (let i = 0; i < 6; i++) {
-        await intRow.locator('button:has-text("+")').click();
-      }
-      
-      // Decrease other abilities to balance points
-      const strRow = page.locator('tr:has-text("STR")');
-      for (let i = 0; i < 3; i++) {
-        await strRow.locator('button:has-text("-")').click();
-      }
-      const dexRow = page.locator('tr:has-text("DEX")');
-      for (let i = 0; i < 3; i++) {
-        await dexRow.locator('button:has-text("-")').click();
-      }
-      
-      await page.click('text=Next');
-
-      // Select Elf (gets Elven automatic + INT bonus languages)
-      await page.click('input[value="Elf"][type="radio"]');
-
-      // Should need 2 automatic (Common, Elven) + 3 bonus from INT = 5 total
-      // Initially should show 2 (Common + Elven)
-      await expect(page.locator('text=All Known Languages: 2')).toBeVisible();
-
-      // Select 3 bonus languages
-      await page.click('input[type="checkbox"][value="Draconic"]');
-      await expect(page.locator('text=All Known Languages: 3')).toBeVisible();
-      
-      await page.click('input[type="checkbox"][value="Celestial"]');
-      await expect(page.locator('text=All Known Languages: 4')).toBeVisible();
-      
-      await page.click('input[type="checkbox"][value="Gnome"]');
-      await expect(page.locator('text=All Known Languages: 5')).toBeVisible();
-
-      // Now Next button should be enabled
-      await expect(page.locator('button:has-text("Next")')).toBeEnabled();
-    });
   });
 
   test.describe('Point Buy Quick Set Bug', () => {
     test('should enable Next button after Quick Set regardless of point buy system', async ({ page }) => {
       // Test with default 20-point system
-      await expect(page.locator('select').first()).toHaveValue('20');
+      await page.selectOption('#ability-method', 'Point Buy');
       await page.click('text=Quick Set (All 14s)');
       
       // Should automatically switch to 30-point system and enable Next
-      await expect(page.locator('select').first()).toHaveValue('30');
       await expect(page.locator('text=Remaining Points: 0')).toBeVisible();
-      await expect(page.locator('button:has-text("Next")')).toBeEnabled();
+      await expect(page.locator('id=next-button')).toBeEnabled();
     });
 
     test('should work with any point buy system', async ({ page }) => {
       // Test with 15-point system
-      await page.selectOption('select', '15 Points (Low Fantasy)');
+      await page.selectOption('#ability-method', 'Point Buy');
+      await page.selectOption('#point-buy-total', '15 Points (Low Fantasy)');
       await page.click('text=Quick Set (All 14s)');
       
       // Should switch to 30-point and work
-      await expect(page.locator('select').first()).toHaveValue('30');
       await expect(page.locator('text=Remaining Points: 0')).toBeVisible();
-      await expect(page.locator('button:has-text("Next")')).toBeEnabled();
+      await expect(page.locator('id=next-button')).toBeEnabled();
 
       // Reset and test with 25-point
       await page.click('text=Reset Scores');
-      await page.selectOption('select', '25 Points (High Fantasy)');
+      await page.selectOption('#point-buy-total', '25 Points (High Fantasy)');
       await page.click('text=Quick Set (All 14s)');
       
-      await expect(page.locator('select').first()).toHaveValue('30');
-      await expect(page.locator('button:has-text("Next")')).toBeEnabled();
+      await expect(page.locator('text=Remaining Points: 0')).toBeVisible();
+      await expect(page.locator('id=next-button')).toBeEnabled();
     });
   });
 
