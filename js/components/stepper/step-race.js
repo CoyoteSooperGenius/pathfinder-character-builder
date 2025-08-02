@@ -15,27 +15,11 @@ Vue.component('step-race', {
       return this.races.find(race => race.name === this.selectedRace);
     },
     intelligenceModifier() {
-      // Calculate Intelligence modifier based on ability scores and racial adjustments
-      let baseIntelligence = 10; // Default base score
-      
-      // Add racial adjustments
-      if (this.selectedRaceData && this.selectedRaceData.abilityAdjustments.increases.fixed) {
-        if (this.selectedRaceData.abilityAdjustments.increases.abilities.includes('INT')) {
-          baseIntelligence += 2;
-        }
-      } else if (this.selectedIncreases.includes('INT')) {
-        baseIntelligence += 2;
-      }
-      
-      if (this.selectedRaceData && this.selectedRaceData.abilityAdjustments.decreases.fixed) {
-        if (this.selectedRaceData.abilityAdjustments.decreases.abilities.includes('INT')) {
-          baseIntelligence -= 2;
-        }
-      } else if (this.selectedDecreases.includes('INT')) {
-        baseIntelligence -= 2;
-      }
-      
-      return Math.floor((baseIntelligence - 10) / 2);
+      return AbilityCalculator.getIntelligenceModifier(
+        this.selectedRaceData, 
+        this.selectedIncreases, 
+        this.selectedDecreases
+      );
     },
     isStepComplete() {
       const raceData = this.selectedRaceData;
@@ -50,9 +34,12 @@ Vue.component('step-race', {
       const expectedFavoredClasses = raceData.name === 'Half-Elf' ? 2 : 1;
       const favoredClassComplete = this.selectedFavoredClasses.length === expectedFavoredClasses;
       
-      // Check languages completion (racial languages + bonus from INT)
-      const expectedLanguageCount = this.getExpectedLanguageCount();
-      const languagesComplete = this.selectedLanguages.length >= expectedLanguageCount;
+      // Check languages completion using proper validation
+      const languagesComplete = LanguageData.validateLanguageSelection(
+        raceData.name, 
+        this.selectedLanguages, 
+        this.intelligenceModifier
+      ).isValid;
       
       return increasesComplete && decreasesComplete && favoredClassComplete && languagesComplete;
     }
@@ -111,17 +98,6 @@ Vue.component('step-race', {
     resetLanguages() {
       this.selectedLanguages = [];
     },
-    getExpectedLanguageCount() {
-      // Get racial languages count + bonus from Intelligence
-      const racialCount = this.getRacialLanguagesCount();
-      const bonusCount = Math.max(0, this.intelligenceModifier);
-      return racialCount + bonusCount;
-    },
-    getRacialLanguagesCount() {
-      // This is a simplified count - the actual component will handle the parsing
-      if (!this.selectedRaceData) return 1;
-      return this.selectedRaceData.name === 'Human' ? 1 : 2; // Rough estimate
-    },
     onIncreaseChange(ability) {
       const raceData = this.selectedRaceData;
       if (!raceData || raceData.abilityAdjustments.increases.fixed) return;
@@ -152,6 +128,10 @@ Vue.component('step-race', {
     },
     onLanguagesChange(languages) {
       this.selectedLanguages = languages;
+      this.checkCompletion();
+    },
+    onLanguagesCompletionChange(isComplete) {
+      // Language component handles its own completion logic
       this.checkCompletion();
     },
     checkCompletion() {
@@ -192,13 +172,14 @@ Vue.component('step-race', {
             @favored-class-changed="onFavoredClassChange"
           ></favored-class-card>
           
-          <languages-card
+          <language-selector
             :selected-race-data="selectedRaceData"
             :selected-languages="selectedLanguages"
             :selected-increases="selectedIncreases"
             :selected-decreases="selectedDecreases"
             @languages-changed="onLanguagesChange"
-          ></languages-card>
+            @completion-changed="onLanguagesCompletionChange"
+          ></language-selector>
         </div>
         
         <div class="col-12 col-lg-6">

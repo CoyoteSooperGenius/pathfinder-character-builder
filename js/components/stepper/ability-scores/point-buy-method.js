@@ -22,6 +22,21 @@ Vue.component('point-buy-method', {
       this.remainingPoints = this.totalPoints;
       this.checkCompletion();
     },
+    setAll14s() {
+      // Set all abilities to 14
+      this.currentValues = [14, 14, 14, 14, 14, 14];
+      
+      // Calculate points needed for six 14s (6 * 5 = 30 points)
+      const pointsNeeded = 6 * this.getPointCost(14);
+      
+      // If we don't have enough points, automatically increase to 30 points (Epic Fantasy)
+      if (pointsNeeded > this.totalPoints) {
+        this.totalPoints = 30;
+      }
+      
+      this.remainingPoints = this.totalPoints - pointsNeeded;
+      this.checkCompletion();
+    },
     getPointCost(score) {
       // Point buy costs for Pathfinder
       const costs = {
@@ -105,7 +120,10 @@ Vue.component('point-buy-method', {
         <div class="alert alert-info">
           <strong>Remaining Points: {{ remainingPoints }}</strong>
         </div>
-        <button @click="resetScores" class="btn btn-secondary">Reset Scores</button>
+        <div class="d-flex gap-2">
+          <button @click="resetScores" class="btn btn-secondary">Reset Scores</button>
+          <button @click="setAll14s" class="btn btn-success">Quick Set (All 14s)</button>
+        </div>
       </div>
       
       <div class="table-responsive">

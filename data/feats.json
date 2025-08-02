@@ -2,71 +2,177 @@
   "fighterBonusFeats": [
     {
       "name": "Blind-Fight",
-      "description": "Reduces penalties for fighting while unable to see."
+      "description": "Reduces penalties for fighting while unable to see.",
+      "prerequisites": []
     },
     {
       "name": "Combat Expertise",
-      "description": "Trade attack bonus for AC bonus when fighting defensively."
+      "description": "Trade attack bonus for AC bonus when fighting defensively.",
+      "prerequisites": [
+        {
+          "type": "ability",
+          "ability": "INT",
+          "value": 13
+        }
+      ]
     },
     {
       "name": "Combat Reflexes",
-      "description": "Make additional attacks of opportunity based on Dex modifier."
+      "description": "Make additional attacks of opportunity based on Dex modifier.",
+      "prerequisites": []
     },
     {
       "name": "Deadly Aim",
-      "description": "Trade attack bonus for damage bonus with ranged weapons."
+      "description": "Trade attack bonus for damage bonus with ranged weapons.",
+      "prerequisites": [
+        {
+          "type": "ability",
+          "ability": "DEX",
+          "value": 13
+        },
+        {
+          "type": "bab",
+          "value": 1
+        }
+      ]
     },
     {
       "name": "Dodge",
-      "description": "Gain +1 dodge bonus to AC against one designated opponent."
+      "description": "Gain +1 dodge bonus to AC against one designated opponent.",
+      "prerequisites": [
+        {
+          "type": "ability",
+          "ability": "DEX",
+          "value": 13
+        }
+      ]
     },
     {
       "name": "Improved Initiative",
-      "description": "Gain +4 bonus on initiative checks."
+      "description": "Gain +4 bonus on initiative checks.",
+      "prerequisites": []
     },
     {
       "name": "Improved Unarmed Strike",
-      "description": "Deal lethal damage with unarmed strikes without penalty."
+      "description": "Deal lethal damage with unarmed strikes without penalty.",
+      "prerequisites": []
     },
     {
       "name": "Point-Blank Shot",
-      "description": "Gain +1 bonus on attack and damage rolls with ranged weapons at close range."
+      "description": "Gain +1 bonus on attack and damage rolls with ranged weapons at close range.",
+      "prerequisites": []
     },
     {
       "name": "Power Attack",
-      "description": "Trade attack bonus for damage bonus with melee weapons."
+      "description": "Trade attack bonus for damage bonus with melee weapons.",
+      "prerequisites": [
+        {
+          "type": "ability",
+          "ability": "STR",
+          "value": 13
+        },
+        {
+          "type": "bab",
+          "value": 1
+        }
+      ]
     },
     {
       "name": "Precise Shot",
-      "description": "Shoot into melee without penalty (requires Point-Blank Shot)."
+      "description": "Shoot into melee without penalty.",
+      "prerequisites": [
+        {
+          "type": "feat",
+          "feat": "Point-Blank Shot"
+        }
+      ]
     },
     {
       "name": "Quick Draw",
-      "description": "Draw weapons as a free action."
+      "description": "Draw weapons as a free action.",
+      "prerequisites": [
+        {
+          "type": "bab",
+          "value": 1
+        }
+      ]
     },
     {
       "name": "Rapid Shot",
-      "description": "Make one extra ranged attack per round at -2 penalty."
+      "description": "Make one extra ranged attack per round at -2 penalty.",
+      "prerequisites": [
+        {
+          "type": "ability",
+          "ability": "DEX",
+          "value": 13
+        },
+        {
+          "type": "feat",
+          "feat": "Point-Blank Shot"
+        }
+      ]
     },
     {
       "name": "Shot on the Run",
-      "description": "Move, shoot, and move again as a full-round action."
+      "description": "Move, shoot, and move again as a full-round action.",
+      "prerequisites": [
+        {
+          "type": "ability",
+          "ability": "DEX",
+          "value": 13
+        },
+        {
+          "type": "feat",
+          "feat": "Dodge"
+        },
+        {
+          "type": "feat",
+          "feat": "Mobility"
+        },
+        {
+          "type": "feat",
+          "feat": "Point-Blank Shot"
+        },
+        {
+          "type": "bab",
+          "value": 4
+        }
+      ]
     },
     {
       "name": "Toughness",
-      "description": "Gain +3 hit points, +1 per HD beyond 3rd."
+      "description": "Gain +3 hit points, +1 per HD beyond 3rd.",
+      "prerequisites": []
     },
     {
       "name": "Two-Weapon Fighting",
-      "description": "Reduce penalties for fighting with two weapons."
+      "description": "Reduce penalties for fighting with two weapons.",
+      "prerequisites": [
+        {
+          "type": "ability",
+          "ability": "DEX",
+          "value": 15
+        }
+      ]
     },
     {
       "name": "Weapon Finesse",
-      "description": "Use Dex modifier instead of Str for attack rolls with light weapons."
+      "description": "Use Dex modifier instead of Str for attack rolls with light weapons.",
+      "prerequisites": []
     },
     {
       "name": "Weapon Focus",
-      "description": "Gain +1 bonus on attack rolls with one weapon type."
+      "description": "Gain +1 bonus on attack rolls with one weapon type.",
+      "prerequisites": [
+        {
+          "type": "proficiency",
+          "weapon": "selected_weapon"
+        },
+        {
+          "type": "bab",
+          "value": 1
+        }
+      ]
     }
   ]
 }

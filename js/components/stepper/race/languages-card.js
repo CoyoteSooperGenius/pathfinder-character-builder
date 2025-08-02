@@ -77,51 +77,11 @@ Vue.component('languages-card', {
   },
   computed: {
     intelligenceModifier() {
-      // Get base Intelligence from localStorage
-      const savedScores = localStorage.getItem('currentAbilityScores');
-      let baseIntelligence = 10; // Default if no saved scores
-      
-      if (savedScores) {
-        try {
-          const abilityData = JSON.parse(savedScores);
-          // Access the nested scores object
-          baseIntelligence = abilityData.scores?.INT || 10;
-        } catch (e) {
-          console.warn('Error parsing ability scores from localStorage:', e);
-        }
-      }
-      
-      // Apply racial adjustments
-      const raceData = this.selectedRaceData;
-      
-      // Check for fixed increases
-      if (raceData.abilityAdjustments.increases.fixed) {
-        if (raceData.abilityAdjustments.increases.abilities && 
-            raceData.abilityAdjustments.increases.abilities.includes('INT')) {
-          baseIntelligence += 2;
-        }
-      } else {
-        // Check player-selected increases
-        if (this.selectedIncreases.includes('INT')) {
-          baseIntelligence += 2;
-        }
-      }
-      
-      // Check for fixed decreases
-      if (raceData.abilityAdjustments.decreases.fixed) {
-        if (raceData.abilityAdjustments.decreases.abilities && 
-            raceData.abilityAdjustments.decreases.abilities.includes('INT')) {
-          baseIntelligence -= 2;
-        }
-      } else {
-        // Check player-selected decreases
-        if (this.selectedDecreases.includes('INT')) {
-          baseIntelligence -= 2;
-        }
-      }
-      
-      // Calculate modifier
-      return Math.floor((baseIntelligence - 10) / 2);
+      return AbilityCalculator.getIntelligenceModifier(
+        this.selectedRaceData, 
+        this.selectedIncreases, 
+        this.selectedDecreases
+      );
     },
     racialLanguages() {
       const raceName = this.selectedRaceData.name;

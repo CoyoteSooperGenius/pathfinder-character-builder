@@ -11,7 +11,6 @@ Vue.component('favored-class-card', {
   },
   data() {
     return {
-      showFavoredClass: true,
       availableClasses: [
         'Barbarian',
         'Bard',
@@ -66,72 +65,65 @@ Vue.component('favored-class-card', {
       
       return !this.selectedFavoredClasses.includes(className) && 
              this.selectedFavoredClasses.length >= this.allowedSelections;
-    },
-    toggleFavoredClass() {
-      this.showFavoredClass = !this.showFavoredClass;
     }
   },
   template: `
-    <div class="card mt-3">
-      <div class="card-header" style="cursor: pointer;" @click="toggleFavoredClass">
-        <h5 class="mb-0 d-flex justify-content-between align-items-center">
-          Favored Class
-          <i :class="showFavoredClass ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"></i>
-        </h5>
+    <collapsible-card 
+      title="Favored Class" 
+      :initially-expanded="true"
+      card-classes="mt-3"
+    >
+      <div class="mb-2">
+        <small class="text-muted">
+          {{ isMultiSelect ? 'Select ' + allowedSelections + ' favored classes' : 'Select 1 favored class' }}
+        </small>
       </div>
-      <div v-show="showFavoredClass" class="card-body">
-        <div class="mb-2">
-          <small class="text-muted">
-            {{ isMultiSelect ? 'Select ' + allowedSelections + ' favored classes' : 'Select 1 favored class' }}
-          </small>
-        </div>
-        
-        <div v-if="isMultiSelect" class="mb-3">
-          <div class="row">
-            <div v-for="className in availableClasses" :key="className" class="col-6 col-md-4 col-lg-6 mb-2">
-              <div class="form-check">
-                <input 
-                  class="form-check-input" 
-                  type="checkbox" 
-                  :value="className"
-                  :checked="selectedFavoredClasses.includes(className)"
-                  @change="onClassChange(className)"
-                  :disabled="isClassDisabled(className)"
-                  :id="'favored-class-' + className.toLowerCase()"
-                >
-                <label class="form-check-label" :for="'favored-class-' + className.toLowerCase()">
-                  {{ className }}
-                </label>
-              </div>
+      
+      <div v-if="isMultiSelect" class="mb-3">
+        <div class="row">
+          <div v-for="className in availableClasses" :key="className" class="col-6 col-md-4 col-lg-6 mb-2">
+            <div class="form-check">
+              <input 
+                class="form-check-input" 
+                type="checkbox" 
+                :value="className"
+                :checked="selectedFavoredClasses.includes(className)"
+                @change="onClassChange(className)"
+                :disabled="isClassDisabled(className)"
+                :id="'favored-class-' + className.toLowerCase()"
+              >
+              <label class="form-check-label" :for="'favored-class-' + className.toLowerCase()">
+                {{ className }}
+              </label>
             </div>
           </div>
         </div>
-        
-        <div v-else>
-          <div class="row">
-            <div v-for="className in availableClasses" :key="className" class="col-6 col-md-4 col-lg-6 mb-2">
-              <div class="form-check">
-                <input 
-                  class="form-check-input" 
-                  type="radio" 
-                  :value="className"
-                  :checked="selectedFavoredClasses.includes(className)"
-                  @change="onClassChange(className)"
-                  :id="'favored-class-' + className.toLowerCase()"
-                  name="favoredClass"
-                >
-                <label class="form-check-label" :for="'favored-class-' + className.toLowerCase()">
-                  {{ className }}
-                </label>
-              </div>
+      </div>
+      
+      <div v-else>
+        <div class="row">
+          <div v-for="className in availableClasses" :key="className" class="col-6 col-md-4 col-lg-6 mb-2">
+            <div class="form-check">
+              <input 
+                class="form-check-input" 
+                type="radio" 
+                :value="className"
+                :checked="selectedFavoredClasses.includes(className)"
+                @change="onClassChange(className)"
+                :id="'favored-class-' + className.toLowerCase()"
+                name="favoredClass"
+              >
+              <label class="form-check-label" :for="'favored-class-' + className.toLowerCase()">
+                {{ className }}
+              </label>
             </div>
           </div>
         </div>
-        
-        <div v-if="selectedFavoredClasses.length > 0" class="mt-3">
-          <strong>Selected:</strong> {{ selectedFavoredClasses.join(', ') }}
-        </div>
       </div>
-    </div>
+      
+      <div v-if="selectedFavoredClasses.length > 0" class="mt-3">
+        <strong>Selected:</strong> {{ selectedFavoredClasses.join(', ') }}
+      </div>
+    </collapsible-card>
   `
 });

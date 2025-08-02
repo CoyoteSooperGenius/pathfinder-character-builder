@@ -63,18 +63,17 @@ Vue.component('character-sheet', {
       return def || '—';
     },
     updateAbilityScores() {
-      const savedAbilityScores = localStorage.getItem('currentAbilityScores');
-      if (savedAbilityScores) {
-        const abilityScores = JSON.parse(savedAbilityScores);
+      const abilityData = CharacterDataService.getAbilityScores();
+      if (abilityData && abilityData.scores) {
         const abilitiesSection = this.sheetSections.find(section => section.listKey === 'abilities');
         
-        if (abilitiesSection && abilityScores && abilityScores.scores) {
+        if (abilitiesSection) {
           abilitiesSection.fields.forEach(field => {
             const abilityName = field.label;
-            const score = abilityScores.scores[abilityName];
+            const score = abilityData.scores[abilityName];
             if (score !== undefined) {
               field.value = score;
-              field.bonus = this.calculateBonus(score);
+              field.bonus = AbilityCalculator.formatAbilityScore(score);
             }
           });
         }
@@ -144,16 +143,14 @@ Vue.component('character-sheet', {
       }
     },
     updateFromLocalStorage() {
-      // Update all sections from localStorage
+      // Update all sections from localStorage using CharacterDataService
       this.updateAbilityScores();
       this.updateBasicInfo();
       this.updateDetails();
       this.updateTraits();
     },
     calculateBonus(score) {
-      if (score === null || score === 0 || score === '') return '';
-      const bonus = Math.floor((score - 10) / 2);
-      return (bonus >= 0 ? '+' : '') + bonus;
+      return AbilityCalculator.getModifier(score);
     }
   },
   template: `

@@ -4,12 +4,12 @@ Vue.component('fighter-bonus-feat', {
       <h6>Fighter Bonus Feat</h6>
       <p class="text-muted mb-3">Choose a combat feat from the list below:</p>
       
-      <div class="row" v-if="fighterBonusFeats.length > 0">
+      <div class="row" v-if="availableFeats.length > 0">
         <!-- Feat List -->
         <div class="col-md-6">
           <div class="list-group">
             <button
-              v-for="feat in fighterBonusFeats"
+              v-for="feat in availableFeats"
               :key="feat.name"
               type="button"
               class="list-group-item list-group-item-action"
@@ -27,6 +27,9 @@ Vue.component('fighter-bonus-feat', {
               </div>
             </button>
           </div>
+          <div v-if="filteredOutCount > 0" class="text-muted small mt-2">
+            <i class="fas fa-info-circle"></i> {{ filteredOutCount }} feat{{ filteredOutCount > 1 ? 's' : '' }} hidden due to unmet prerequisites
+          </div>
         </div>
         
         <!-- Description Panel -->
@@ -38,15 +41,30 @@ Vue.component('fighter-bonus-feat', {
               </h6>
             </div>
             <div class="card-body">
-              <p v-if="displayedFeat" class="mb-0">
-                {{ displayedFeat.description }}
-              </p>
+              <div v-if="displayedFeat">
+                <p class="mb-2">{{ displayedFeat.description }}</p>
+                <div v-if="displayedFeat.prerequisites && displayedFeat.prerequisites.length > 0" class="small text-muted">
+                  <strong>Prerequisites:</strong>
+                  <ul class="mb-0 ps-3">
+                    <li v-for="prereq in displayedFeat.prerequisites" :key="prereq.type + prereq.ability + prereq.value">
+                      {{ formatPrerequisite(prereq) }}
+                    </li>
+                  </ul>
+                </div>
+                <div v-else class="small text-muted">
+                  <strong>Prerequisites:</strong> None
+                </div>
+              </div>
               <p v-else class="text-muted mb-0">
                 Click on a feat from the list to see its description.
               </p>
             </div>
           </div>
         </div>
+      </div>
+      
+      <div v-else-if="fighterBonusFeats.length > 0" class="alert alert-warning">
+        <i class="fas fa-exclamation-triangle"></i> No feats available with your current ability scores and level.
       </div>
       
       <div v-else class="text-center">
@@ -67,6 +85,12 @@ Vue.component('fighter-bonus-feat', {
     };
   },
   computed: {
+    availableFeats() {
+      return PrerequisiteChecker.filterByPrerequisites(this.fighterBonusFeats);
+    },
+    filteredOutCount() {
+      return this.fighterBonusFeats.length - this.availableFeats.length;
+    },
     displayedFeat() {
       // Show description for hovered feat, or selected feat, or null
       const featName = this.hoveredFeat || this.selectedBonusFeat;
@@ -83,6 +107,9 @@ Vue.component('fighter-bonus-feat', {
         console.error('Error loading feats data:', error);
         alert('Error loading feats data. Please refresh the page.');
       }
+    },
+    formatPrerequisite(prereq) {
+      return PrerequisiteChecker.formatPrerequisite(prereq);
     },
     selectBonusFeat(featName) {
       this.$emit('feat-selected', featName);

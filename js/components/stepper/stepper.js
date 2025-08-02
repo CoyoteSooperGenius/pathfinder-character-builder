@@ -56,7 +56,7 @@ Vue.component('stepper', {
       steps: [
         { title: 'Determine Ability Scores', component: 'step-ability-scores' },
         { title: 'Pick Your Race', component: 'step-race' },
-        { title: 'Pick Your Class', component: 'step-class' },
+        { title: 'Pick Your Class', component: 'class-step-coordinator' },
         { title: 'Pick Skills', component: 'step-skills' },
         { title: 'Pick Feats', component: 'step-feats' },
         { title: 'Buy Equipment', component: 'step-equipment' },
@@ -79,6 +79,8 @@ Vue.component('stepper', {
           this.saveRaceData();
           // Emit event to update character sheet with race data
           this.$emit('race-data-saved');
+        } else if (this.currentStep === 2) {
+          this.saveClassData();
         }
         
         this.currentStep++;
@@ -94,7 +96,7 @@ Vue.component('stepper', {
     saveAbilityScores() {
       if (this.$refs.currentStepComponent && this.$refs.currentStepComponent.getAbilityScores) {
         const abilityScores = this.$refs.currentStepComponent.getAbilityScores();
-        localStorage.setItem('currentAbilityScores', JSON.stringify(abilityScores));
+        CharacterDataService.saveAbilityScores(abilityScores);
       }
     },
     saveRaceData() {
@@ -102,74 +104,19 @@ Vue.component('stepper', {
         const raceData = this.$refs.currentStepComponent.getRaceData();
         
         // Update ability scores with racial adjustments
-        this.updateAbilityScoresWithRacialAdjustments(raceData);
+        CharacterDataService.updateAbilityScoresWithRacialAdjustments(raceData);
         
-        // Save basic info (race and favored classes)
-        this.saveBasicInfo(raceData);
-        
-        // Save languages
-        this.saveLanguages(raceData.languages);
-        
-        // Save racial traits
-        this.saveRacialTraits(raceData.traits);
+        // Save all race data using the service
+        CharacterDataService.saveRaceData(raceData);
       }
     },
-    updateAbilityScoresWithRacialAdjustments(raceData) {
-      const savedScores = localStorage.getItem('currentAbilityScores');
-      if (savedScores) {
-        try {
-          const abilityData = JSON.parse(savedScores);
-          
-          // Apply racial increases
-          raceData.selectedIncreases.forEach(ability => {
-            abilityData.scores[ability] = (abilityData.scores[ability] || 10) + 2;
-          });
-          
-          // Apply racial decreases
-          raceData.selectedDecreases.forEach(ability => {
-            abilityData.scores[ability] = (abilityData.scores[ability] || 10) - 2;
-          });
-          
-          localStorage.setItem('currentAbilityScores', JSON.stringify(abilityData));
-        } catch (e) {
-          console.warn('Error updating ability scores with racial adjustments:', e);
+    saveClassData() {
+      if (this.$refs.currentStepComponent && this.$refs.currentStepComponent.getClassData) {
+        const classData = this.$refs.currentStepComponent.getClassData();
+        if (classData) {
+          CharacterDataService.saveClassData(classData);
         }
       }
-    },
-    saveBasicInfo(raceData) {
-      const basicInfo = {
-        race: raceData.selectedRace,
-        favoredClasses: raceData.selectedFavoredClasses
-      };
-      localStorage.setItem('currentBasicInfo', JSON.stringify(basicInfo));
-    },
-    saveLanguages(languages) {
-      const details = {
-        languages: languages
-      };
-      localStorage.setItem('currentDetails', JSON.stringify(details));
-    },
-    saveRacialTraits(raceTraits) {
-      // Convert race traits to trait objects with Label and Description
-      const traits = raceTraits.map(trait => {
-        const colonIndex = trait.indexOf(':');
-        if (colonIndex > -1) {
-          return {
-            Label: trait.substring(0, colonIndex).trim(),
-            Description: trait.substring(colonIndex + 1).trim()
-          };
-        } else {
-          return {
-            Label: trait.trim(),
-            Description: ''
-          };
-        }
-      });
-      
-      const traitsData = {
-        racialTraits: traits
-      };
-      localStorage.setItem('currentTraits', JSON.stringify(traitsData));
     },
     finish() {
       this.$emit('finished');
