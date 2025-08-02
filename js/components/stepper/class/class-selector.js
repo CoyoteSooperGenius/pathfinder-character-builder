@@ -25,7 +25,9 @@ Vue.component('class-selector', {
         alert('Error loading class data. Please refresh the page.');
       }
     },
-    selectClass(className) {
+    selectClass(classNameOrObject) {
+      // Handle both string (from selection-changed) and object (from item-selected)
+      const className = typeof classNameOrObject === 'string' ? classNameOrObject : classNameOrObject.name;
       this.$emit('class-selected', className);
     },
     toggleClassSelection() {
@@ -44,35 +46,28 @@ Vue.component('class-selector', {
         </h5>
       </div>
       <div class="card-body" v-show="showClassSelection">
-        <div class="row" v-if="coreClasses.length > 0">
-          <div 
-            v-for="classOption in coreClasses" 
-            :key="classOption.name"
-            class="col-md-6 col-lg-4 mb-3"
-          >
-            <div 
-              :id="classOption.name + '-selector'"
-              class="card h-100 class-option"
-              :class="{ 'border-primary bg-light': selectedClass === classOption.name }"
-              @click="selectClass(classOption.name)"
-              style="cursor: pointer;"
-            >
-              <div class="card-body">
-                <h6 class="card-title">{{ classOption.name }}</h6>
-                <p class="card-text small">{{ classOption.description }}</p>
-                <div class="small text-muted">
-                  <strong>Hit Die:</strong> d{{ classOption.hitDie }}<br>
-                  <strong>Skill Points:</strong> {{ classOption.skillPoints }}<br>
-                  <strong>BAB:</strong> {{ classOption.baseAttackBonus }}<br>
-                  <strong>Saves:</strong> Fort {{ classOption.saves.fortitude }}, Ref {{ classOption.saves.reflex }}, Will {{ classOption.saves.will }}
-                </div>
-              </div>
+        <selection-grid
+          :items="coreClasses"
+          :selected-item="selectedClass"
+          display-mode="cards"
+          columns="col-md-6 col-lg-4"
+          item-key="name"
+          title-property="name"
+          description-property="description"
+          :loading="coreClasses.length === 0"
+          empty-message="No classes available"
+          @selection-changed="selectClass"
+          @item-selected="selectClass"
+        >
+          <template #card-content="{ item }">
+            <div class="small text-muted">
+              <strong>Hit Die:</strong> d{{ item.hitDie }}<br>
+              <strong>Skill Points:</strong> {{ item.skillPoints }}<br>
+              <strong>BAB:</strong> {{ item.baseAttackBonus }}<br>
+              <strong>Saves:</strong> Fort {{ item.saves.fortitude }}, Ref {{ item.saves.reflex }}, Will {{ item.saves.will }}
             </div>
-          </div>
-        </div>
-        <div v-else class="text-center">
-          <i class="fas fa-spinner fa-spin"></i> Loading classes...
-        </div>
+          </template>
+        </selection-grid>
       </div>
     </div>
   `
