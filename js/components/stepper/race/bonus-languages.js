@@ -20,30 +20,13 @@ Vue.component('bonus-languages', {
     bonusLanguageCount() {
       return Math.max(0, this.intelligenceModifier);
     },
-    canSelectMore() {
-      return this.selectedBonusLanguages.length < this.bonusLanguageCount;
-    },
     showBonusLanguages() {
       return this.bonusLanguageCount > 0 && this.availableBonusLanguages.length > 0;
     }
   },
   methods: {
-    toggleBonusLanguage(language) {
-      const currentSelection = [...this.selectedBonusLanguages];
-      const index = currentSelection.indexOf(language);
-      
-      if (index > -1) {
-        // Remove language
-        currentSelection.splice(index, 1);
-      } else if (this.canSelectMore) {
-        // Add language
-        currentSelection.push(language);
-      }
-      
-      this.$emit('bonus-languages-changed', currentSelection);
-    },
-    isLanguageSelected(language) {
-      return this.selectedBonusLanguages.includes(language);
+    handleLanguageChange(selectedLanguages) {
+      this.$emit('bonus-languages-changed', selectedLanguages);
     }
   },
   template: `
@@ -57,38 +40,17 @@ Vue.component('bonus-languages', {
         +{{ intelligenceModifier }} Intelligence modifier grants {{ bonusLanguageCount }} bonus language{{ bonusLanguageCount !== 1 ? 's' : '' }}
       </small>
       
-      <div class="row">
-        <div 
-          v-for="language in availableBonusLanguages" 
-          :key="'bonus-' + language" 
-          class="col-6 col-md-4 col-lg-6 mb-2"
-        >
-          <div class="form-check">
-            <input 
-              class="form-check-input" 
-              type="checkbox" 
-              :id="'bonus-lang-' + language"
-              :value="language"
-              :checked="isLanguageSelected(language)"
-              :disabled="!isLanguageSelected(language) && !canSelectMore"
-              @change="toggleBonusLanguage(language)"
-            />
-            <label 
-              class="form-check-label" 
-              :for="'bonus-lang-' + language"
-              :class="{ 'text-muted': !isLanguageSelected(language) && !canSelectMore }"
-            >
-              {{ language }}
-            </label>
-          </div>
-        </div>
-      </div>
-      
-      <div class="mt-2">
-        <small class="text-muted">
-          Selected: {{ selectedBonusLanguages.length }} / {{ bonusLanguageCount }}
-        </small>
-      </div>
+      <checkbox-group
+        :items="availableBonusLanguages"
+        :selected-items="selectedBonusLanguages"
+        :max-selections="bonusLanguageCount"
+        :show-counter="true"
+        counter-label="Selected"
+        columns="col-6 col-md-4 col-lg-6"
+        layout="grid"
+        group-name="bonus-languages"
+        @selection-changed="handleLanguageChange"
+      />
     </div>
     
     <div v-else-if="bonusLanguageCount === 0" class="mb-3">

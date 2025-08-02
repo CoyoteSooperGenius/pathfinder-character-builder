@@ -41,7 +41,6 @@ Vue.component('available-races-card', {
           display-mode="radio"
           item-key="name"
           title-property="name"
-          description-property="description"
           :loading="races.length === 0"
           empty-message="No races available"
           @selection-changed="handleRaceSelection"

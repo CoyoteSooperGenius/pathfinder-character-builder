@@ -56,7 +56,7 @@ This document tracks the progress of the component refactoring project.
 ### 3.1 Generic Form Components
 - [x] Create `collapsible-card.js` - Reusable expand/collapse card
 - [x] Create `selection-grid.js` - Generic grid for selecting options
-- [ ] Create `checkbox-group.js` - Multiple selection component
+- [x] Create `checkbox-group.js` - Multiple selection component
 - [ ] Create `progress-indicator.js` - Completion status display
 
 ### 3.2 Specialized Selection Components  

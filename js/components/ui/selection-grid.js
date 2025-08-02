@@ -60,8 +60,11 @@ Vue.component('selection-grid', {
       deep: true
     },
     localSelectedItem: {
-      handler(newValue) {
-        this.$emit('selection-changed', newValue);
+      handler(newValue, oldValue) {
+        // Only emit if the values actually changed to prevent infinite loops
+        if (JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
+          this.$emit('selection-changed', newValue);
+        }
       },
       deep: true
     }

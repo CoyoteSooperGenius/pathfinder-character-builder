@@ -23,28 +23,30 @@ Vue.component('ability-adjustments-card', {
     };
   },
   methods: {
-    onIncreaseChange(ability) {
-      this.$emit('increase-changed', ability);
+    handleIncreaseChange(selectedAbilities) {
+      // Find which ability was toggled and emit individual change
+      const added = selectedAbilities.find(ability => !this.selectedIncreases.includes(ability));
+      const removed = this.selectedIncreases.find(ability => !selectedAbilities.includes(ability));
+      
+      // Emit the ability that changed
+      const changedAbility = added || removed;
+      if (changedAbility) {
+        this.$emit('increase-changed', changedAbility);
+      }
     },
-    onDecreaseChange(ability) {
-      this.$emit('decrease-changed', ability);
+    handleDecreaseChange(selectedAbilities) {
+      // Find which ability was toggled and emit individual change
+      const added = selectedAbilities.find(ability => !this.selectedDecreases.includes(ability));
+      const removed = this.selectedDecreases.find(ability => !selectedAbilities.includes(ability));
+      
+      // Emit the ability that changed
+      const changedAbility = added || removed;
+      if (changedAbility) {
+        this.$emit('decrease-changed', changedAbility);
+      }
     },
     toggleAbilityAdjustments() {
       this.showAbilityAdjustments = !this.showAbilityAdjustments;
-    },
-    isIncreaseDisabled(ability) {
-      const raceData = this.selectedRaceData;
-      if (raceData.abilityAdjustments.increases.fixed) return true;
-      
-      return !this.selectedIncreases.includes(ability) && 
-             this.selectedIncreases.length >= raceData.abilityAdjustments.increases.count;
-    },
-    isDecreaseDisabled(ability) {
-      const raceData = this.selectedRaceData;
-      if (raceData.abilityAdjustments.decreases.fixed) return true;
-      
-      return !this.selectedDecreases.includes(ability) && 
-             this.selectedDecreases.length >= raceData.abilityAdjustments.decreases.count;
     }
   },
   template: `
@@ -61,24 +63,19 @@ Vue.component('ability-adjustments-card', {
           <small class="text-muted d-block mb-2">
             {{ selectedRaceData.abilityAdjustments.increases.fixed ? 'Fixed by race' : 'Select ' + selectedRaceData.abilityAdjustments.increases.count }}
           </small>
-          <div class="row">
-            <div v-for="ability in abilities" :key="'inc-' + ability" class="col-4 col-sm-2">
-              <div class="form-check">
-                <input 
-                  class="form-check-input" 
-                  type="checkbox" 
-                  :value="ability"
-                  :checked="selectedIncreases.includes(ability)"
-                  @change="onIncreaseChange(ability)"
-                  :disabled="isIncreaseDisabled(ability)"
-                  :id="'increase-' + ability"
-                >
-                <label class="form-check-label" :for="'increase-' + ability">
-                  {{ ability }}
-                </label>
-              </div>
-            </div>
-          </div>
+          
+          <checkbox-group
+            :items="abilities"
+            :selected-items="selectedIncreases"
+            :max-selections="selectedRaceData.abilityAdjustments.increases.count"
+            :disabled="selectedRaceData.abilityAdjustments.increases.fixed"
+            :show-counter="!selectedRaceData.abilityAdjustments.increases.fixed"
+            counter-label="Selected"
+            columns="col-4 col-sm-2"
+            layout="grid"
+            group-name="ability-increases"
+            @selection-changed="handleIncreaseChange"
+          />
         </div>
         
         <div v-if="selectedRaceData.abilityAdjustments.decreases.count > 0">
@@ -86,24 +83,19 @@ Vue.component('ability-adjustments-card', {
           <small class="text-muted d-block mb-2">
             {{ selectedRaceData.abilityAdjustments.decreases.fixed ? 'Fixed by race' : 'Select ' + selectedRaceData.abilityAdjustments.decreases.count }}
           </small>
-          <div class="row">
-            <div v-for="ability in abilities" :key="'dec-' + ability" class="col-4 col-sm-2">
-              <div class="form-check">
-                <input 
-                  class="form-check-input" 
-                  type="checkbox" 
-                  :value="ability"
-                  :checked="selectedDecreases.includes(ability)"
-                  @change="onDecreaseChange(ability)"
-                  :disabled="isDecreaseDisabled(ability)"
-                  :id="'decrease-' + ability"
-                >
-                <label class="form-check-label" :for="'decrease-' + ability">
-                  {{ ability }}
-                </label>
-              </div>
-            </div>
-          </div>
+          
+          <checkbox-group
+            :items="abilities"
+            :selected-items="selectedDecreases"
+            :max-selections="selectedRaceData.abilityAdjustments.decreases.count"
+            :disabled="selectedRaceData.abilityAdjustments.decreases.fixed"
+            :show-counter="!selectedRaceData.abilityAdjustments.decreases.fixed"
+            counter-label="Selected"
+            columns="col-4 col-sm-2"
+            layout="grid"
+            group-name="ability-decreases"
+            @selection-changed="handleDecreaseChange"
+          />
         </div>
         
         <div v-if="selectedRaceData.abilityAdjustments.increases.count === 0 && selectedRaceData.abilityAdjustments.decreases.count === 0" class="text-muted">

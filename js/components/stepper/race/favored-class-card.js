@@ -36,35 +36,8 @@ Vue.component('favored-class-card', {
     }
   },
   methods: {
-    onClassChange(className) {
-      if (this.isMultiSelect) {
-        this.handleMultiSelect(className);
-      } else {
-        this.handleSingleSelect(className);
-      }
-    },
-    handleSingleSelect(className) {
-      this.$emit('favored-class-changed', [className]);
-    },
-    handleMultiSelect(className) {
-      const currentSelections = [...this.selectedFavoredClasses];
-      const index = currentSelections.indexOf(className);
-      
-      if (index > -1) {
-        // Remove if already selected
-        currentSelections.splice(index, 1);
-      } else if (currentSelections.length < this.allowedSelections) {
-        // Add if under limit
-        currentSelections.push(className);
-      }
-      
-      this.$emit('favored-class-changed', currentSelections);
-    },
-    isClassDisabled(className) {
-      if (!this.isMultiSelect) return false;
-      
-      return !this.selectedFavoredClasses.includes(className) && 
-             this.selectedFavoredClasses.length >= this.allowedSelections;
+    handleClassChange(selectedClasses) {
+      this.$emit('favored-class-changed', selectedClasses);
     }
   },
   template: `
@@ -79,51 +52,24 @@ Vue.component('favored-class-card', {
         </small>
       </div>
       
-      <div v-if="isMultiSelect" class="mb-3">
-        <div class="row">
-          <div v-for="className in availableClasses" :key="className" class="col-6 col-md-4 col-lg-6 mb-2">
-            <div class="form-check">
-              <input 
-                class="form-check-input" 
-                type="checkbox" 
-                :value="className"
-                :checked="selectedFavoredClasses.includes(className)"
-                @change="onClassChange(className)"
-                :disabled="isClassDisabled(className)"
-                :id="'favored-class-' + className.toLowerCase()"
-              >
-              <label class="form-check-label" :for="'favored-class-' + className.toLowerCase()">
-                {{ className }}
-              </label>
-            </div>
+      <checkbox-group
+        :items="availableClasses"
+        :selected-items="selectedFavoredClasses"
+        :allow-multiple="isMultiSelect"
+        :max-selections="allowedSelections"
+        :show-counter="isMultiSelect"
+        counter-label="Selected"
+        columns="col-6 col-md-4 col-lg-6"
+        layout="grid"
+        group-name="favored-classes"
+        @selection-changed="handleClassChange"
+      >
+        <template #selected-items="{ selectedItems }">
+          <div v-if="selectedItems.length > 0" class="mt-3">
+            <strong>Selected:</strong> {{ selectedItems.join(', ') }}
           </div>
-        </div>
-      </div>
-      
-      <div v-else>
-        <div class="row">
-          <div v-for="className in availableClasses" :key="className" class="col-6 col-md-4 col-lg-6 mb-2">
-            <div class="form-check">
-              <input 
-                class="form-check-input" 
-                type="radio" 
-                :value="className"
-                :checked="selectedFavoredClasses.includes(className)"
-                @change="onClassChange(className)"
-                :id="'favored-class-' + className.toLowerCase()"
-                name="favoredClass"
-              >
-              <label class="form-check-label" :for="'favored-class-' + className.toLowerCase()">
-                {{ className }}
-              </label>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <div v-if="selectedFavoredClasses.length > 0" class="mt-3">
-        <strong>Selected:</strong> {{ selectedFavoredClasses.join(', ') }}
-      </div>
+        </template>
+      </checkbox-group>
     </collapsible-card>
   `
 });
