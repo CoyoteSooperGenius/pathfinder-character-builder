@@ -32,14 +32,17 @@
             @ability-scores-saved="onAbilityScoresSaved"
             @race-data-saved="onRaceDataSaved"
             @class-data-saved="onClassDataSaved"
+            @step-changed="onStepChanged"
+            ref="stepper"
           ></stepper>
         </div>
         <div class="col-md-6 mb-3">
-          <character-sheet-coordinator 
+          <character-sheet-hybrid 
             class="card p-3"
             :character="currentCharacter"
+            :current-step="currentStep"
             ref="characterSheet"
-          ></character-sheet-coordinator>
+          ></character-sheet-hybrid>
         </div>
       </div>
     </div>
@@ -79,24 +82,29 @@
     <script src="js/components/stepper/step-skills.js"></script>
     <script src="js/components/stepper/step-feats.js"></script>
     <script src="js/components/stepper/step-equipment.js"></script>
-    <script src="js/components/character-sheet/character-basics.js"></script>
-    <script src="js/components/character-sheet/ability-scores-display.js"></script>
-    <script src="js/components/character-sheet/character-list-display.js"></script>
-    <script src="js/components/character-sheet/character-details.js"></script>
-    <script src="js/components/character-sheet/character-sheet-coordinator.js"></script>
+    <script src="js/components/character-sheet/character-sheet-hybrid.js"></script>
     <script>
     new Vue({
       el: '#app',
       data: {
         showMainPage: true,
         showStepper: false,
-        currentCharacter: {}
+        currentCharacter: {},
+        currentStep: 0
       },
       methods: {
         showStepperComponent() {
           this.showMainPage = false;
           this.showStepper = true;
           this.currentCharacter = {}; // Reset for new character
+          this.currentStep = 0; // Reset step
+        },
+        onStepChanged(stepNumber) {
+          this.currentStep = stepNumber;
+          // Update character sheet when step changes
+          if (this.$refs.characterSheet) {
+            this.$refs.characterSheet.updateFromLocalStorage();
+          }
         },
         updateCharacter(character) {
           this.currentCharacter = character;

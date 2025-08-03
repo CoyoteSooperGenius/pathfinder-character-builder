@@ -88,12 +88,14 @@ Vue.component('stepper', {
         
         this.currentStep++;
         this.canProceed = true; // Reset for next step
+        this.$emit('step-changed', this.currentStep);
       }
     },
     prevStep() {
       if (this.currentStep > 0) {
         this.currentStep--;
         this.canProceed = this.currentStep > 0; // Allow going back except from ability scores
+        this.$emit('step-changed', this.currentStep);
       }
     },
     saveAbilityScores() {

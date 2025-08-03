@@ -12,9 +12,10 @@ test.describe('Character Creation Flow', () => {
     await page.selectOption('#ability-method', 'Point Buy');
     await page.click('text=Quick Set (All 14s)');
     
-    // Verify ability scores are set - check that table rows contain 14
-    await expect(page.locator('tbody tr')).toHaveCount(6);
-    const rows = page.locator('tbody tr');
+    // Verify ability scores are set - check point-buy table specifically
+    const pointBuyTable = page.locator('.ability-score-adjuster table tbody');
+    await expect(pointBuyTable.locator('tr')).toHaveCount(6);
+    const rows = pointBuyTable.locator('tr');
     for (let i = 0; i < 6; i++) {
       await expect(rows.nth(i)).toContainText('14');
     }

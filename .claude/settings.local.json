@@ -14,7 +14,10 @@
       "Bash(timeout 45 npm run test:e2e -- --grep \"should complete full character creation with Human Fighter\" --project=chromium)",
       "Bash(node:*)",
       "Bash(timeout 10 npm run test:e2e -- --grep \"application loads\" --project=chromium --timeout=5000)",
-      "Bash(timeout 15 npm run test:e2e -- --grep \"application loads\" --project=chromium)"
+      "Bash(timeout 15 npm run test:e2e -- --grep \"application loads\" --project=chromium)",
+      "Bash(timeout 30 npm run test:e2e -- --grep \"should complete full character creation with Human Fighter\" --project=chromium)",
+      "Bash(timeout 30 npm run test:e2e -- --grep \"should prevent progression with incomplete steps\" --project=chromium)",
+      "Bash(find:*)"
     ],
     "deny": []
   }
