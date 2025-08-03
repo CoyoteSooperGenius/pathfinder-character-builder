@@ -121,6 +121,24 @@ Vue.component('character-sheet-hybrid', {
       return `${race} ${charClass}, Level ${level}`;
     },
     
+    // Prepare basic info for table display
+    basicInfoData() {
+      return [
+        { key: 'name', label: 'Name', value: this.basicInfo.name || '—' },
+        { key: 'race', label: 'Race', value: this.basicInfo.race || '—', id: 'character-sheet-race' },
+        { key: 'class', label: 'Class', value: this.basicInfo.class || '—' },
+        { key: 'level', label: 'Level', value: this.basicInfo.level }
+      ];
+    },
+    
+    // Prepare key stats for grid display
+    keyStatsData() {
+      return [
+        { key: 'Hit Points', value: this.derivedStats.hitPoints },
+        { key: 'Armor Class', value: this.derivedStats.armorClass }
+      ];
+    },
+    
     topAbilities() {
       // Get top 3 abilities for compact display
       const abilities = Object.entries(this.abilityScores)
@@ -324,11 +342,18 @@ Vue.component('character-sheet-hybrid', {
               
               <div class="d-flex align-items-center gap-3">
                 <!-- Quick Stats -->
-                <div class="quick-stats d-none d-md-flex gap-2">
-                  <div v-for="ability in topAbilities" :key="ability.ability" class="stat-chip">
-                    <small class="fw-bold">{{ ability.ability }}</small>
-                    <div class="stat-value">{{ ability.score }} ({{ formatModifier(ability.modifier) }})</div>
-                  </div>
+                <div class="quick-stats d-none d-md-flex">
+                  <stat-block
+                    type="custom"
+                    :character-data="{ abilityScores }"
+                    layout="inline"
+                    mode="compact"
+                    size="small"
+                    :show-modifiers="false"
+                    :show-labels="false"
+                    :use-colors="false"
+                    :stats="Object.fromEntries(topAbilities.map(a => [a.ability, { value: a.score, modifier: a.modifier }]))"
+                  />
                 </div>
                 
                 <!-- View Toggle -->
@@ -498,45 +523,26 @@ Vue.component('character-sheet-hybrid', {
               <div class="card-body">
                 <div class="row g-3">
                   <div class="col-md-6">
-                    <h6 class="text-primary">Basic Information</h6>
-                    <table class="table table-sm">
-                      <tbody>
-                        <tr>
-                          <td class="fw-semibold">Name:</td>
-                          <td>{{ basicInfo.name || '—' }}</td>
-                        </tr>
-                        <tr>
-                          <td class="fw-semibold">Race:</td>
-                          <td id="character-sheet-race">{{ basicInfo.race || '—' }}</td>
-                        </tr>
-                        <tr>
-                          <td class="fw-semibold">Class:</td>
-                          <td>{{ basicInfo.class || '—' }}</td>
-                        </tr>
-                        <tr>
-                          <td class="fw-semibold">Level:</td>
-                          <td>{{ basicInfo.level }}</td>
-                        </tr>
-                      </tbody>
-                    </table>
+                    <info-panel
+                      title="Basic Information"
+                      mode="section"
+                      size="small"
+                      :data="basicInfoData"
+                      data-type="table"
+                      :show-divider="false"
+                    />
                   </div>
                   
                   <div class="col-md-6">
-                    <h6 class="text-primary">Key Stats</h6>
-                    <div class="row">
-                      <div class="col-6 text-center mb-2">
-                        <div class="border rounded p-2">
-                          <div class="fw-bold">{{ derivedStats.hitPoints }}</div>
-                          <small class="text-muted">Hit Points</small>
-                        </div>
-                      </div>
-                      <div class="col-6 text-center mb-2">
-                        <div class="border rounded p-2">
-                          <div class="fw-bold">{{ derivedStats.armorClass }}</div>
-                          <small class="text-muted">Armor Class</small>
-                        </div>
-                      </div>
-                    </div>
+                    <info-panel
+                      title="Key Stats"
+                      mode="section"
+                      size="small"
+                      :data="keyStatsData"
+                      data-type="grid"
+                      :list-config="{ keyProperty: 'key', valueProperty: 'value' }"
+                      :show-divider="false"
+                    />
                   </div>
                 </div>
               </div>
@@ -550,25 +556,15 @@ Vue.component('character-sheet-hybrid', {
                 <h6 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Ability Scores</h6>
               </div>
               <div class="card-body">
-                <!-- Modern grid layout -->
-                <div class="row">
-                  <div v-for="(score, ability) in abilityScores" :key="ability" class="col-6 col-md-4 col-lg-2 text-center mb-3">
-                    <div class="ability-score-display border rounded p-2">
-                      <div class="ability-name fw-bold text-primary">{{ ability }}</div>
-                      <div class="ability-score display-6 fw-bold">
-                        {{ score }}
-                      </div>
-                      <div class="ability-modifier">{{ formatModifier(abilityModifiers[ability]) }}</div>
-                      <small class="text-muted">
-                        {{ ability === 'STR' ? 'Strength' : 
-                           ability === 'DEX' ? 'Dexterity' :
-                           ability === 'CON' ? 'Constitution' :
-                           ability === 'INT' ? 'Intelligence' :
-                           ability === 'WIS' ? 'Wisdom' : 'Charisma' }}
-                      </small>
-                    </div>
-                  </div>
-                </div>
+                <!-- Ability Scores using stat-block component -->
+                <stat-block
+                  type="abilities"
+                  :character-data="{ abilityScores }"
+                  layout="grid"
+                  :show-modifiers="true"
+                  :show-labels="true"
+                  :use-colors="true"
+                />
                 
                 <!-- Hidden table for test compatibility -->
                 <table class="d-none">
@@ -619,16 +615,16 @@ Vue.component('character-sheet-hybrid', {
                     <h6 class="mb-0"><i class="fas fa-comment me-2"></i>Languages</h6>
                   </div>
                   <div class="card-body">
-                    <div v-if="languages.length > 0">
-                      <div class="d-flex flex-wrap gap-1">
-                        <span v-for="language in languages" :key="language" class="badge bg-secondary">
-                          {{ language }}
-                        </span>
-                      </div>
-                    </div>
-                    <div v-else class="text-muted">
-                      No languages selected yet.
-                    </div>
+                    <tag-list
+                      :items="languages"
+                      mode="badges"
+                      variant="secondary"
+                      layout="wrap"
+                      size="normal"
+                      :show-empty="true"
+                      empty-message="No languages selected yet."
+                      gap="1"
+                    />
                   </div>
                 </div>
               </div>
@@ -645,32 +641,17 @@ Vue.component('character-sheet-hybrid', {
                     <h6 class="mb-0"><i class="fas fa-shield-alt me-2"></i>Combat Statistics</h6>
                   </div>
                   <div class="card-body">
-                    <div class="row g-3">
-                      <div class="col-6 text-center">
-                        <div class="border rounded p-3">
-                          <div class="display-6 fw-bold text-danger">{{ derivedStats.hitPoints }}</div>
-                          <div class="small text-muted">Hit Points</div>
-                        </div>
-                      </div>
-                      <div class="col-6 text-center">
-                        <div class="border rounded p-3">
-                          <div class="display-6 fw-bold text-primary">{{ derivedStats.armorClass }}</div>
-                          <div class="small text-muted">Armor Class</div>
-                        </div>
-                      </div>
-                      <div class="col-6 text-center">
-                        <div class="border rounded p-3">
-                          <div class="display-6 fw-bold text-success">{{ formatModifier(derivedStats.initiative) }}</div>
-                          <div class="small text-muted">Initiative</div>
-                        </div>
-                      </div>
-                      <div class="col-6 text-center">
-                        <div class="border rounded p-3">
-                          <div class="display-6 fw-bold text-info">{{ derivedStats.speed }}ft</div>
-                          <div class="small text-muted">Speed</div>
-                        </div>
-                      </div>
-                    </div>
+                    <!-- Combat Stats using stat-block component -->
+                    <stat-block
+                      type="combat"
+                      :character-data="{ derivedStats, abilityScores }"
+                      layout="grid"
+                      :columns="2"
+                      :show-modifiers="true"
+                      :show-labels="true"
+                      :show-icons="true"
+                      :use-colors="true"
+                    />
                   </div>
                 </div>
               </div>

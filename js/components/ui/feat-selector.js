@@ -201,25 +201,6 @@ Vue.component('feat-selector', {
       this.localSelectedFeat = currentSelections;
     },
     
-    // Format prerequisite for display
-    formatPrerequisite(prerequisite) {
-      return PrerequisiteChecker.formatPrerequisite(prerequisite);
-    },
-    
-    // Check if character meets specific prerequisite
-    meetsPrerequisite(prerequisite) {
-      return PrerequisiteChecker.meetsPrerequisite(prerequisite, this.characterDataForChecking);
-    },
-    
-    // Get prerequisite status icon and color
-    getPrerequisiteStatus(prerequisite) {
-      const meets = this.meetsPrerequisite(prerequisite);
-      return {
-        icon: meets ? 'fas fa-check-circle' : 'fas fa-times-circle',
-        class: meets ? 'text-success' : 'text-danger',
-        meets: meets
-      };
-    },
     
     // Clear all selections
     clearSelections() {
@@ -287,79 +268,44 @@ Vue.component('feat-selector', {
       >
         <!-- Detail content slot for prerequisites -->
         <template #detail-content="{ item }">
-          <div v-if="showPrerequisiteStatus">
-            <!-- Prerequisites Section -->
-            <div v-if="item.prerequisites && item.prerequisites.length > 0" class="prerequisites-section">
-              <h6 class="small fw-bold mb-2">
-                <i class="fas fa-list-check me-1"></i>Prerequisites:
-              </h6>
-              <ul class="list-unstyled mb-0">
-                <li 
-                  v-for="prereq in item.prerequisites" 
-                  :key="prereq.type + prereq.ability + prereq.value + prereq.feat"
-                  class="d-flex align-items-center mb-1"
-                >
-                  <i :class="getPrerequisiteStatus(prereq).icon + ' ' + getPrerequisiteStatus(prereq).class + ' me-2'"></i>
-                  <span :class="getPrerequisiteStatus(prereq).meets ? '' : 'text-muted'">
-                    {{ formatPrerequisite(prereq) }}
-                  </span>
-                </li>
-              </ul>
-            </div>
-            <div v-else class="prerequisites-section">
-              <h6 class="small fw-bold mb-2">
-                <i class="fas fa-list-check me-1"></i>Prerequisites:
-              </h6>
-              <p class="text-muted small mb-0">
-                <i class="fas fa-check-circle text-success me-1"></i>None
-              </p>
-            </div>
-            
-            <!-- Additional feat information slot -->
-            <slot name="feat-details" :feat="item"></slot>
-          </div>
+          <!-- Prerequisites Section using prerequisite-display component -->
+          <prerequisite-display
+            :prerequisites="item.prerequisites || []"
+            :character-data="characterDataForChecking"
+            mode="list"
+            size="small"
+            :show-status="showPrerequisiteStatus"
+          />
           
-          <!-- Fallback if prerequisite status is disabled -->
-          <div v-else-if="item.prerequisites && item.prerequisites.length > 0" class="small text-muted">
-            <strong>Prerequisites:</strong>
-            <ul class="mb-0 ps-3">
-              <li v-for="prereq in item.prerequisites" :key="prereq.type + prereq.ability + prereq.value">
-                {{ formatPrerequisite(prereq) }}
-              </li>
-            </ul>
-          </div>
-          <div v-else class="small text-muted">
-            <strong>Prerequisites:</strong> None
-          </div>
+          <!-- Additional feat information slot -->
+          <slot name="feat-details" :feat="item"></slot>
         </template>
         
         <!-- List content slot for prerequisite indicators -->
         <template #list-content="{ item }">
           <div v-if="showPrerequisiteStatus && item.prerequisites && item.prerequisites.length > 0" class="mt-1">
-            <small class="text-muted">
-              <i class="fas fa-list-check me-1"></i>
-              {{ item.prerequisites.length }} prerequisite{{ item.prerequisites.length > 1 ? 's' : '' }}
-              <span v-if="!filterByPrerequisites">
-                <span class="mx-1">•</span>
-                <i :class="item.meetsPrerequisites ? 'fas fa-check text-success' : 'fas fa-times text-danger'"></i>
-                {{ item.meetsPrerequisites ? 'Available' : 'Unavailable' }}
-              </span>
-            </small>
+            <prerequisite-display
+              :prerequisites="item.prerequisites"
+              :character-data="characterDataForChecking"
+              mode="compact"
+              size="small"
+              :show-status="!filterByPrerequisites"
+              :show-title="false"
+            />
           </div>
         </template>
         
         <!-- Card content slot for prerequisite indicators -->
         <template #card-content="{ item }">
           <div v-if="showPrerequisiteStatus && item.prerequisites && item.prerequisites.length > 0" class="mt-2">
-            <small class="text-muted">
-              <i class="fas fa-list-check me-1"></i>
-              {{ item.prerequisites.length }} prerequisite{{ item.prerequisites.length > 1 ? 's' : '' }}
-              <span v-if="!filterByPrerequisites">
-                <span class="mx-1">•</span>
-                <i :class="item.meetsPrerequisites ? 'fas fa-check text-success' : 'fas fa-times text-danger'"></i>
-                {{ item.meetsPrerequisites ? 'Available' : 'Unavailable' }}
-              </span>
-            </small>
+            <prerequisite-display
+              :prerequisites="item.prerequisites"
+              :character-data="characterDataForChecking"
+              mode="compact"
+              size="small"
+              :show-status="!filterByPrerequisites"
+              :show-title="false"
+            />
           </div>
         </template>
       </selection-grid>

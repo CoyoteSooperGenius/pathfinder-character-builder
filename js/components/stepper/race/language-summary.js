@@ -18,6 +18,13 @@ Vue.component('language-summary', {
     },
     hasLanguages() {
       return this.selectedLanguages.length > 0;
+    },
+    languageItems() {
+      return this.selectedLanguages.map(language => ({
+        text: language,
+        variant: this.getLanguageCategory(language) === 'automatic' ? 'info' : 'success',
+        tooltip: this.getLanguageCategory(language) === 'automatic' ? 'Automatic language' : 'Bonus language'
+      }));
     }
   },
   methods: {
@@ -28,19 +35,14 @@ Vue.component('language-summary', {
   template: `
     <div v-if="hasLanguages" class="mt-3">
       <strong>All Known Languages:</strong>
-      <div class="d-flex flex-wrap gap-1 mt-1">
-        <span 
-          v-for="language in selectedLanguages" 
-          :key="'known-' + language"
-          :class="[
-            'badge', 
-            getLanguageCategory(language) === 'automatic' ? 'bg-info' : 'bg-success'
-          ]"
-          :title="getLanguageCategory(language) === 'automatic' ? 'Automatic language' : 'Bonus language'"
-        >
-          {{ language }}
-        </span>
-      </div>
+      <tag-list
+        :items="languageItems"
+        mode="badges"
+        layout="wrap"
+        size="normal"
+        gap="1"
+        class="mt-1"
+      />
       <div class="mt-2">
         <small class="text-muted">
           <i class="badge bg-info me-1"></i> Automatic ({{ automaticLanguages.length }})

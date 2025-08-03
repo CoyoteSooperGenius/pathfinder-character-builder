@@ -62,12 +62,12 @@ This document tracks the progress of the component refactoring project.
 ### 3.2 Specialized Selection Components  
 - [x] Create `feat-selector.js` - Generalized feat selection
 - [x] Create `ability-score-adjuster.js` - Point-buy and racial adjustments
-- [ ] Create `prerequisite-display.js` - Requirements with pass/fail indicators
+- [x] Create `prerequisite-display.js` - Requirements with pass/fail indicators
 
 ### 3.3 Data Display Components
-- [ ] Create `info-panel.js` - Standardized information display
-- [ ] Create `stat-block.js` - Character stats display
-- [ ] Create `tag-list.js` - Lists of tags/badges
+- [x] Create `info-panel.js` - Standardized information display
+- [x] Create `stat-block.js` - Character stats display
+- [x] Create `tag-list.js` - Lists of tags/badges
 
 ### 3.4 Refactor Existing Components to Use New UI Components
 - [x] Update race components to use `collapsible-card.js`

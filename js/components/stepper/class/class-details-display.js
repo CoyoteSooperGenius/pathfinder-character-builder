@@ -14,35 +14,56 @@ Vue.component('class-details-display', {
       return this.classData && Object.keys(this.classData).length > 0;
     }
   },
+  computed: {
+    // Prepare class features for list display
+    classFeaturesData() {
+      if (!this.classData.classFeatures) return [];
+      return this.classData.classFeatures.map(feature => ({
+        name: feature,
+        icon: 'fas fa-check text-success'
+      }));
+    },
+    
+    // Prepare proficiencies for table display
+    proficienciesData() {
+      return [
+        { key: 'weapons', label: 'Weapons', value: this.classData.weaponProficiencies },
+        { key: 'armor', label: 'Armor', value: this.classData.armorProficiencies },
+        { key: 'skills', label: 'Class Skills', value: this.classData.classSkills ? this.classData.classSkills.join(', ') : '—' }
+      ];
+    }
+  },
   template: `
-    <div v-if="selectedClass && hasClassData" class="card mb-4">
-      <div class="card-header">
-        <h5 class="mb-0">{{ selectedClass }} Details</h5>
-      </div>
-      <div class="card-body">
+    <div v-if="selectedClass && hasClassData">
+      <info-panel 
+        :title="selectedClass + ' Details'"
+        mode="card"
+        class="mb-4"
+      >
         <div class="row">
           <div class="col-md-6">
-            <h6>Class Features</h6>
-            <ul class="list-unstyled">
-              <li v-for="feature in classData.classFeatures" :key="feature">
-                <i class="fas fa-check text-success me-2"></i>{{ feature }}
-              </li>
-            </ul>
+            <info-panel
+              title="Class Features"
+              mode="section"
+              size="small"
+              :data="classFeaturesData"
+              data-type="list"
+              :list-config="{ keyProperty: 'name', iconProperty: 'icon' }"
+              :show-divider="false"
+            />
           </div>
           <div class="col-md-6">
-            <h6>Proficiencies</h6>
-            <div class="mb-2">
-              <strong>Weapons:</strong> {{ classData.weaponProficiencies }}
-            </div>
-            <div class="mb-2">
-              <strong>Armor:</strong> {{ classData.armorProficiencies }}
-            </div>
-            <div class="mb-2">
-              <strong>Class Skills:</strong> {{ classData.classSkills ? classData.classSkills.join(', ') : '—' }}
-            </div>
+            <info-panel
+              title="Proficiencies"
+              mode="section"
+              size="small"
+              :data="proficienciesData"
+              data-type="table"
+              :show-divider="false"
+            />
           </div>
         </div>
-      </div>
+      </info-panel>
     </div>
   `
 });
