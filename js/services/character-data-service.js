@@ -127,11 +127,17 @@ const CharacterDataService = {
   // Save race data (used by step-race)
   saveRaceData(raceData) {
     try {
-      // Save basic info (race and favored classes)
+      // Save basic info (race, favored classes, and human bonus feat)
       const basicInfo = {
         race: raceData.selectedRace,
         favoredClasses: raceData.selectedFavoredClasses
       };
+      
+      // Add human bonus feat if selected
+      if (raceData.humanBonusFeat) {
+        basicInfo.humanBonusFeat = raceData.humanBonusFeat;
+      }
+      
       this.saveBasicInfo(basicInfo);
 
       // Save languages

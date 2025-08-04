@@ -1,4 +1,170 @@
 {
+  "generalFeats": [
+    {
+      "name": "Alertness",
+      "description": "You get a +2 bonus on Perception and Sense Motive skill checks.",
+      "prerequisites": []
+    },
+    {
+      "name": "Athletic",
+      "description": "You get a +2 bonus on Climb and Swim skill checks.",
+      "prerequisites": []
+    },
+    {
+      "name": "Blind-Fight",
+      "description": "In melee, every time you miss because of concealment, you can reroll your miss chance percentile roll one time to see if you actually hit.",
+      "prerequisites": []
+    },
+    {
+      "name": "Combat Reflexes",
+      "description": "You may make a number of additional attacks of opportunity per round equal to your Dexterity bonus.",
+      "prerequisites": []
+    },
+    {
+      "name": "Deceitful",
+      "description": "You get a +2 bonus on Bluff and Disguise skill checks.",
+      "prerequisites": []
+    },
+    {
+      "name": "Deft Hands",
+      "description": "You get a +2 bonus on Disable Device and Sleight of Hand skill checks.",
+      "prerequisites": []
+    },
+    {
+      "name": "Dodge",
+      "description": "You gain a +1 dodge bonus to your AC against attacks made by one opponent that you designate during your action.",
+      "prerequisites": [
+        {
+          "type": "ability",
+          "ability": "DEX",
+          "value": 13
+        }
+      ]
+    },
+    {
+      "name": "Endurance",
+      "description": "You gain a +4 bonus on checks and saves to resist nonlethal damage from forced marches, starvation, thirst, and hot or cold environments.",
+      "prerequisites": []
+    },
+    {
+      "name": "Great Fortitude",
+      "description": "You get a +2 bonus on all Fortitude saving throws.",
+      "prerequisites": []
+    },
+    {
+      "name": "Improved Initiative",
+      "description": "You get a +4 bonus on initiative checks.",
+      "prerequisites": []
+    },
+    {
+      "name": "Improved Unarmed Strike",
+      "description": "You are considered to be armed even when unarmed and can deal lethal damage with unarmed strikes.",
+      "prerequisites": []
+    },
+    {
+      "name": "Investigator",
+      "description": "You get a +2 bonus on Appraise and Linguistics skill checks.",
+      "prerequisites": []
+    },
+    {
+      "name": "Iron Will",
+      "description": "You get a +2 bonus on all Will saving throws.",
+      "prerequisites": []
+    },
+    {
+      "name": "Lightning Reflexes",
+      "description": "You get a +2 bonus on all Reflex saving throws.",
+      "prerequisites": []
+    },
+    {
+      "name": "Magical Aptitude",
+      "description": "You get a +2 bonus on Spellcraft and Use Magic Device skill checks.",
+      "prerequisites": []
+    },
+    {
+      "name": "Nimble Moves",
+      "description": "You can move through 5 feet of difficult terrain each round as if it were normal terrain.",
+      "prerequisites": [
+        {
+          "type": "ability",
+          "ability": "DEX",
+          "value": 13
+        }
+      ]
+    },
+    {
+      "name": "Persuasive",
+      "description": "You get a +2 bonus on Diplomacy and Intimidate skill checks.",
+      "prerequisites": []
+    },
+    {
+      "name": "Point-Blank Shot",
+      "description": "You get a +1 bonus on attack and damage rolls with ranged weapons at ranges of up to 30 feet.",
+      "prerequisites": []
+    },
+    {
+      "name": "Power Attack",
+      "description": "On your action, before making attack rolls for a turn, you may choose to subtract a number from all melee attack rolls and add twice that number to all melee damage rolls.",
+      "prerequisites": [
+        {
+          "type": "ability",
+          "ability": "STR",
+          "value": 13
+        },
+        {
+          "type": "bab",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "name": "Precise Shot",
+      "description": "You can shoot or throw ranged weapons at an opponent engaged in melee without taking the standard –4 penalty on your attack roll.",
+      "prerequisites": [
+        {
+          "type": "feat",
+          "feat": "Point-Blank Shot"
+        }
+      ]
+    },
+    {
+      "name": "Self-Sufficient",
+      "description": "You get a +2 bonus on Heal and Survival skill checks.",
+      "prerequisites": []
+    },
+    {
+      "name": "Skill Focus",
+      "description": "You get a +3 bonus on all checks involving the chosen skill. If you have 10 or more ranks in that skill, this bonus increases to +6.",
+      "prerequisites": [],
+      "special": "Choose one skill. This feat can be taken multiple times, but each time it applies to a different skill."
+    },
+    {
+      "name": "Stealthy",
+      "description": "You get a +2 bonus on Escape Artist and Stealth skill checks.",
+      "prerequisites": []
+    },
+    {
+      "name": "Toughness",
+      "description": "You gain +3 hit points. For every Hit Die you possess beyond 3, you gain an additional +1 hit point.",
+      "prerequisites": []
+    },
+    {
+      "name": "Two-Weapon Fighting",
+      "description": "Your penalties on attack rolls for fighting with two weapons are reduced. The penalty for your primary hand lessens by 2 and the one for your off hand lessens by 6.",
+      "prerequisites": [
+        {
+          "type": "ability",
+          "ability": "DEX",
+          "value": 15
+        }
+      ]
+    },
+    {
+      "name": "Weapon Finesse",
+      "description": "With a light weapon, elven curve blade, rapier, whip, or spiked chain made for a creature of your size category, you may use your Dexterity modifier instead of your Strength modifier on attack rolls.",
+      "prerequisites": []
+    }
+  ],
   "fighterBonusFeats": [
     {
       "name": "Blind-Fight",

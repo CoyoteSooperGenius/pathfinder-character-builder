@@ -180,6 +180,8 @@ Vue.component('character-sheet-hybrid', {
           startingSpells: basicData.startingSpells,
           // Copy fighter-specific data
           bonusFeat: basicData.bonusFeat,
+          // Copy human racial bonus feat
+          humanBonusFeat: basicData.humanBonusFeat,
           // Copy complete class data
           classData: basicData.classData
         };
@@ -234,13 +236,21 @@ Vue.component('character-sheet-hybrid', {
         });
       }
       
-      // Add human bonus feat placeholder
-      if (basicInfo && basicInfo.race === 'Human' && !basicInfo.bonusFeat) {
-        this.feats.push({
-          label: 'Human Bonus Feat',
-          description: 'Humans select one extra feat at 1st level (selection pending).',
-          source: 'Race (Human)'
-        });
+      // Add human bonus feat
+      if (basicInfo && basicInfo.race === 'Human') {
+        if (basicInfo.humanBonusFeat) {
+          this.feats.push({
+            label: basicInfo.humanBonusFeat,
+            description: 'Human racial bonus feat selected at 1st level.',
+            source: 'Race (Human)'
+          });
+        } else {
+          this.feats.push({
+            label: 'Human Bonus Feat',
+            description: 'Humans select one extra feat at 1st level (selection pending).',
+            source: 'Race (Human)'
+          });
+        }
       }
     },
     

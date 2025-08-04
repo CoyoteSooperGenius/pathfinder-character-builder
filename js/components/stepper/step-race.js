@@ -6,6 +6,7 @@ Vue.component('step-race', {
       selectedDecreases: [],
       selectedFavoredClasses: [],
       selectedLanguages: [],
+      selectedHumanBonusFeat: null,
       abilities: ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'],
       races: []
     };
@@ -20,6 +21,14 @@ Vue.component('step-race', {
         this.selectedIncreases, 
         this.selectedDecreases
       );
+    },
+    currentAbilityScores() {
+      // Get ability scores from localStorage for feat prerequisite checking
+      const abilityData = CharacterDataService.getAbilityScores();
+      if (!abilityData || !abilityData.scores) {
+        return { STR: 10, DEX: 10, CON: 10, INT: 10, WIS: 10, CHA: 10 };
+      }
+      return abilityData.scores;
     },
     isStepComplete() {
       const raceData = this.selectedRaceData;
@@ -41,7 +50,10 @@ Vue.component('step-race', {
         this.intelligenceModifier
       ).isValid;
       
-      return increasesComplete && decreasesComplete && favoredClassComplete && languagesComplete;
+      // Check human bonus feat completion
+      const humanBonusFeatComplete = this.selectedRace !== 'Human' || !!this.selectedHumanBonusFeat;
+      
+      return increasesComplete && decreasesComplete && favoredClassComplete && languagesComplete && humanBonusFeatComplete;
     }
   },
   methods: {
@@ -65,6 +77,7 @@ Vue.component('step-race', {
         selectedDecreases: this.selectedDecreases,
         selectedFavoredClasses: this.selectedFavoredClasses,
         languages: this.selectedLanguages,
+        humanBonusFeat: this.selectedHumanBonusFeat,
         traits: this.selectedRaceData ? this.selectedRaceData.traits : []
       };
     },
@@ -73,6 +86,7 @@ Vue.component('step-race', {
       this.resetAbilitySelections();
       this.resetFavoredClasses();
       this.resetLanguages();
+      this.resetHumanBonusFeat();
       this.checkCompletion();
     },
     resetAbilitySelections() {
@@ -97,6 +111,9 @@ Vue.component('step-race', {
     },
     resetLanguages() {
       this.selectedLanguages = [];
+    },
+    resetHumanBonusFeat() {
+      this.selectedHumanBonusFeat = null;
     },
     onIncreaseChange(ability) {
       const raceData = this.selectedRaceData;
@@ -134,6 +151,10 @@ Vue.component('step-race', {
       // Language component handles its own completion logic
       this.checkCompletion();
     },
+    onHumanBonusFeatChange(featName) {
+      this.selectedHumanBonusFeat = featName;
+      this.checkCompletion();
+    },
     checkCompletion() {
       this.$emit('step-complete', this.isStepComplete);
     }
@@ -145,6 +166,7 @@ Vue.component('step-race', {
     this.resetAbilitySelections();
     this.resetFavoredClasses();
     this.resetLanguages();
+    this.resetHumanBonusFeat();
     this.checkCompletion();
   },
   template: `
@@ -186,6 +208,13 @@ Vue.component('step-race', {
           <racial-traits-card
             :selected-race-data="selectedRaceData"
           ></racial-traits-card>
+          
+          <human-bonus-feat
+            v-if="selectedRace === 'Human'"
+            :selected-bonus-feat="selectedHumanBonusFeat"
+            :ability-scores="currentAbilityScores"
+            @feat-selected="onHumanBonusFeatChange"
+          ></human-bonus-feat>
         </div>
       </div>
       
