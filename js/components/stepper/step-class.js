@@ -86,13 +86,25 @@ Vue.component('step-class', {
             </fighter-bonus-feat>
           </div>
           
+          <!-- Wizard Options Selection -->
+          <div v-else-if="selectedClass === 'Wizard'" class="mb-3">
+            <wizard-options
+              :selected-arcane-bond="selectedArcaneBond"
+              :selected-arcane-school="selectedArcaneSchool"
+              :selected-spells="selectedSpells"
+              @arcane-bond-selected="onArcaneBondSelected"
+              @arcane-school-selected="onArcaneSchoolSelected"
+              @spells-selected="onSpellsSelected">
+            </wizard-options>
+          </div>
+          
           <!-- Placeholder for other classes -->
-          <div v-else-if="isSpellcaster()" class="alert alert-info">
+          <div v-else-if="isSpellcaster() && selectedClass !== 'Wizard'" class="alert alert-info">
             <i class="fas fa-info-circle me-2"></i>
             <strong>Coming Soon:</strong> Spell selection for {{ selectedClass }} will be implemented here.
           </div>
           
-          <div v-else-if="hasSpecialization()" class="alert alert-info">
+          <div v-else-if="hasSpecialization() && selectedClass !== 'Wizard'" class="alert alert-info">
             <i class="fas fa-info-circle me-2"></i>
             <strong>Coming Soon:</strong> {{ getSpecializationText() }}
           </div>
@@ -110,6 +122,9 @@ Vue.component('step-class', {
       selectedClass: null,
       showClassSelection: true,
       selectedBonusFeat: null,
+      selectedArcaneBond: null,
+      selectedArcaneSchool: null,
+      selectedSpells: [],
       coreClasses: []
     };
   },
@@ -129,6 +144,9 @@ Vue.component('step-class', {
     selectClass(className) {
       this.selectedClass = className;
       this.selectedBonusFeat = null; // Reset feat selection when changing class
+      this.selectedArcaneBond = null; // Reset wizard selections when changing class
+      this.selectedArcaneSchool = null;
+      this.selectedSpells = [];
       this.showClassSelection = false;
       this.updateStepComplete();
     },
@@ -136,10 +154,29 @@ Vue.component('step-class', {
       this.selectedBonusFeat = featName;
       this.updateStepComplete();
     },
+    onArcaneBondSelected(bondType) {
+      this.selectedArcaneBond = bondType;
+      this.updateStepComplete();
+    },
+    onArcaneSchoolSelected(school) {
+      this.selectedArcaneSchool = school;
+      this.updateStepComplete();
+    },
+    onSpellsSelected(spells) {
+      this.selectedSpells = spells;
+      this.updateStepComplete();
+    },
     updateStepComplete() {
       // For Fighter, need both class and bonus feat selected
       if (this.selectedClass === 'Fighter') {
         this.$emit('step-complete', this.selectedClass && this.selectedBonusFeat);
+      } else if (this.selectedClass === 'Wizard') {
+        // For Wizard, need class, arcane bond, arcane school, and 3 spells selected
+        const wizardComplete = this.selectedClass && 
+                              this.selectedArcaneBond && 
+                              this.selectedArcaneSchool && 
+                              this.selectedSpells.length === 3;
+        this.$emit('step-complete', wizardComplete);
       } else {
         // For other classes, just need class selected (until their 1st level options are implemented)
         this.$emit('step-complete', !!this.selectedClass);
@@ -182,6 +219,13 @@ Vue.component('step-class', {
         data.bonusFeat = this.selectedBonusFeat;
       }
       
+      // Add Wizard-specific data
+      if (this.selectedClass === 'Wizard') {
+        if (this.selectedArcaneBond) data.arcaneBond = this.selectedArcaneBond;
+        if (this.selectedArcaneSchool) data.arcaneSchool = this.selectedArcaneSchool;
+        if (this.selectedSpells.length > 0) data.startingSpells = this.selectedSpells;
+      }
+      
       return data;
     }
   },
@@ -201,6 +245,17 @@ Vue.component('step-class', {
           // Restore Fighter bonus feat if saved
           if (basicInfo.bonusFeat) {
             this.selectedBonusFeat = basicInfo.bonusFeat;
+          }
+          
+          // Restore Wizard options if saved
+          if (basicInfo.arcaneBond) {
+            this.selectedArcaneBond = basicInfo.arcaneBond;
+          }
+          if (basicInfo.arcaneSchool) {
+            this.selectedArcaneSchool = basicInfo.arcaneSchool;
+          }
+          if (basicInfo.startingSpells) {
+            this.selectedSpells = basicInfo.startingSpells;
           }
         }
       } catch (e) {

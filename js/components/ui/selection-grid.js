@@ -5,7 +5,7 @@ Vue.component('selection-grid', {
       required: true
     },
     selectedItem: {
-      type: [String, Object],
+      type: [String, Object, Array],
       default: null
     },
     displayMode: {

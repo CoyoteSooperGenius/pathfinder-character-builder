@@ -12,9 +12,7 @@ Vue.component('class-details-display', {
   computed: {
     hasClassData() {
       return this.classData && Object.keys(this.classData).length > 0;
-    }
-  },
-  computed: {
+    },
     // Prepare class features for list display
     classFeaturesData() {
       if (!this.classData.classFeatures) return [];

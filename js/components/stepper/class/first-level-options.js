@@ -7,6 +7,34 @@ Vue.component('first-level-options', {
     selectedBonusFeat: {
       type: String,
       default: null
+    },
+    selectedArcaneBond: {
+      type: String,
+      default: null
+    },
+    selectedFamiliar: {
+      type: String,
+      default: null
+    },
+    selectedBondedObject: {
+      type: String,
+      default: null
+    },
+    selectedWeapon: {
+      type: String,
+      default: null
+    },
+    selectedArcaneSchool: {
+      type: String,
+      default: null
+    },
+    selectedSpells: {
+      type: Array,
+      default: () => []
+    },
+    selectedOppositionSchools: {
+      type: Array,
+      default: () => []
     }
   },
   computed: {
@@ -32,6 +60,27 @@ Vue.component('first-level-options', {
   methods: {
     onFeatSelected(featName) {
       this.$emit('feat-selected', featName);
+    },
+    onArcaneBondSelected(bondType) {
+      this.$emit('arcane-bond-selected', bondType);
+    },
+    onFamiliarSelected(familiarName) {
+      this.$emit('familiar-selected', familiarName);
+    },
+    onBondedObjectSelected(objectType) {
+      this.$emit('bonded-object-selected', objectType);
+    },
+    onWeaponSelected(weaponName) {
+      this.$emit('weapon-selected', weaponName);
+    },
+    onArcaneSchoolSelected(school) {
+      this.$emit('arcane-school-selected', school);
+    },
+    onOppositionSchoolsSelected(schools) {
+      this.$emit('opposition-schools-selected', schools);
+    },
+    onSpellsSelected(spells) {
+      this.$emit('spells-selected', spells);
     }
   },
   template: `
@@ -48,14 +97,34 @@ Vue.component('first-level-options', {
           </fighter-bonus-feat>
         </div>
         
+        <!-- Wizard Options Selection -->
+        <div v-else-if="selectedClass === 'Wizard'" class="mb-3">
+          <wizard-options
+            :selected-arcane-bond="selectedArcaneBond"
+            :selected-familiar="selectedFamiliar"
+            :selected-bonded-object="selectedBondedObject"
+            :selected-weapon="selectedWeapon"
+            :selected-arcane-school="selectedArcaneSchool"
+            :selected-opposition-schools="selectedOppositionSchools"
+            :selected-spells="selectedSpells"
+            @arcane-bond-selected="onArcaneBondSelected"
+            @familiar-selected="onFamiliarSelected"
+            @bonded-object-selected="onBondedObjectSelected"
+            @weapon-selected="onWeaponSelected"
+            @arcane-school-selected="onArcaneSchoolSelected"
+            @opposition-schools-selected="onOppositionSchoolsSelected"
+            @spells-selected="onSpellsSelected">
+          </wizard-options>
+        </div>
+        
         <!-- Placeholder for other spellcaster classes -->
-        <div v-else-if="isSpellcaster" class="alert alert-info">
+        <div v-else-if="isSpellcaster && selectedClass !== 'Wizard'" class="alert alert-info">
           <i class="fas fa-info-circle me-2"></i>
           <strong>Coming Soon:</strong> Spell selection for {{ selectedClass }} will be implemented here.
         </div>
         
         <!-- Placeholder for specialization classes -->
-        <div v-else-if="hasSpecialization" class="alert alert-info">
+        <div v-else-if="hasSpecialization && selectedClass !== 'Wizard'" class="alert alert-info">
           <i class="fas fa-info-circle me-2"></i>
           <strong>Coming Soon:</strong> {{ specializationText }}
         </div>

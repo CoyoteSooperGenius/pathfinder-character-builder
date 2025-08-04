@@ -151,6 +151,11 @@ Vue.component('character-sheet-hybrid', {
         .slice(0, 3);
       
       return abilities;
+    },
+    
+    isSpellcaster() {
+      const spellcasters = ['Bard', 'Cleric', 'Druid', 'Paladin', 'Ranger', 'Sorcerer', 'Wizard'];
+      return spellcasters.includes(this.basicInfo.class);
     }
   },
   methods: {
@@ -164,7 +169,19 @@ Vue.component('character-sheet-hybrid', {
           class: basicData.class || '',
           level: 1,
           alignment: basicData.alignment || '',
-          favoredClasses: basicData.favoredClasses || []
+          favoredClasses: basicData.favoredClasses || [],
+          // Copy wizard-specific data
+          arcaneBond: basicData.arcaneBond,
+          familiar: basicData.familiar,
+          bondedObject: basicData.bondedObject,
+          weapon: basicData.weapon,
+          arcaneSchool: basicData.arcaneSchool,
+          oppositionSchools: basicData.oppositionSchools,
+          startingSpells: basicData.startingSpells,
+          // Copy fighter-specific data
+          bonusFeat: basicData.bonusFeat,
+          // Copy complete class data
+          classData: basicData.classData
         };
         this.characterName = basicData.name || 'Untitled Character';
       }
@@ -655,27 +672,55 @@ Vue.component('character-sheet-hybrid', {
                   </div>
                 </div>
               </div>
-              
-              <!-- Class Features -->
-              <div class="col-lg-6">
-                <div class="card h-100">
+            </div>
+            
+            <!-- Spellbook Section (for spellcasters) -->
+            <div v-if="isSpellcaster" class="row g-3 mt-2">
+              <div class="col-12">
+                <div class="card">
                   <div class="card-header">
-                    <h6 class="mb-0"><i class="fas fa-sword me-2"></i>Class & Features</h6>
+                    <h6 class="mb-0"><i class="fas fa-book-open me-2"></i>Spellbook</h6>
                   </div>
                   <div class="card-body">
-                    <div v-if="basicInfo.class" class="mb-3">
-                      <h6 class="text-primary">{{ basicInfo.class }} {{ basicInfo.level }}</h6>
-                    </div>
-                    
-                    <div v-if="feats.length > 0">
-                      <h6 class="small fw-bold text-muted mb-2">Class Features</h6>
-                      <div v-for="feat in feats" :key="feat.label" class="feat-item mb-2">
-                        <div class="fw-semibold">{{ feat.label }}</div>
-                        <div class="small text-muted">{{ feat.description }}</div>
+                    <!-- Wizard Spellbook -->
+                    <div v-if="basicInfo.class === 'Wizard'">
+                      <!-- Cantrips -->
+                      <div class="mb-4">
+                        <h6 class="text-primary mb-2">Cantrips (0-level)</h6>
+                        <div class="alert alert-info small mb-0">
+                          <i class="fas fa-info-circle me-2"></i>
+                          <strong>All wizard cantrips:</strong> 
+                          Acid Splash, Arcane Mark, Bleed, Dancing Lights, Daze, Detect Magic, Detect Poison, 
+                          Disrupt Undead, Flare, Ghost Sound, Light, Mage Hand, Mending, Message, Open/Close, 
+                          Prestidigitation, Ray of Frost, Read Magic, Resistance, Touch of Fatigue
+                        </div>
+                      </div>
+                      
+                      <!-- 1st Level Spells -->
+                      <div v-if="basicInfo.startingSpells && basicInfo.startingSpells.length > 0">
+                        <h6 class="text-primary mb-2">1st-Level Spells</h6>
+                        <div class="row g-2">
+                          <div 
+                            v-for="spell in basicInfo.startingSpells" 
+                            :key="spell" 
+                            class="col-md-4 col-sm-6"
+                          >
+                            <div class="spell-item p-2 border rounded bg-light">
+                              <div class="fw-semibold small">{{ spell }}</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div v-else class="text-muted">
+                        No 1st-level spells in spellbook yet.
                       </div>
                     </div>
-                    <div v-else class="text-muted">
-                      No class features yet.
+                    
+                    <!-- Placeholder for other spellcaster classes -->
+                    <div v-else-if="isSpellcaster" class="text-muted">
+                      <i class="fas fa-info-circle me-2"></i>
+                      Spellbook for {{ basicInfo.class }} will be available when spell selection is implemented.
                     </div>
                   </div>
                 </div>
@@ -686,8 +731,78 @@ Vue.component('character-sheet-hybrid', {
           <!-- Features Tab -->
           <div :class="{ 'tab-pane': true, 'active': activeTab === 'features' }">
             <div class="row g-3">
+              <!-- Class & Features -->
+              <div class="col-lg-4">
+                <div class="card h-100">
+                  <div class="card-header">
+                    <h6 class="mb-0"><i class="fas fa-graduation-cap me-2"></i>Class & Features</h6>
+                  </div>
+                  <div class="card-body">
+                    <div v-if="basicInfo.class" class="mb-3">
+                      <h6 class="text-primary">{{ basicInfo.class }} {{ basicInfo.level }}</h6>
+                      
+                      <!-- Wizard-specific information -->
+                      <div v-if="basicInfo.class === 'Wizard'" class="mt-3">
+                        <!-- Arcane Bond -->
+                        <div v-if="basicInfo.arcaneBond" class="mb-2">
+                          <strong class="small text-muted">Arcane Bond:</strong>
+                          <div class="small">
+                            {{ basicInfo.arcaneBond === 'familiar' ? 'Familiar' : 'Bonded Object' }}
+                            <span v-if="basicInfo.familiar"> ({{ basicInfo.familiar }})</span>
+                            <span v-if="basicInfo.bondedObject"> ({{ basicInfo.bondedObject }}
+                              <span v-if="basicInfo.weapon">: {{ basicInfo.weapon }}</span>)
+                            </span>
+                          </div>
+                        </div>
+                        
+                        <!-- Arcane School -->
+                        <div v-if="basicInfo.arcaneSchool" class="mb-2">
+                          <strong class="small text-muted">Arcane School:</strong>
+                          <div class="small">{{ basicInfo.arcaneSchool }}</div>
+                          <div v-if="basicInfo.oppositionSchools && basicInfo.oppositionSchools.length > 0" class="small text-muted">
+                            Opposition: {{ basicInfo.oppositionSchools.join(', ') }}
+                          </div>
+                        </div>
+                        
+                      </div>
+                      
+                      <!-- Fighter-specific information -->
+                      <div v-if="basicInfo.class === 'Fighter' && basicInfo.bonusFeat" class="mt-3">
+                        <div class="mb-2">
+                          <strong class="small text-muted">Bonus Feat:</strong>
+                          <div class="small">{{ basicInfo.bonusFeat }}</div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <!-- Class Features -->
+                    <div v-if="basicInfo.classData && basicInfo.classData.classFeatures">
+                      <h6 class="small fw-bold text-muted mb-2">Class Features</h6>
+                      <div v-for="feature in basicInfo.classData.classFeatures" :key="feature" class="feat-item mb-2">
+                        <div class="small">{{ feature }}</div>
+                      </div>
+                    </div>
+                    
+                    <!-- Proficiencies -->
+                    <div v-if="basicInfo.classData" class="mt-3">
+                      <h6 class="small fw-bold text-muted mb-2">Proficiencies</h6>
+                      <div class="small mb-1">
+                        <strong>Weapons:</strong> {{ basicInfo.classData.weaponProficiencies || 'None' }}
+                      </div>
+                      <div class="small mb-1">
+                        <strong>Armor:</strong> {{ basicInfo.classData.armorProficiencies || 'None' }}
+                      </div>
+                    </div>
+                    
+                    <div v-if="!basicInfo.class" class="text-muted">
+                      No class selected yet.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
               <!-- Feats -->
-              <div class="col-lg-6">
+              <div class="col-lg-4">
                 <div class="card h-100">
                   <div class="card-header">
                     <h6 class="mb-0"><i class="fas fa-star me-2"></i>Feats</h6>
@@ -710,7 +825,7 @@ Vue.component('character-sheet-hybrid', {
               </div>
               
               <!-- Skills -->
-              <div class="col-lg-6">
+              <div class="col-lg-4">
                 <div class="card h-100">
                   <div class="card-header">
                     <h6 class="mb-0"><i class="fas fa-tools me-2"></i>Skills</h6>
@@ -783,6 +898,17 @@ Vue.component('character-sheet-hybrid', {
       padding: 0.5rem;
       background: var(--bs-light);
       border-radius: 0.375rem;
+    }
+    
+    .spell-item {
+      transition: all 0.2s ease;
+    }
+    
+    .spell-item:hover {
+      background-color: var(--bs-primary) !important;
+      color: white !important;
+      transform: translateY(-1px);
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
     }
     
     @media (max-width: 768px) {

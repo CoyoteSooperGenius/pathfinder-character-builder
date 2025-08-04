@@ -18,7 +18,10 @@
       "Bash(timeout 30 npm run test:e2e -- --grep \"should complete full character creation with Human Fighter\" --project=chromium)",
       "Bash(timeout 30 npm run test:e2e -- --grep \"should prevent progression with incomplete steps\" --project=chromium)",
       "Bash(find:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(pkill:*)",
+      "Bash(true)",
+      "Bash(python:*)"
     ],
     "deny": []
   }

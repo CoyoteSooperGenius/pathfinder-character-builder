@@ -204,8 +204,25 @@ const CharacterDataService = {
       const basicInfo = this.getBasicInfo() || {};
       basicInfo.class = classData.selectedClass;
       
+      // Save Fighter-specific data
       if (classData.bonusFeat) {
         basicInfo.bonusFeat = classData.bonusFeat;
+      }
+      
+      // Save Wizard-specific data
+      if (classData.selectedClass === 'Wizard') {
+        if (classData.arcaneBond) basicInfo.arcaneBond = classData.arcaneBond;
+        if (classData.familiar) basicInfo.familiar = classData.familiar;
+        if (classData.bondedObject) basicInfo.bondedObject = classData.bondedObject;
+        if (classData.weapon) basicInfo.weapon = classData.weapon;
+        if (classData.arcaneSchool) basicInfo.arcaneSchool = classData.arcaneSchool;
+        if (classData.oppositionSchools) basicInfo.oppositionSchools = classData.oppositionSchools;
+        if (classData.startingSpells) basicInfo.startingSpells = classData.startingSpells;
+      }
+      
+      // Save complete class data for reference
+      if (classData.classData) {
+        basicInfo.classData = classData.classData;
       }
       
       return this.saveBasicInfo(basicInfo);
