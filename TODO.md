@@ -1,6 +1,6 @@
-# Pathfinder Character Builder - Refactoring TODO
+# Pathfinder Character Builder - TODO
 
-This document tracks the progress of the component refactoring project.
+This document tracks the progress of the Pathfinder Character Builder development.
 
 ## ✅ Phase 1: Extract Data and Services (COMPLETED)
 
@@ -51,7 +51,7 @@ This document tracks the progress of the component refactoring project.
 - [x] Update parent components to use new child components
 - [x] Fix traits display issue in character sheet
 
-## 🔄 Phase 3: Create Reusable UI Components (IN PROGRESS)
+## ✅ Phase 3: Create Reusable UI Components (COMPLETED)
 
 ### 3.1 Generic Form Components
 - [x] Create `collapsible-card.js` - Reusable expand/collapse card
@@ -75,19 +75,60 @@ This document tracks the progress of the component refactoring project.
 - [x] Update fighter bonus feats to use generic `feat-selector.js`
 - [x] Update language components to use `checkbox-group.js`
 
-## 🚀 Future Phases (Planned)
+## 🔄 Phase 4: Implement Remaining Character Creation Steps (IN PROGRESS)
 
-### Phase 4: Implement Remaining Character Creation Steps
-- [ ] Complete Step 4: Skills allocation
-- [ ] Complete Step 5: Feat selection  
-- [ ] Complete Step 6: Equipment purchase
-- [ ] Complete Step 7: Final character details
+### Step 1: Determine Ability Scores ✅ COMPLETED
+- [x] Point Buy method
+- [x] Standard Array method
+- [x] Roll Dice method
 
-### Phase 5: Advanced Features
+### Step 2: Pick Your Race ✅ COMPLETED
+- [x] All Core Rulebook races implemented
+- [x] Racial traits and adjustments
+- [x] Language selection
+- [x] Human bonus feat selection
+
+### Step 3: Pick Your Class ⏳ IN PROGRESS
+#### Core Classes Implementation Status:
+- [x] **Barbarian** - Automatic features (Rage, Fast Movement)
+- [ ] **Bard** - Spellcasting, Bardic Performance
+- [ ] **Cleric** - Domain selection, Channel Energy
+- [ ] **Druid** - Animal Companion or Domain, Wild Empathy
+- [x] **Fighter** - Bonus feat selection
+- [ ] **Monk** - Bonus feat, Flurry of Blows, Stunning Fist
+- [x] **Paladin** - Automatic features (Aura of Good, Detect Evil, Smite Evil)
+- [ ] **Ranger** - Favored Enemy, Track, Combat Style
+- [ ] **Rogue** - Sneak Attack, Trapfinding
+- [ ] **Sorcerer** - Bloodline selection, Spells known
+- [x] **Wizard** - Arcane Bond, Arcane School, Starting spellbook
+
+### Step 4: Skills Allocation
+- [ ] Implement skill point allocation based on class and Intelligence
+- [ ] Validate skill selections and prerequisites
+
+### Step 5: Feat Selection  
+- [ ] General feat selection for all characters
+- [ ] Class-specific bonus feats
+- [ ] Prerequisite validation
+
+### Step 6: Equipment Purchase
+- [ ] Starting equipment based on class
+- [ ] Gold and equipment purchasing system
+- [ ] Armor Class and encumbrance calculations
+
+### Step 7: Final Character Details
+- [ ] Character name and background
+- [ ] Alignment selection
+- [ ] Final character summary and validation
+
+## 🚀 Phase 5: Advanced Features (PLANNED)
 - [ ] Character export/import functionality
 - [ ] Print-friendly character sheets
 - [ ] Character leveling system
 - [ ] Additional Pathfinder content (beyond Core Rulebook)
+- [ ] Multi-class support
+- [ ] Spell preparation and casting interface
+- [ ] Combat encounter calculator
 
 ---
 
@@ -96,11 +137,20 @@ This document tracks the progress of the component refactoring project.
 - Phase 1 provides the foundation services
 - Phase 2 breaks down monolithic components  
 - Phase 3 creates reusable building blocks
-- Future phases add new functionality
+- Phase 4 completes core character creation
+- Phase 5 adds advanced features
 
 ## Current Status
-- **Phase 1**: ✅ Complete
-- **Phase 2**: ✅ Complete  
-- **Phase 3**: 🔄 Ready to start
-- **Phase 4**: ⏳ Waiting
-- **Phase 5**: ⏳ Waiting
+- **Phase 1**: ✅ Complete - Services and data management
+- **Phase 2**: ✅ Complete - Component architecture
+- **Phase 3**: ✅ Complete - Reusable UI components
+- **Phase 4**: 🔄 In Progress - Character creation steps (4/11 classes done)
+- **Phase 5**: ⏳ Waiting - Advanced features
+
+## Recent Progress
+- ✅ Implemented Human racial bonus feat selection
+- ✅ Created dedicated Spellbook section for character sheet
+- ✅ Implemented Barbarian class (automatic features)
+- ✅ Implemented Paladin class (automatic features)
+- ✅ Fixed wizard selection persistence and display issues
+- ✅ Established data-driven architecture for all class features
