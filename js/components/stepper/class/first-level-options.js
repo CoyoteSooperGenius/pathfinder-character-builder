@@ -117,6 +117,13 @@ Vue.component('first-level-options', {
           </wizard-options>
         </div>
         
+        <!-- Classes with Automatic Features (No Choices Needed) -->
+        <div v-else-if="selectedClass === 'Barbarian' || selectedClass === 'Paladin'" class="alert alert-success">
+          <i class="fas fa-check-circle me-2"></i>
+          <strong>Ready to Go!</strong> {{ selectedClass }}s automatically gain all their 1st level abilities. 
+          Check the Character Sheet to see your class features and abilities.
+        </div>
+        
         <!-- Placeholder for other spellcaster classes -->
         <div v-else-if="isSpellcaster && selectedClass !== 'Wizard'" class="alert alert-info">
           <i class="fas fa-info-circle me-2"></i>

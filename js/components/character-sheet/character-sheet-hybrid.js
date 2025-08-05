@@ -783,6 +783,7 @@ Vue.component('character-sheet-hybrid', {
                           <div class="small">{{ basicInfo.bonusFeat }}</div>
                         </div>
                       </div>
+                      
                     </div>
                     
                     <!-- Class Features -->

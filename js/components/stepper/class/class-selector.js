@@ -7,24 +7,13 @@ Vue.component('class-selector', {
     showClassSelection: {
       type: Boolean,
       default: true
+    },
+    coreClasses: {
+      type: Array,
+      default: () => []
     }
   },
-  data() {
-    return {
-      coreClasses: []
-    };
-  },
   methods: {
-    async loadClasses() {
-      try {
-        const classesResponse = await fetch('data/classes.json');
-        const classesData = await classesResponse.json();
-        this.coreClasses = classesData.coreClasses;
-      } catch (error) {
-        console.error('Error loading classes data:', error);
-        alert('Error loading class data. Please refresh the page.');
-      }
-    },
     selectClass(classNameOrObject) {
       // Handle both string (from selection-changed) and object (from item-selected)
       const className = typeof classNameOrObject === 'string' ? classNameOrObject : classNameOrObject.name;
@@ -33,9 +22,6 @@ Vue.component('class-selector', {
     toggleClassSelection() {
       this.$emit('toggle-selection');
     }
-  },
-  async mounted() {
-    await this.loadClasses();
   },
   template: `
     <div class="card mb-4">

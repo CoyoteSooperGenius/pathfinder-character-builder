@@ -45,6 +45,12 @@ Vue.component('class-step-coordinator', {
                  !needsBondedObject &&
                  !needsWeapon &&
                  !needsOppositionSchools);
+      } else if (this.selectedClass === 'Barbarian') {
+        // Barbarian is complete once selected - no choices needed at 1st level
+        return !!this.selectedClass;
+      } else if (this.selectedClass === 'Paladin') {
+        // Paladin is complete once selected - no choices needed at 1st level
+        return !!this.selectedClass;
       } else {
         // For other classes, just need class selected (until their 1st level options are implemented)
         return !!this.selectedClass;
@@ -232,6 +238,7 @@ Vue.component('class-step-coordinator', {
       <class-selector
         :selected-class="selectedClass"
         :show-class-selection="showClassSelection"
+        :core-classes="coreClasses"
         @class-selected="onClassSelected"
         @toggle-selection="onToggleSelection"
       ></class-selector>
