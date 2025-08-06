@@ -51,6 +51,9 @@ Vue.component('class-step-coordinator', {
       } else if (this.selectedClass === 'Paladin') {
         // Paladin is complete once selected - no choices needed at 1st level
         return !!this.selectedClass;
+      } else if (this.selectedClass === 'Rogue') {
+        // Rogue is complete once selected - no choices needed at 1st level
+        return !!this.selectedClass;
       } else {
         // For other classes, just need class selected (until their 1st level options are implemented)
         return !!this.selectedClass;

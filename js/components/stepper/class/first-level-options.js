@@ -118,7 +118,7 @@ Vue.component('first-level-options', {
         </div>
         
         <!-- Classes with Automatic Features (No Choices Needed) -->
-        <div v-else-if="selectedClass === 'Barbarian' || selectedClass === 'Paladin'" class="alert alert-success">
+        <div v-else-if="selectedClass === 'Barbarian' || selectedClass === 'Paladin' || selectedClass === 'Rogue'" class="alert alert-success">
           <i class="fas fa-check-circle me-2"></i>
           <strong>Ready to Go!</strong> {{ selectedClass }}s automatically gain all their 1st level abilities. 
           Check the Character Sheet to see your class features and abilities.
