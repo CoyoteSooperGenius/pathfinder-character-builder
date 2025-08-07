@@ -87,7 +87,7 @@ Vue.component('spell-selector', {
           <div class="card">
             <div class="card-header bg-primary-subtle border-primary-border-subtle">
               <h6 class="mb-0">
-                <i class="fas" :class="selection.icon || 'fa-magic'" class="me-2"></i>
+                <i class="fas me-2" :class="selection.icon || 'fa-magic'"></i>
                 {{ selection.label }} ({{ getSelectedCount(selection.type) }}/{{ selection.count }})
               </h6>
             </div>

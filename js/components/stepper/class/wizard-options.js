@@ -621,8 +621,8 @@ Vue.component('wizard-options', {
     onWizardSpellsChanged(newSelections) {
       this.selectedSpellsData = newSelections;
       // Convert to array format for existing wizard code compatibility
-      this.selectedSpells = newSelections.firstLevel || [];
-      this.$emit('spells-selected', this.selectedSpells);
+      const spellsArray = newSelections.firstLevel || [];
+      this.$emit('spells-selected', spellsArray);
     },
     updateIntelligence() {
       // Get current ability scores from localStorage
