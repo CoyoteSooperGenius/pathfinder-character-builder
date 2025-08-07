@@ -11,6 +11,8 @@ Vue.component('class-step-coordinator', {
       selectedArcaneSchool: null,
       selectedOppositionSchools: [],
       selectedSpells: [],
+      selectedCantrips: [],
+      selectedFirstLevelSpells: [],
       coreClasses: []
     };
   },
@@ -54,6 +56,11 @@ Vue.component('class-step-coordinator', {
       } else if (this.selectedClass === 'Rogue') {
         // Rogue is complete once selected - no choices needed at 1st level
         return !!this.selectedClass;
+      } else if (this.selectedClass === 'Bard') {
+        // Bard needs 4 cantrips and 2 1st level spells selected
+        return !!(this.selectedClass && 
+                 this.selectedCantrips.length === 4 && 
+                 this.selectedFirstLevelSpells.length === 2);
       } else {
         // For other classes, just need class selected (until their 1st level options are implemented)
         return !!this.selectedClass;
@@ -83,6 +90,8 @@ Vue.component('class-step-coordinator', {
       this.selectedArcaneSchool = null;
       this.selectedOppositionSchools = [];
       this.selectedSpells = [];
+      this.selectedCantrips = [];
+      this.selectedFirstLevelSpells = [];
       this.showClassSelection = false;
       this.updateStepComplete();
     },
@@ -135,6 +144,11 @@ Vue.component('class-step-coordinator', {
       this.selectedSpells = spells;
       this.updateStepComplete();
     },
+    onBardSpellsChanged(spellsData) {
+      this.selectedCantrips = spellsData.selectedCantrips || [];
+      this.selectedFirstLevelSpells = spellsData.selectedFirstLevelSpells || [];
+      this.updateStepComplete();
+    },
     updateStepComplete() {
       this.$emit('step-complete', this.isStepComplete);
     },
@@ -181,6 +195,12 @@ Vue.component('class-step-coordinator', {
         if (this.selectedArcaneSchool) data.arcaneSchool = this.selectedArcaneSchool;
         if (this.selectedOppositionSchools.length > 0) data.oppositionSchools = this.selectedOppositionSchools;
         if (this.selectedSpells.length > 0) data.startingSpells = this.selectedSpells;
+      }
+      
+      // Add Bard-specific data
+      if (this.selectedClass === 'Bard') {
+        if (this.selectedCantrips.length > 0) data.selectedCantrips = this.selectedCantrips;
+        if (this.selectedFirstLevelSpells.length > 0) data.selectedFirstLevelSpells = this.selectedFirstLevelSpells;
       }
       
       return data;
@@ -232,6 +252,14 @@ Vue.component('class-step-coordinator', {
       if (savedBasicInfo.startingSpells) {
         this.selectedSpells = savedBasicInfo.startingSpells;
       }
+      
+      // Restore Bard options if saved
+      if (savedBasicInfo.selectedCantrips) {
+        this.selectedCantrips = savedBasicInfo.selectedCantrips;
+      }
+      if (savedBasicInfo.selectedFirstLevelSpells) {
+        this.selectedFirstLevelSpells = savedBasicInfo.selectedFirstLevelSpells;
+      }
     }
     
     this.updateStepComplete();
@@ -263,6 +291,8 @@ Vue.component('class-step-coordinator', {
         :selected-arcane-school="selectedArcaneSchool"
         :selected-opposition-schools="selectedOppositionSchools"
         :selected-spells="selectedSpells"
+        :selected-cantrips="selectedCantrips"
+        :selected-first-level-spells="selectedFirstLevelSpells"
         @feat-selected="onFeatSelected"
         @arcane-bond-selected="onArcaneBondSelected"
         @familiar-selected="onFamiliarSelected"
@@ -271,6 +301,7 @@ Vue.component('class-step-coordinator', {
         @arcane-school-selected="onArcaneSchoolSelected"
         @opposition-schools-selected="onOppositionSchoolsSelected"
         @spells-selected="onSpellsSelected"
+        @bard-spells-changed="onBardSpellsChanged"
       ></first-level-options>
     </div>
   `

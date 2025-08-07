@@ -108,7 +108,7 @@ Vue.component('skills-display', {
         
         <!-- Empty state -->
         <div v-else class="empty-state text-center py-3">
-          <i class="fas fa-tools text-muted mb-2" style="font-size: 2rem; opacity: 0.3;"></i>
+          <i class="fas fa-tools text-muted mb-2 empty-icon"></i>
           <div class="text-muted">
             <div class="fw-semibold">No skills allocated yet</div>
             <div class="small">Skills will be allocated in the Skills step</div>

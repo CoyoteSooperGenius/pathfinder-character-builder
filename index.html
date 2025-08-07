@@ -5,6 +5,7 @@
     <title>Pathfinder Character Generator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="css/sandstone.css">
+    <link rel="stylesheet" href="css/utilities.css">
   </head> 
   <body>
     <div id="app" class="container-fluid py-4">
@@ -59,6 +60,7 @@
     <script src="js/components/ui/checkbox-group.js"></script>
     <script src="js/components/ui/progress-indicator.js"></script>
     <script src="js/components/ui/feat-selector.js"></script>
+    <script src="js/components/ui/spell-selector.js"></script>
     <script src="js/components/ui/ability-score-adjuster.js"></script>
     <script src="js/components/ui/prerequisite-display.js"></script>
     <script src="js/components/ui/info-panel.js"></script>
@@ -73,6 +75,7 @@
     <script src="js/components/stepper/step-details.js"></script>
     <script src="js/components/stepper/class/fighter-bonus-feat.js"></script>
     <script src="js/components/stepper/class/wizard-options.js"></script>
+    <script src="js/components/stepper/class/bard-options.js"></script>
     <script src="js/components/stepper/class/class-selector.js"></script>
     <script src="js/components/stepper/class/class-details-display.js"></script>
     <script src="js/components/stepper/class/first-level-options.js"></script>
@@ -134,7 +137,7 @@
         onAbilityScoresSaved() {
           // Call the character sheet's update method
           if (this.$refs.characterSheet) {
-            this.$refs.characterSheet.updateAbilityScores();
+            this.$refs.characterSheet.updateFromLocalStorage();
           }
         },
         resetLocalStorage() {

@@ -169,7 +169,7 @@ Vue.component('selection-grid', {
             @click="selectItem(item)"
             @mouseenter="onItemHover(item)"
             @mouseleave="onItemLeave"
-            style="cursor: pointer;"
+            class="cursor-pointer"
           >
             <div class="card-body">
               <h6 class="card-title">

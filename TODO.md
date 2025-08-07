@@ -91,7 +91,7 @@ This document tracks the progress of the Pathfinder Character Builder developmen
 ### Step 3: Pick Your Class ⏳ IN PROGRESS
 #### Core Classes Implementation Status:
 - [x] **Barbarian** - Automatic features (Rage, Fast Movement)
-- [ ] **Bard** - Spellcasting, Bardic Performance
+- [x] **Bard** - Spellcasting, Bardic Performance
 - [ ] **Cleric** - Domain selection, Channel Energy
 - [ ] **Druid** - Animal Companion or Domain, Wild Empathy
 - [x] **Fighter** - Bonus feat selection

@@ -284,6 +284,9 @@ const CharacterDisplayService = {
         startingSpells: basicData.startingSpells,
         bonusFeat: basicData.bonusFeat,
         humanBonusFeat: basicData.humanBonusFeat,
+        // Bard spell data
+        selectedCantrips: basicData.selectedCantrips,
+        selectedFirstLevelSpells: basicData.selectedFirstLevelSpells,
         classData: basicData.classData
       };
     }

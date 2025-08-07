@@ -232,7 +232,7 @@ Vue.component('standard-array-method', {
                   <!-- Assignment Controls -->
                   <div class="btn-group-vertical">
                     <!-- Assignment buttons for each standard array score -->
-                    <div class="d-flex flex-wrap gap-1" style="max-width: 120px;">
+                    <div class="d-flex flex-wrap gap-1 w-120">
                       <button 
                         v-for="(score, scoreIndex) in standardValues" 
                         :key="scoreIndex"
@@ -243,8 +243,7 @@ Vue.component('standard-array-method', {
                           'btn-outline-primary': (!assignedScores[ability] || assignedScores[ability].index !== scoreIndex) && isScoreAvailable(scoreIndex),
                           'btn-outline-secondary': !isScoreAvailable(scoreIndex) && (!assignedScores[ability] || assignedScores[ability].index !== scoreIndex)
                         }"
-                        class="btn btn-sm"
-                        style="min-width: 35px;"
+                        class="btn btn-sm w-min-35"
                         :title="'Assign ' + score.total + ' (' + getBonus(score.total) + ')'"
                       >
                         {{ score.total }}

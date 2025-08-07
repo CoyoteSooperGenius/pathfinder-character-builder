@@ -1,0 +1,37 @@
+/* Custom utility classes to extend Bootstrap */
+
+/* Cursor utilities */
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* Common width constraints for form elements */
+.w-120 {
+  max-width: 120px;
+}
+
+.w-min-35 {
+  min-width: 35px;
+}
+
+/* Empty state icon styling */
+.empty-icon {
+  font-size: 2rem;
+  opacity: 0.3;
+}
+
+/* Line height utilities */
+.lh-14 {
+  line-height: 1.4;
+}
+
+/* Spell card hover effects */
+.spell-card.available {
+  transition: all 0.2s ease;
+}
+
+.spell-card.available:hover {
+  transform: translateY(-1px);
+  border-color: var(--bs-primary) !important;
+  background-color: var(--bs-primary-bg-subtle) !important;
+}

@@ -55,7 +55,7 @@ Vue.component('feats-display', {
         
         <!-- Empty state -->
         <div v-else class="empty-state text-center py-3">
-          <i class="fas fa-star text-muted mb-2" style="font-size: 2rem; opacity: 0.3;"></i>
+          <i class="fas fa-star text-muted mb-2 empty-icon"></i>
           <div class="text-muted">
             <div class="fw-semibold">No feats selected yet</div>
             <div class="small">Feats will appear here as you progress through character creation</div>

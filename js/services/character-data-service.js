@@ -226,6 +226,12 @@ const CharacterDataService = {
         if (classData.startingSpells) basicInfo.startingSpells = classData.startingSpells;
       }
       
+      // Save Bard-specific data
+      if (classData.selectedClass === 'Bard') {
+        if (classData.selectedCantrips) basicInfo.selectedCantrips = classData.selectedCantrips;
+        if (classData.selectedFirstLevelSpells) basicInfo.selectedFirstLevelSpells = classData.selectedFirstLevelSpells;
+      }
+      
       // Save complete class data for reference
       if (classData.classData) {
         basicInfo.classData = classData.classData;

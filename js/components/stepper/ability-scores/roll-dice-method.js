@@ -285,8 +285,7 @@ Vue.component('roll-dice-method', {
                 :class="{ 
                   'border-muted': !isRollAvailable(index),
                   'border-primary': isRollAvailable(index)
-                }"
-                style="cursor: pointer;"
+                } + ' cursor-pointer'"
                 @click="showRollDetails = roll"
               >
                 <div class="card-body py-2">
@@ -356,7 +355,7 @@ Vue.component('roll-dice-method', {
                   <!-- Assignment Controls -->
                   <div class="btn-group-vertical">
                     <!-- Simple button grid instead of dropdown for better compatibility -->
-                    <div class="d-flex flex-wrap gap-1" style="max-width: 120px;">
+                    <div class="d-flex flex-wrap gap-1 w-120">
                       <button 
                         v-for="(roll, rollIndex) in rolledValues" 
                         :key="rollIndex"
@@ -367,8 +366,7 @@ Vue.component('roll-dice-method', {
                           'btn-outline-primary': (!assignedScores[ability] || assignedScores[ability].index !== rollIndex) && isRollAvailable(rollIndex),
                           'btn-outline-secondary': !isRollAvailable(rollIndex) && (!assignedScores[ability] || assignedScores[ability].index !== rollIndex)
                         }"
-                        class="btn btn-sm"
-                        style="min-width: 35px;"
+                        class="btn btn-sm w-min-35"
                         :title="'Assign ' + roll.total + ' (' + getBonus(roll.total) + ')'"
                       >
                         {{ roll.total }}
@@ -391,7 +389,7 @@ Vue.component('roll-dice-method', {
       </div>
 
       <!-- Roll Details Modal -->
-      <div v-if="showRollDetails" class="modal d-block" style="background: rgba(0,0,0,0.5);">
+      <div v-if="showRollDetails" class="modal d-block bg-dark bg-opacity-50">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">

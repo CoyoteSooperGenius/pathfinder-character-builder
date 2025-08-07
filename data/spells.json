@@ -1,0 +1,412 @@
+{
+  "wizardSpells": {
+    "firstLevel": [
+      {
+        "name": "Alarm",
+        "school": "Abjuration",
+        "description": "Wards an area for 2 hours/level."
+      },
+      {
+        "name": "Animate Rope",
+        "school": "Transmutation",
+        "description": "Makes a rope move at your command."
+      },
+      {
+        "name": "Burning Hands",
+        "school": "Evocation",
+        "description": "1d4/level fire damage (max 5d4)."
+      },
+      {
+        "name": "Cause Fear",
+        "school": "Necromancy",
+        "description": "One creature of 5 HD or less flees for 1d4 rounds."
+      },
+      {
+        "name": "Charm Person",
+        "school": "Enchantment",
+        "description": "Makes one person your friend."
+      },
+      {
+        "name": "Chill Touch",
+        "school": "Necromancy",
+        "description": "One touch/level deals 1d6 damage and possibly 1 Str damage."
+      },
+      {
+        "name": "Color Spray",
+        "school": "Illusion",
+        "description": "Knocks unconscious, blinds, and/or stuns weak creatures."
+      },
+      {
+        "name": "Comprehend Languages",
+        "school": "Divination",
+        "description": "You understand all languages."
+      },
+      {
+        "name": "Detect Secret Doors",
+        "school": "Divination",
+        "description": "Reveals hidden doors within 60 ft."
+      },
+      {
+        "name": "Detect Undead",
+        "school": "Divination",
+        "description": "Reveals undead within 60 ft."
+      },
+      {
+        "name": "Disguise Self",
+        "school": "Illusion",
+        "description": "Changes your appearance."
+      },
+      {
+        "name": "Endure Elements",
+        "school": "Abjuration",
+        "description": "Exist comfortably in hot or cold regions."
+      },
+      {
+        "name": "Enlarge Person",
+        "school": "Transmutation",
+        "description": "Humanoid creature doubles in size."
+      },
+      {
+        "name": "Erase",
+        "school": "Transmutation",
+        "description": "Mundane or magical writing vanishes."
+      },
+      {
+        "name": "Expeditious Retreat",
+        "school": "Transmutation",
+        "description": "Your base land speed increases by 30 ft."
+      },
+      {
+        "name": "Feather Fall",
+        "school": "Transmutation",
+        "description": "Objects or creatures fall slowly."
+      },
+      {
+        "name": "Floating Disk",
+        "school": "Evocation",
+        "description": "Creates 3-ft.-diameter horizontal disk that holds 100 lbs./level."
+      },
+      {
+        "name": "Grease",
+        "school": "Conjuration",
+        "description": "Makes 10-ft. square or one object slippery."
+      },
+      {
+        "name": "Hold Portal",
+        "school": "Abjuration",
+        "description": "Holds door shut."
+      },
+      {
+        "name": "Hypnotism",
+        "school": "Enchantment",
+        "description": "Fascinates 2d4 HD of creatures."
+      },
+      {
+        "name": "Identify",
+        "school": "Divination",
+        "description": "Gives +10 bonus to identify magic items."
+      },
+      {
+        "name": "Jump",
+        "school": "Transmutation",
+        "description": "Subject gets bonus on Acrobatics checks."
+      },
+      {
+        "name": "Mage Armor",
+        "school": "Conjuration",
+        "description": "Gives subject +4 armor bonus."
+      },
+      {
+        "name": "Magic Missile",
+        "school": "Evocation",
+        "description": "1d4+1 damage; +1 missile per two levels above 1st (max 5)."
+      },
+      {
+        "name": "Magic Weapon",
+        "school": "Transmutation",
+        "description": "Weapon gains +1 bonus."
+      },
+      {
+        "name": "Mount",
+        "school": "Conjuration",
+        "description": "Summons riding horse for 2 hours/level."
+      },
+      {
+        "name": "Obscuring Mist",
+        "school": "Conjuration",
+        "description": "Fog surrounds you."
+      },
+      {
+        "name": "Protection from Evil",
+        "school": "Abjuration",
+        "description": "+2 to AC and saves, +4 to SR, counter mind control, hedge out summoned creatures."
+      },
+      {
+        "name": "Ray of Enfeeblement",
+        "school": "Necromancy",
+        "description": "Ranged touch attack deals 1d6 Str damage + 1 per two levels."
+      },
+      {
+        "name": "Reduce Person",
+        "school": "Transmutation",
+        "description": "Humanoid creature halves in size."
+      },
+      {
+        "name": "Shield",
+        "school": "Abjuration",
+        "description": "Invisible disc gives +4 to AC, blocks magic missiles."
+      },
+      {
+        "name": "Shocking Grasp",
+        "school": "Evocation",
+        "description": "Touch delivers 1d6/level electricity damage (max 5d6)."
+      },
+      {
+        "name": "Silent Image",
+        "school": "Illusion",
+        "description": "Creates minor illusion of your design."
+      },
+      {
+        "name": "Sleep",
+        "school": "Enchantment",
+        "description": "Puts 4 HD of creatures into magical slumber."
+      },
+      {
+        "name": "Summon Monster I",
+        "school": "Conjuration",
+        "description": "Summons extraplanar creature to fight for you."
+      },
+      {
+        "name": "True Strike",
+        "school": "Divination",
+        "description": "Next attack gains +20 bonus."
+      },
+      {
+        "name": "Unseen Servant",
+        "school": "Conjuration",
+        "description": "Invisible force obeys your commands."
+      },
+      {
+        "name": "Ventriloquism",
+        "school": "Illusion",
+        "description": "Throws voice for 1 min./level."
+      }
+    ]
+  },
+  "bardSpells": {
+    "cantrips": [
+      {
+        "name": "Dancing Lights",
+        "school": "Evocation",
+        "description": "Creates torches or other lights."
+      },
+      {
+        "name": "Daze",
+        "school": "Enchantment",
+        "description": "A single humanoid creature with 4 HD or less loses its next action."
+      },
+      {
+        "name": "Detect Magic",
+        "school": "Divination",
+        "description": "Detects spells and magic items within 60 ft."
+      },
+      {
+        "name": "Flare",
+        "school": "Evocation",
+        "description": "Dazzles one creature (–1 penalty on attack rolls)."
+      },
+      {
+        "name": "Ghost Sound",
+        "school": "Illusion",
+        "description": "Figment sounds."
+      },
+      {
+        "name": "Know Direction",
+        "school": "Divination",
+        "description": "You discern north."
+      },
+      {
+        "name": "Light",
+        "school": "Evocation",
+        "description": "Object shines like a torch."
+      },
+      {
+        "name": "Lullaby",
+        "school": "Enchantment",
+        "description": "Makes subject drowsy: –5 on Perception checks, –2 on Will saves against sleep."
+      },
+      {
+        "name": "Mage Hand",
+        "school": "Transmutation",
+        "description": "5-pound telekinesis."
+      },
+      {
+        "name": "Mending",
+        "school": "Transmutation",
+        "description": "Makes minor repairs on an object."
+      },
+      {
+        "name": "Message",
+        "school": "Transmutation",
+        "description": "Whisper conversation at distance."
+      },
+      {
+        "name": "Open/Close",
+        "school": "Transmutation",
+        "description": "Opens or closes small or light things."
+      },
+      {
+        "name": "Prestidigitation",
+        "school": "Universal",
+        "description": "Performs minor tricks."
+      },
+      {
+        "name": "Read Magic",
+        "school": "Divination",
+        "description": "Read scrolls and spellbooks."
+      },
+      {
+        "name": "Resistance",
+        "school": "Abjuration",
+        "description": "Subject gains +1 bonus on saving throws."
+      },
+      {
+        "name": "Summon Instrument",
+        "school": "Conjuration",
+        "description": "Summons one handheld musical instrument."
+      }
+    ],
+    "firstLevel": [
+      {
+        "name": "Alarm",
+        "school": "Abjuration",
+        "description": "Wards an area for 2 hours/level."
+      },
+      {
+        "name": "Animate Rope",
+        "school": "Transmutation",
+        "description": "Makes a rope move at your command."
+      },
+      {
+        "name": "Cause Fear",
+        "school": "Necromancy",
+        "description": "One creature of 5 HD or less flees for 1d4 rounds."
+      },
+      {
+        "name": "Charm Person",
+        "school": "Enchantment",
+        "description": "Makes one person your friend."
+      },
+      {
+        "name": "Comprehend Languages",
+        "school": "Divination",
+        "description": "You understand all languages."
+      },
+      {
+        "name": "Confusion, Lesser",
+        "school": "Enchantment",
+        "description": "One creature is confused for 1 round."
+      },
+      {
+        "name": "Cure Light Wounds",
+        "school": "Conjuration",
+        "description": "Cures 1d8 damage + 1/level (max +5)."
+      },
+      {
+        "name": "Detect Secret Doors",
+        "school": "Divination",
+        "description": "Reveals hidden doors within 60 ft."
+      },
+      {
+        "name": "Disguise Self",
+        "school": "Illusion",
+        "description": "Changes your appearance."
+      },
+      {
+        "name": "Erase",
+        "school": "Transmutation",
+        "description": "Mundane or magical writing vanishes."
+      },
+      {
+        "name": "Expeditious Retreat",
+        "school": "Transmutation",
+        "description": "Your base land speed increases by 30 ft."
+      },
+      {
+        "name": "Feather Fall",
+        "school": "Transmutation",
+        "description": "Objects or creatures fall slowly."
+      },
+      {
+        "name": "Grease",
+        "school": "Conjuration",
+        "description": "Makes 10-ft. square or one object slippery."
+      },
+      {
+        "name": "Hideous Laughter",
+        "school": "Enchantment",
+        "description": "Subject loses actions for 1 round/level."
+      },
+      {
+        "name": "Hypnotism",
+        "school": "Enchantment",
+        "description": "Fascinates 2d4 HD of creatures."
+      },
+      {
+        "name": "Identify",
+        "school": "Divination",
+        "description": "Gives +10 bonus to identify magic items."
+      },
+      {
+        "name": "Magic Mouth",
+        "school": "Illusion",
+        "description": "Speaks once when triggered."
+      },
+      {
+        "name": "Magic Weapon",
+        "school": "Transmutation",
+        "description": "Weapon gains +1 bonus."
+      },
+      {
+        "name": "Obscure Object",
+        "school": "Abjuration",
+        "description": "Masks object against scrying."
+      },
+      {
+        "name": "Remove Fear",
+        "school": "Abjuration",
+        "description": "Suppresses fear or gives +4 on saves against fear."
+      },
+      {
+        "name": "Silent Image",
+        "school": "Illusion",
+        "description": "Creates minor illusion of your design."
+      },
+      {
+        "name": "Sleep",
+        "school": "Enchantment",
+        "description": "Puts 4 HD of creatures into magical slumber."
+      },
+      {
+        "name": "Summon Monster I",
+        "school": "Conjuration",
+        "description": "Summons extraplanar creature to fight for you."
+      },
+      {
+        "name": "Undetectable Alignment",
+        "school": "Abjuration",
+        "description": "Conceals alignment for 24 hours."
+      },
+      {
+        "name": "Unseen Servant",
+        "school": "Conjuration",
+        "description": "Invisible force obeys your commands."
+      },
+      {
+        "name": "Ventriloquism",
+        "school": "Illusion",
+        "description": "Throws voice for 1 min./level."
+      }
+    ]
+  }
+}

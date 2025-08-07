@@ -71,11 +71,18 @@ Vue.component('combat-display-tab', {
                   <div class="row g-2">
                     <div 
                       v-for="spell in basicInfo.startingSpells" 
-                      :key="spell" 
-                      class="col-md-4 col-sm-6"
+                      :key="spell.name || spell" 
+                      class="col-md-6"
                     >
                       <div class="spell-item p-2 border rounded bg-light">
-                        <div class="fw-semibold small">{{ spell }}</div>
+                        <!-- Handle rich spell objects (new format) -->
+                        <div v-if="spell.name" class="fw-semibold small">{{ spell.name }}</div>
+                        <!-- Handle legacy string format (old saves) -->
+                        <div v-else class="fw-semibold small">{{ spell }}</div>
+                        
+                        <!-- Show additional details for rich spell objects -->
+                        <div v-if="spell.school" class="text-muted small">{{ spell.school }}</div>
+                        <div v-if="spell.description" class="small">{{ spell.description }}</div>
                       </div>
                     </div>
                   </div>
@@ -86,8 +93,87 @@ Vue.component('combat-display-tab', {
                 </div>
               </div>
               
+              <!-- Bard Spellbook -->
+              <div v-else-if="basicInfo.class === 'Bard'">
+                <!-- Spells Known vs Per Day Info -->
+                <div class="row g-3 mb-4">
+                  <div class="col-md-6">
+                    <div class="card border-primary">
+                      <div class="card-header bg-primary text-white">
+                        <h6 class="mb-0"><i class="fas fa-brain me-2"></i>Known Spells</h6>
+                      </div>
+                      <div class="card-body">
+                        <div class="text-center">
+                          <div class="small text-muted mb-1">Cantrips</div>
+                          <div class="h4 mb-2 text-primary">{{ (basicInfo.selectedCantrips || []).length }}/4</div>
+                          <div class="small text-muted mb-1">1st Level</div>
+                          <div class="h4 mb-0 text-primary">{{ (basicInfo.selectedFirstLevelSpells || []).length }}/2</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="card border-success">
+                      <div class="card-header bg-success text-white">
+                        <h6 class="mb-0"><i class="fas fa-magic me-2"></i>Per Day</h6>
+                      </div>
+                      <div class="card-body">
+                        <div class="text-center">
+                          <div class="small text-muted mb-1">Cantrips</div>
+                          <div class="h4 mb-2 text-success">∞</div>
+                          <div class="small text-muted mb-1">1st Level</div>
+                          <div class="h4 mb-0 text-success">1</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Known Cantrips -->
+                <div v-if="basicInfo.selectedCantrips && basicInfo.selectedCantrips.length > 0" class="mb-4">
+                  <h6 class="text-primary mb-2">Known Cantrips (0-level)</h6>
+                  <div class="row g-2">
+                    <div 
+                      v-for="cantrip in basicInfo.selectedCantrips" 
+                      :key="'cantrip-' + cantrip.name" 
+                      class="col-md-6"
+                    >
+                      <div class="spell-item p-2 border rounded bg-light">
+                        <div class="fw-semibold small">{{ cantrip.name }}</div>
+                        <div class="text-muted small">{{ cantrip.school }}</div>
+                        <div class="small">{{ cantrip.description }}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Known 1st Level Spells -->
+                <div v-if="basicInfo.selectedFirstLevelSpells && basicInfo.selectedFirstLevelSpells.length > 0">
+                  <h6 class="text-primary mb-2">Known 1st-Level Spells</h6>
+                  <div class="row g-2">
+                    <div 
+                      v-for="spell in basicInfo.selectedFirstLevelSpells" 
+                      :key="'spell-' + spell.name" 
+                      class="col-md-6"
+                    >
+                      <div class="spell-item p-2 border rounded bg-light">
+                        <div class="fw-semibold small">{{ spell.name }}</div>
+                        <div class="text-muted small">{{ spell.school }}</div>
+                        <div class="small">{{ spell.description }}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div v-if="(!basicInfo.selectedCantrips || basicInfo.selectedCantrips.length === 0) && 
+                          (!basicInfo.selectedFirstLevelSpells || basicInfo.selectedFirstLevelSpells.length === 0)" 
+                     class="text-muted">
+                  No spells known yet. Complete spell selection in the Class step.
+                </div>
+              </div>
+              
               <!-- Placeholder for other spellcaster classes -->
-              <div v-else-if="isSpellcaster" class="text-muted">
+              <div v-else-if="isSpellcaster && basicInfo.class !== 'Wizard' && basicInfo.class !== 'Bard'" class="text-muted">
                 <i class="fas fa-info-circle me-2"></i>
                 Spellbook for {{ basicInfo.class }} will be available when spell selection is implemented.
               </div>

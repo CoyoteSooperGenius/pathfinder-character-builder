@@ -14,10 +14,9 @@ Vue.component('wizard-options', {
           <div class="row">
             <div class="col-md-6 mb-3">
               <div 
-                class="card h-100 option-card"
+                class="card h-100 option-card cursor-pointer"
                 :class="{ 'border-primary bg-light': selectedArcaneBond === 'familiar' }"
                 @click="selectArcaneBond('familiar')"
-                style="cursor: pointer;"
               >
                 <div class="card-body text-center">
                   <i class="fas fa-cat fa-2x mb-2 text-primary"></i>
@@ -31,10 +30,9 @@ Vue.component('wizard-options', {
             
             <div class="col-md-6 mb-3">
               <div 
-                class="card h-100 option-card"
+                class="card h-100 option-card cursor-pointer"
                 :class="{ 'border-primary bg-light': selectedArcaneBond === 'bonded_object' }"
                 @click="selectArcaneBond('bonded_object')"
-                style="cursor: pointer;"
               >
                 <div class="card-body text-center">
                   <i class="fas fa-magic fa-2x mb-2 text-primary"></i>
@@ -62,10 +60,9 @@ Vue.component('wizard-options', {
           <div class="row">
             <div class="col-md-6 col-lg-4 mb-3" v-for="familiar in familiarOptions" :key="familiar.name">
               <div 
-                class="card h-100 option-card"
+                class="card h-100 option-card cursor-pointer"
                 :class="{ 'border-primary bg-light': selectedFamiliar === familiar.name }"
                 @click="selectFamiliar(familiar.name)"
-                style="cursor: pointer;"
               >
                 <div class="card-body">
                   <h6 class="card-title">
@@ -95,10 +92,9 @@ Vue.component('wizard-options', {
           <div class="row">
             <div class="col-md-6 col-lg-4 mb-3" v-for="object in bondedObjectOptions" :key="object.name">
               <div 
-                class="card h-100 option-card"
+                class="card h-100 option-card cursor-pointer"
                 :class="{ 'border-primary bg-light': selectedBondedObject === object.name }"
                 @click="selectBondedObject(object.name)"
-                style="cursor: pointer;"
               >
                 <div class="card-body">
                   <h6 class="card-title">
@@ -157,10 +153,9 @@ Vue.component('wizard-options', {
           <div class="row">
             <div class="col-md-6 col-lg-4 mb-3" v-for="school in arcaneSchools" :key="school.name">
               <div 
-                class="card h-100 option-card"
+                class="card h-100 option-card cursor-pointer"
                 :class="{ 'border-primary bg-light': selectedArcaneSchool === school.name }"
                 @click="selectArcaneSchool(school.name)"
-                style="cursor: pointer;"
               >
                 <div class="card-body">
                   <h6 class="card-title">
@@ -259,33 +254,15 @@ Vue.component('wizard-options', {
               </div>
             </div>
             
-            <feat-selector
+            <!-- Unified Spell Selection Interface -->
+            <spell-selector
               v-if="availableStartingSpells.total > 0"
-              :feats="firstLevelSpells"
-              :selected-feat="selectedSpells"
-              title=""
-              :description="'Select ' + availableStartingSpells.total + ' 1st-level wizard spells for your starting spellbook:'"
-              display-mode="list"
-              :show-details="false"
-              :allow-multiple="true"
-              :max-selections="availableStartingSpells.total"
-              :min-selections="availableStartingSpells.total"
+              :spell-selections="spellSelections"
+              :selected-spells="selectedSpellsData"
               :loading="firstLevelSpells.length === 0"
-              empty-message="Loading spells..."
-              :filter-by-prerequisites="false"
-              :show-prerequisite-status="false"
-              @feat-selected="selectSpells"
-            >
-              <!-- Override the validation messages slot to use spell terminology -->
-              <template #footer="{ selectedFeat, isValid }">
-                <div v-if="!isValid" class="validation-messages mt-3">
-                  <div v-if="selectedFeat.length < availableStartingSpells.total" class="alert alert-warning small mb-2">
-                    <i class="fas fa-exclamation-triangle me-1"></i>
-                    Please select {{ availableStartingSpells.total }} spell{{ availableStartingSpells.total > 1 ? 's' : '' }}.
-                  </div>
-                </div>
-              </template>
-            </feat-selector>
+              class-name="Wizard"
+              @spells-changed="onWizardSpellsChanged"
+            />
             
             <div v-else class="alert alert-warning">
               <i class="fas fa-exclamation-triangle me-2"></i>
@@ -464,6 +441,9 @@ Vue.component('wizard-options', {
         }
       ],
       firstLevelSpells: [],
+      selectedSpellsData: {
+        firstLevel: []
+      },
       familiarOptions: [
         {
           name: 'Bat',
@@ -597,6 +577,23 @@ Vue.component('wizard-options', {
         intelligence: intelligence,
         bonus: intBonus
       };
+    },
+    // Spell selections for unified spell-selector component
+    spellSelections() {
+      if (this.availableStartingSpells.total <= 0) {
+        return [];
+      }
+      
+      return [
+        {
+          type: 'firstLevel',
+          label: '1st Level Spells',
+          icon: 'fa-magic',
+          count: this.availableStartingSpells.total,
+          description: `Select ${this.availableStartingSpells.total} 1st-level wizard spells for your starting spellbook. These spells represent your initial magical knowledge and research.`,
+          spells: this.firstLevelSpells
+        }
+      ];
     }
   },
   methods: {
@@ -621,6 +618,12 @@ Vue.component('wizard-options', {
     selectSpells(spells) {
       this.$emit('spells-selected', spells);
     },
+    onWizardSpellsChanged(newSelections) {
+      this.selectedSpellsData = newSelections;
+      // Convert to array format for existing wizard code compatibility
+      this.selectedSpells = newSelections.firstLevel || [];
+      this.$emit('spells-selected', this.selectedSpells);
+    },
     updateIntelligence() {
       // Get current ability scores from localStorage
       const abilityScores = JSON.parse(localStorage.getItem('currentAbilityScores') || '{}');
@@ -638,94 +641,26 @@ Vue.component('wizard-options', {
       this.currentIntelligence = intelligence;
     },
     async loadSpells() {
-      // For now, create a basic list of 1st level wizard spells
-      // In a full implementation, this would come from a spells.json file
-      this.firstLevelSpells = [
-        {
-          name: 'Burning Hands',
-          description: 'A cone of searing flame shoots from your fingertips.',
-          school: 'Evocation'
-        },
-        {
-          name: 'Magic Missile',
-          description: 'A missile of magical energy darts forth and unerringly strikes its target.',
-          school: 'Evocation'
-        },
-        {
-          name: 'Shield',
-          description: 'An invisible barrier of magical force appears in front of you.',
-          school: 'Abjuration'
-        },
-        {
-          name: 'Mage Armor',
-          description: 'An invisible but tangible field of force surrounds the subject.',
-          school: 'Conjuration'
-        },
-        {
-          name: 'Charm Person',
-          description: 'Makes a humanoid creature regard you as a trusted friend.',
-          school: 'Enchantment'
-        },
-        {
-          name: 'Sleep',
-          description: 'Causes creatures to fall into a magical slumber.',
-          school: 'Enchantment'
-        },
-        {
-          name: 'Color Spray',
-          description: 'A vivid cone of clashing colors springs forth, stunning creatures.',
-          school: 'Illusion'
-        },
-        {
-          name: 'Disguise Self',
-          description: 'Changes your appearance to that of a similar creature.',
-          school: 'Illusion'
-        },
-        {
-          name: 'Identify',
-          description: 'Determines the properties of magic items.',
-          school: 'Divination'
-        },
-        {
-          name: 'Comprehend Languages',
-          description: 'Understand spoken and written languages.',
-          school: 'Divination'
-        },
-        {
-          name: 'Enlarge Person',
-          description: 'Doubles the size of a humanoid creature.',
-          school: 'Transmutation'
-        },
-        {
-          name: 'Expeditious Retreat',
-          description: 'Increases your base land speed.',
-          school: 'Transmutation'
-        },
-        {
-          name: 'Grease',
-          description: 'Makes a 10-ft. square slippery.',
-          school: 'Conjuration'
-        },
-        {
-          name: 'Summon Monster I',
-          description: 'Summons an extraplanar creature to fight for you.',
-          school: 'Conjuration'
-        },
-        {
-          name: 'Cause Fear',
-          description: 'One creature becomes frightened.',
-          school: 'Necromancy'
-        },
-        {
-          name: 'Chill Touch',
-          description: 'One touch/level deals 1d6 damage and possibly 1 Str damage.',
-          school: 'Necromancy'
-        }
-      ];
+      try {
+        const response = await fetch('data/spells.json');
+        const data = await response.json();
+        
+        this.firstLevelSpells = data.wizardSpells.firstLevel || [];
+      } catch (error) {
+        console.error('Error loading wizard spells:', error);
+        // Fallback to empty array if loading fails
+        this.firstLevelSpells = [];
+      }
     }
   },
   async mounted() {
     await this.loadSpells();
     this.updateIntelligence();
+    // Initialize selectedSpellsData from existing selectedSpells prop
+    if (this.selectedSpells && this.selectedSpells.length > 0) {
+      this.selectedSpellsData = {
+        firstLevel: [...this.selectedSpells]
+      };
+    }
   }
 });

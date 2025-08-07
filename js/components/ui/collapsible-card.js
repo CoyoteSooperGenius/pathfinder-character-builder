@@ -64,9 +64,8 @@ Vue.component('collapsible-card', {
   template: `
     <div :class="fullCardClasses">
       <div 
-        :class="fullHeaderClasses" 
-        @click="toggle" 
-        style="cursor: pointer;"
+        :class="fullHeaderClasses + ' cursor-pointer'" 
+        @click="toggle"
       >
         <h5 class="mb-0 d-flex justify-content-between align-items-center">
           <span class="d-flex align-items-center">

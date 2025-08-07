@@ -3,3 +3,6 @@ node_modules
 # Playwright test artifacts
 playwright-report/
 test-results/
+
+.claude
+CLAUDE.md

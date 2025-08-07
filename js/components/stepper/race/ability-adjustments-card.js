@@ -51,7 +51,7 @@ Vue.component('ability-adjustments-card', {
   },
   template: `
     <div class="card">
-      <div class="card-header" style="cursor: pointer;" @click="toggleAbilityAdjustments">
+      <div class="card-header cursor-pointer" @click="toggleAbilityAdjustments">
         <h5 class="mb-0 d-flex justify-content-between align-items-center">
           Ability Score Adjustments
           <i :class="showAbilityAdjustments ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"></i>

@@ -35,6 +35,14 @@ Vue.component('first-level-options', {
     selectedOppositionSchools: {
       type: Array,
       default: () => []
+    },
+    selectedCantrips: {
+      type: Array,
+      default: () => []
+    },
+    selectedFirstLevelSpells: {
+      type: Array,
+      default: () => []
     }
   },
   computed: {
@@ -81,6 +89,9 @@ Vue.component('first-level-options', {
     },
     onSpellsSelected(spells) {
       this.$emit('spells-selected', spells);
+    },
+    onBardSpellsChanged(spellsData) {
+      this.$emit('bard-spells-changed', spellsData);
     }
   },
   template: `
@@ -117,6 +128,17 @@ Vue.component('first-level-options', {
           </wizard-options>
         </div>
         
+        <!-- Bard Spell Selection -->
+        <div v-else-if="selectedClass === 'Bard'" class="mb-3">
+          <bard-options
+            :class-data="{
+              selectedCantrips: selectedCantrips,
+              selectedFirstLevelSpells: selectedFirstLevelSpells
+            }"
+            @spells-changed="onBardSpellsChanged">
+          </bard-options>
+        </div>
+        
         <!-- Classes with Automatic Features (No Choices Needed) -->
         <div v-else-if="selectedClass === 'Barbarian' || selectedClass === 'Paladin' || selectedClass === 'Rogue'" class="alert alert-success">
           <i class="fas fa-check-circle me-2"></i>
@@ -125,7 +147,7 @@ Vue.component('first-level-options', {
         </div>
         
         <!-- Placeholder for other spellcaster classes -->
-        <div v-else-if="isSpellcaster && selectedClass !== 'Wizard'" class="alert alert-info">
+        <div v-else-if="isSpellcaster && selectedClass !== 'Wizard' && selectedClass !== 'Bard'" class="alert alert-info">
           <i class="fas fa-info-circle me-2"></i>
           <strong>Coming Soon:</strong> Spell selection for {{ selectedClass }} will be implemented here.
         </div>

@@ -25,10 +25,10 @@ Vue.component('class-selector', {
   },
   template: `
     <div class="card mb-4">
-      <div class="card-header" @click="toggleClassSelection" style="cursor: pointer;">
-        <h5 class="mb-0">
+      <div class="card-header cursor-pointer" @click="toggleClassSelection">
+        <h5 class="mb-0 d-flex justify-content-between align-items-center">
           Available Classes
-          <i class="fas" :class="showClassSelection ? 'fa-chevron-up' : 'fa-chevron-down'" style="float: right;"></i>
+          <i class="fas" :class="showClassSelection ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
         </h5>
       </div>
       <div class="card-body" v-show="showClassSelection">
