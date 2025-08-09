@@ -232,6 +232,11 @@ const CharacterDataService = {
         if (classData.selectedFirstLevelSpells) basicInfo.selectedFirstLevelSpells = classData.selectedFirstLevelSpells;
       }
       
+      // Save Ranger-specific data
+      if (classData.selectedClass === 'Ranger') {
+        if (classData.favoredEnemy) basicInfo.favoredEnemy = classData.favoredEnemy;
+      }
+      
       // Save complete class data for reference
       if (classData.classData) {
         basicInfo.classData = classData.classData;

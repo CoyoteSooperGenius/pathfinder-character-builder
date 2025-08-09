@@ -43,6 +43,18 @@ Vue.component('first-level-options', {
     selectedFirstLevelSpells: {
       type: Array,
       default: () => []
+    },
+    favoredEnemies: {
+      type: Array,
+      default: () => []
+    },
+    selectedFavoredEnemyType: {
+      type: String,
+      default: null
+    },
+    selectedFavoredEnemySubtype: {
+      type: String,
+      default: null
     }
   },
   computed: {
@@ -92,6 +104,12 @@ Vue.component('first-level-options', {
     },
     onBardSpellsChanged(spellsData) {
       this.$emit('bard-spells-changed', spellsData);
+    },
+    onFavoredEnemyTypeSelected(enemyType) {
+      this.$emit('favored-enemy-type-selected', enemyType);
+    },
+    onFavoredEnemySubtypeSelected(subtype) {
+      this.$emit('favored-enemy-subtype-selected', subtype);
     }
   },
   template: `
@@ -139,6 +157,17 @@ Vue.component('first-level-options', {
           </bard-options>
         </div>
         
+        <!-- Ranger Favored Enemy Selection -->
+        <div v-else-if="selectedClass === 'Ranger'" class="mb-3">
+          <ranger-options
+            :favored-enemies="favoredEnemies"
+            :selected-favored-enemy-type="selectedFavoredEnemyType"
+            :selected-favored-enemy-subtype="selectedFavoredEnemySubtype"
+            @favored-enemy-type-selected="onFavoredEnemyTypeSelected"
+            @favored-enemy-subtype-selected="onFavoredEnemySubtypeSelected">
+          </ranger-options>
+        </div>
+        
         <!-- Classes with Automatic Features (No Choices Needed) -->
         <div v-else-if="selectedClass === 'Barbarian' || selectedClass === 'Paladin' || selectedClass === 'Rogue'" class="alert alert-success">
           <i class="fas fa-check-circle me-2"></i>
@@ -153,7 +182,7 @@ Vue.component('first-level-options', {
         </div>
         
         <!-- Placeholder for specialization classes -->
-        <div v-else-if="hasSpecialization && selectedClass !== 'Wizard'" class="alert alert-info">
+        <div v-else-if="hasSpecialization && selectedClass !== 'Wizard' && selectedClass !== 'Ranger'" class="alert alert-info">
           <i class="fas fa-info-circle me-2"></i>
           <strong>Coming Soon:</strong> {{ specializationText }}
         </div>

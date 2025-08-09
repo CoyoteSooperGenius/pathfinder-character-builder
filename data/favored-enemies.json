@@ -1,0 +1,96 @@
+{
+  "favoredEnemies": [
+    {
+      "type": "Aberration",
+      "description": "A creature with aberrant anatomy, strange abilities, an alien mindset, or any combination thereof.",
+      "subtypes": []
+    },
+    {
+      "type": "Animal",
+      "description": "A living, nonhuman creature, usually a vertebrate with no magical abilities and no innate capacity for language or culture.",
+      "subtypes": []
+    },
+    {
+      "type": "Construct",
+      "description": "An animated object or artificially created creature.",
+      "subtypes": []
+    },
+    {
+      "type": "Dragon",
+      "description": "A reptilian creature, usually winged, with magical or unusual abilities.",
+      "subtypes": []
+    },
+    {
+      "type": "Fey",
+      "description": "A creature with supernatural abilities and connections to nature or to some other force or place.",
+      "subtypes": []
+    },
+    {
+      "type": "Humanoid",
+      "description": "A humanoid usually has two arms, two legs, and one head, or a human-like torso, arms, and a head.",
+      "subtypes": [
+        "Dwarf",
+        "Elf",
+        "Giant",
+        "Gnoll",
+        "Gnome",
+        "Goblinoid",
+        "Halfling",
+        "Human",
+        "Orc",
+        "Reptilian"
+      ]
+    },
+    {
+      "type": "Magical Beast",
+      "description": "Magical beasts are similar to animals but can have Intelligence scores higher than 2.",
+      "subtypes": []
+    },
+    {
+      "type": "Monstrous Humanoid",
+      "description": "Monstrous humanoids are similar to humanoids, but with monstrous or animalistic features.",
+      "subtypes": []
+    },
+    {
+      "type": "Ooze",
+      "description": "An ooze is an amorphous or mutable creature, usually mindless.",
+      "subtypes": []
+    },
+    {
+      "type": "Outsider",
+      "description": "An outsider is at least partially composed of the essence of some plane other than the Material Plane.",
+      "subtypes": [
+        "Air",
+        "Angel",
+        "Archon", 
+        "Azata",
+        "Chaotic",
+        "Daemon",
+        "Demon",
+        "Devil",
+        "Earth",
+        "Evil",
+        "Fire",
+        "Good",
+        "Lawful",
+        "Native",
+        "Water"
+      ]
+    },
+    {
+      "type": "Plant",
+      "description": "This type comprises vegetable creatures. Note that regular plants, such as one finds growing in gardens and fields, lack Wisdom and Charisma scores and are not creatures, but objects.",
+      "subtypes": []
+    },
+    {
+      "type": "Undead",
+      "description": "Undead are once-living creatures animated by spiritual or supernatural forces.",
+      "subtypes": []
+    },
+    {
+      "type": "Vermin",
+      "description": "This type includes insects, arachnids, other arthropods, worms, and similar invertebrates.",
+      "subtypes": []
+    }
+  ]
+}

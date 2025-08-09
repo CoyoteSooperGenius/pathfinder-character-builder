@@ -13,7 +13,11 @@ Vue.component('class-step-coordinator', {
       selectedSpells: [],
       selectedCantrips: [],
       selectedFirstLevelSpells: [],
-      coreClasses: []
+      // Ranger-specific properties
+      selectedFavoredEnemyType: null,
+      selectedFavoredEnemySubtype: null,
+      coreClasses: [],
+      favoredEnemies: []
     };
   },
   computed: {
@@ -61,6 +65,15 @@ Vue.component('class-step-coordinator', {
         return !!(this.selectedClass && 
                  this.selectedCantrips.length === 4 && 
                  this.selectedFirstLevelSpells.length === 2);
+      } else if (this.selectedClass === 'Ranger') {
+        // Ranger needs favored enemy type selected, and subtype if applicable
+        const selectedFavoredEnemy = this.favoredEnemies.find(e => e.type === this.selectedFavoredEnemyType);
+        const needsSubtype = selectedFavoredEnemy && selectedFavoredEnemy.subtypes.length > 0;
+        const hasSubtype = needsSubtype ? !!this.selectedFavoredEnemySubtype : true;
+        
+        return !!(this.selectedClass && 
+                 this.selectedFavoredEnemyType && 
+                 hasSubtype);
       } else {
         // For other classes, just need class selected (until their 1st level options are implemented)
         return !!this.selectedClass;
@@ -74,6 +87,11 @@ Vue.component('class-step-coordinator', {
         const classesResponse = await fetch('data/classes.json');
         const classesData = await classesResponse.json();
         this.coreClasses = classesData.coreClasses;
+        
+        // Load favored enemies data for Ranger
+        const favoredEnemiesResponse = await fetch('data/favored-enemies.json');
+        const favoredEnemiesData = await favoredEnemiesResponse.json();
+        this.favoredEnemies = favoredEnemiesData.favoredEnemies;
         
       } catch (error) {
         console.error('Error loading data:', error);
@@ -92,6 +110,9 @@ Vue.component('class-step-coordinator', {
       this.selectedSpells = [];
       this.selectedCantrips = [];
       this.selectedFirstLevelSpells = [];
+      // Reset Ranger selections when changing class
+      this.selectedFavoredEnemyType = null;
+      this.selectedFavoredEnemySubtype = null;
       this.showClassSelection = false;
       this.updateStepComplete();
     },
@@ -149,6 +170,16 @@ Vue.component('class-step-coordinator', {
       this.selectedFirstLevelSpells = spellsData.selectedFirstLevelSpells || [];
       this.updateStepComplete();
     },
+    onFavoredEnemyTypeSelected(enemyType) {
+      this.selectedFavoredEnemyType = enemyType;
+      // Reset subtype when changing type
+      this.selectedFavoredEnemySubtype = null;
+      this.updateStepComplete();
+    },
+    onFavoredEnemySubtypeSelected(subtype) {
+      this.selectedFavoredEnemySubtype = subtype;
+      this.updateStepComplete();
+    },
     updateStepComplete() {
       this.$emit('step-complete', this.isStepComplete);
     },
@@ -201,6 +232,18 @@ Vue.component('class-step-coordinator', {
       if (this.selectedClass === 'Bard') {
         if (this.selectedCantrips.length > 0) data.selectedCantrips = this.selectedCantrips;
         if (this.selectedFirstLevelSpells.length > 0) data.selectedFirstLevelSpells = this.selectedFirstLevelSpells;
+      }
+      
+      // Add Ranger-specific data
+      if (this.selectedClass === 'Ranger') {
+        if (this.selectedFavoredEnemyType) {
+          data.favoredEnemy = {
+            type: this.selectedFavoredEnemyType
+          };
+          if (this.selectedFavoredEnemySubtype) {
+            data.favoredEnemy.subtype = this.selectedFavoredEnemySubtype;
+          }
+        }
       }
       
       return data;
@@ -260,6 +303,14 @@ Vue.component('class-step-coordinator', {
       if (savedBasicInfo.selectedFirstLevelSpells) {
         this.selectedFirstLevelSpells = savedBasicInfo.selectedFirstLevelSpells;
       }
+      
+      // Restore Ranger options if saved
+      if (savedBasicInfo.favoredEnemy) {
+        this.selectedFavoredEnemyType = savedBasicInfo.favoredEnemy.type;
+        if (savedBasicInfo.favoredEnemy.subtype) {
+          this.selectedFavoredEnemySubtype = savedBasicInfo.favoredEnemy.subtype;
+        }
+      }
     }
     
     this.updateStepComplete();
@@ -293,6 +344,9 @@ Vue.component('class-step-coordinator', {
         :selected-spells="selectedSpells"
         :selected-cantrips="selectedCantrips"
         :selected-first-level-spells="selectedFirstLevelSpells"
+        :favored-enemies="favoredEnemies"
+        :selected-favored-enemy-type="selectedFavoredEnemyType"
+        :selected-favored-enemy-subtype="selectedFavoredEnemySubtype"
         @feat-selected="onFeatSelected"
         @arcane-bond-selected="onArcaneBondSelected"
         @familiar-selected="onFamiliarSelected"
@@ -302,6 +356,8 @@ Vue.component('class-step-coordinator', {
         @opposition-schools-selected="onOppositionSchoolsSelected"
         @spells-selected="onSpellsSelected"
         @bard-spells-changed="onBardSpellsChanged"
+        @favored-enemy-type-selected="onFavoredEnemyTypeSelected"
+        @favored-enemy-subtype-selected="onFavoredEnemySubtypeSelected"
       ></first-level-options>
     </div>
   `
