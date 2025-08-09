@@ -7,7 +7,34 @@
       "skillPoints": 4,
       "baseAttackBonus": "High",
       "saves": { "fortitude": "High", "reflex": "Low", "will": "Low" },
-      "classFeatures": ["Rage", "Fast Movement"],
+      "classFeatures": [
+        {
+          "name": "Rage",
+          "type": "Ex",
+          "level": 1,
+          "description": "A barbarian can call upon inner reserves of strength and ferocity, granting her additional combat prowess. At 1st level, a barbarian can rage for a number of rounds per day equal to 4 + her Constitution modifier. While in a rage, a barbarian gains a +2 bonus on melee attack rolls, melee damage rolls, thrown weapon damage rolls, and Will saving throws. She also takes a –2 penalty to Armor Class and gains 2 temporary hit points per Hit Die.",
+          "mechanics": {
+            "dailyUses": "4 + CON modifier",
+            "actionType": "free action",
+            "duration": "1 round per use",
+            "bonuses": ["+2 melee attack", "+2 melee damage", "+2 thrown damage", "+2 Will saves"],
+            "penalties": ["-2 AC"],
+            "tempHP": "2 per Hit Die"
+          },
+          "source": "PZO1110:31"
+        },
+        {
+          "name": "Fast Movement",
+          "type": "Ex",
+          "level": 1,
+          "description": "The barbarian's land speed is faster than the norm for her race by +10 feet. This benefit applies only when she is wearing no armor, light armor, or medium armor, and not carrying a heavy load.",
+          "mechanics": {
+            "speedBonus": "+10 feet",
+            "conditions": ["no armor, light armor, or medium armor", "not heavy load"]
+          },
+          "source": "PZO1110:31"
+        }
+      ],
       "weaponProficiencies": "Simple and martial weapons",
       "armorProficiencies": "Light and medium armor, shields",
       "classSkills": ["Acrobatics", "Climb", "Craft", "Handle Animal", "Intimidate", "Knowledge (nature)", "Perception", "Ride", "Survival", "Swim"]
@@ -19,7 +46,31 @@
       "skillPoints": 6,
       "baseAttackBonus": "Medium",
       "saves": { "fortitude": "Low", "reflex": "High", "will": "High" },
-      "classFeatures": ["Bardic Knowledge", "Bardic Performance", "Cantrips", "Spells", "Countersong", "Distraction", "Fascinate", "Inspire Courage +1"],
+      "classFeatures": [
+        {
+          "name": "Bardic Knowledge",
+          "type": "Ex",
+          "level": 1,
+          "description": "A bard adds half his class level (minimum 1) to all Knowledge skill checks and may make all Knowledge skill checks untrained.",
+          "mechanics": {
+            "skillBonus": "half class level (min 1) to all Knowledge checks",
+            "special": "make Knowledge checks untrained"
+          },
+          "source": "PZO1110:35"
+        },
+        {
+          "name": "Bardic Performance",
+          "type": "Su",
+          "level": 1,
+          "description": "A bard is trained to use the Perform skill to create magical effects on those around him. He can use this ability for a number of rounds per day equal to 4 + his Charisma modifier. At each level after 1st a bard can use bardic performance for 2 additional rounds per day. Starting a bardic performance is a standard action, but it can be maintained each round as a free action.",
+          "mechanics": {
+            "dailyUses": "4 + CHA modifier",
+            "actionType": "standard action to start, free action to maintain",
+            "performances": ["Countersong", "Distraction", "Fascinate", "Inspire Courage +1"]
+          },
+          "source": "PZO1110:35"
+        }
+      ],
       "weaponProficiencies": "Simple weapons, longsword, rapier, sap, short sword, shortbow, whip",
       "armorProficiencies": "Light armor, shields",
       "classSkills": ["Acrobatics", "Appraise", "Bluff", "Climb", "Craft", "Diplomacy", "Disguise", "Escape Artist", "Intimidate", "Knowledge (all)", "Linguistics", "Perception", "Perform", "Profession", "Sense Motive", "Sleight of Hand", "Spellcraft", "Stealth", "Use Magic Device"]
@@ -31,7 +82,46 @@
       "skillPoints": 2,
       "baseAttackBonus": "Medium",
       "saves": { "fortitude": "High", "reflex": "Low", "will": "High" },
-      "classFeatures": ["Aura", "Channel Energy 1d6", "Domains", "Orisons", "Spells"],
+      "classFeatures": [
+        {
+          "name": "Aura",
+          "type": "Ex",
+          "level": 1,
+          "description": "A cleric of a chaotic, evil, good, or lawful deity has a particularly powerful aura corresponding to the deity's alignment (see detect evil for details).",
+          "mechanics": {
+            "alignment": "deity alignment",
+            "strength": "cleric level"
+          },
+          "source": "PZO1110:40"
+        },
+        {
+          "name": "Channel Energy",
+          "type": "Su",
+          "level": 1,
+          "description": "Regardless of alignment, any cleric can release a wave of energy by channeling the power of her faith through her holy symbol. This energy can be used to cause or heal damage, depending on the type of energy channeled and the creatures targeted. A good cleric channels positive energy and can choose to deal damage to undead creatures or to heal living creatures. An evil cleric channels negative energy and can choose to deal damage to living creatures or to heal undead creatures.",
+          "mechanics": {
+            "dailyUses": "3 + CHA modifier",
+            "actionType": "standard action",
+            "range": "30 feet",
+            "damage": "1d6",
+            "area": "30-foot radius burst"
+          },
+          "source": "PZO1110:40"
+        },
+        {
+          "name": "Domains",
+          "type": "Sp",
+          "level": 1,
+          "description": "A cleric's deity influences her alignment, what magic she can perform, her values, and how others see her. A cleric chooses two domains from among those belonging to her deity. Each domain grants a number of domain powers, dependent upon the level of the cleric, as well as a number of bonus spells.",
+          "mechanics": {
+            "choiceType": "domain_selection",
+            "choices": 2,
+            "domainPowers": "level dependent",
+            "bonusSpells": "1 per spell level"
+          },
+          "source": "PZO1110:41"
+        }
+      ],
       "weaponProficiencies": "Simple weapons, Deity's favored weapon",
       "armorProficiencies": "Light and medium armor, shields",
       "classSkills": ["Appraise", "Craft", "Diplomacy", "Heal", "Knowledge (arcana)", "Knowledge (history)", "Knowledge (nobility)", "Knowledge (planes)", "Knowledge (religion)", "Linguistics", "Profession", "Sense Motive", "Spellcraft"]
@@ -43,7 +133,42 @@
       "skillPoints": 4,
       "baseAttackBonus": "Medium",
       "saves": { "fortitude": "High", "reflex": "Low", "will": "High" },
-      "classFeatures": ["Nature Bond", "Nature Sense", "Orisons", "Spells", "Wild Empathy"],
+      "classFeatures": [
+        {
+          "name": "Nature Bond",
+          "type": "Ex",
+          "level": 1,
+          "description": "At 1st level, a druid forms a bond with nature. This bond can take one of two forms. The first is a close tie to the natural world, granting the druid one of the following cleric domains: Air, Animal, Earth, Fire, Plant, Water, or Weather. The second option is to form a close bond with an animal companion.",
+          "mechanics": {
+            "choiceType": "domain_or_companion",
+            "choices": ["Domain (Air, Animal, Earth, Fire, Plant, Water, Weather)", "Animal Companion"],
+            "domainPowers": "1st level domain power"
+          },
+          "source": "PZO1110:52"
+        },
+        {
+          "name": "Nature Sense",
+          "type": "Ex",
+          "level": 1,
+          "description": "A druid gains a +2 bonus on Knowledge (nature) and Survival checks.",
+          "mechanics": {
+            "skillBonus": "+2 to Knowledge (nature) and Survival"
+          },
+          "source": "PZO1110:52"
+        },
+        {
+          "name": "Wild Empathy",
+          "type": "Ex",
+          "level": 1,
+          "description": "A druid can improve the initial attitude of an animal. This ability functions just like a Diplomacy check to improve the attitude of a person. The druid rolls 1d20 and adds her druid level and her Charisma modifier to determine the wild empathy check result.",
+          "mechanics": {
+            "checkBonus": "druid level + CHA modifier",
+            "target": "animals",
+            "effect": "improve attitude (as Diplomacy)"
+          },
+          "source": "PZO1110:52"
+        }
+      ],
       "weaponProficiencies": "Clubs, daggers, darts, javelins, maces, quarterstaffs, scimitars, sickles, slings, spears",
       "armorProficiencies": "Light and medium non-metal armor, non-metal shields",
       "classSkills": ["Climb", "Craft", "Fly", "Handle Animal", "Heal", "Knowledge (geography)", "Knowledge (nature)", "Perception", "Profession", "Ride", "Spellcraft", "Survival", "Swim"]
@@ -55,7 +180,19 @@
       "skillPoints": 2,
       "baseAttackBonus": "High",
       "saves": { "fortitude": "High", "reflex": "Low", "will": "Low" },
-      "classFeatures": ["Bonus Feat"],
+      "classFeatures": [
+        {
+          "name": "Bonus Feats",
+          "type": "Ex",
+          "level": 1,
+          "description": "At 1st level, and at every even level thereafter, a fighter gains a bonus feat in addition to those gained from normal advancement. These bonus feats must be selected from those listed as Combat Feats.",
+          "mechanics": {
+            "bonusFeats": 1,
+            "featCategories": ["Combat"]
+          },
+          "source": "PZO1110:55"
+        }
+      ],
       "weaponProficiencies": "Simple and martial weapons",
       "armorProficiencies": "All armor and shields",
       "classSkills": ["Climb", "Craft", "Handle Animal", "Intimidate", "Knowledge (dungeoneering)", "Knowledge (engineering)", "Profession", "Ride", "Survival", "Swim"]
@@ -67,7 +204,59 @@
       "skillPoints": 4,
       "baseAttackBonus": "Medium",
       "saves": { "fortitude": "High", "reflex": "High", "will": "High" },
-      "classFeatures": ["Bonus Feat","AC Bonus", "Flurry of Blows", "Stunning Fist", "Unarmed Strike", "Unarmed Damage"],
+      "classFeatures": [
+        {
+          "name": "AC Bonus",
+          "type": "Ex",
+          "level": 1,
+          "description": "When unarmored and unencumbered, the monk adds her Wisdom bonus (if any) to her AC and her CMD. In addition, a monk gains a +1 bonus to AC and CMD at 4th level. This bonus increases by 1 for every four monk levels thereafter, up to a maximum of +5 at 20th level.",
+          "mechanics": {
+            "acBonus": "WIS modifier (when unarmored and unencumbered)",
+            "conditions": ["unarmored", "unencumbered"]
+          },
+          "source": "PZO1110:57"
+        },
+        {
+          "name": "Flurry of Blows",
+          "type": "Ex",
+          "level": 1,
+          "description": "Starting at 1st level, a monk can make a flurry of blows as a full-attack action. When doing so, he may make one additional attack, taking a –2 penalty on all of his attack rolls, as if using the Two-Weapon Fighting feat. These attacks can be any combination of unarmed strikes and attacks with a monk special weapon.",
+          "mechanics": {
+            "actionType": "full-attack action",
+            "extraAttacks": 1,
+            "penalty": "-2 to all attacks",
+            "weapons": ["unarmed strikes", "monk weapons"]
+          },
+          "source": "PZO1110:57"
+        },
+        {
+          "name": "Stunning Fist",
+          "type": "Ex",
+          "level": 1,
+          "description": "At 1st level, the monk gains Stunning Fist as a bonus feat, even if he does not meet the prerequisites. At 4th level, and every 4 levels thereafter, the monk gains the ability to apply a new condition to the target of his Stunning Fist.",
+          "mechanics": {
+            "bonusFeats": 1,
+            "featCategories": ["Combat"],
+            "specificFeat": "Stunning Fist",
+            "dailyUses": "1 per monk level"
+          },
+          "source": "PZO1110:57"
+        },
+        {
+          "name": "Unarmed Strike",
+          "type": "Ex",
+          "level": 1,
+          "description": "At 1st level, a monk gains Improved Unarmed Strike as a bonus feat. A monk's attacks may be with fist, elbows, knees, and feet. This means that a monk may make unarmed strikes with his hands full. A monk's unarmed strikes deal lethal damage.",
+          "mechanics": {
+            "bonusFeats": 1,
+            "featCategories": ["Combat"],
+            "specificFeat": "Improved Unarmed Strike",
+            "damage": "lethal damage",
+            "bodyParts": ["fists", "elbows", "knees", "feet"]
+          },
+          "source": "PZO1110:57"
+        }
+      ],
       "weaponProficiencies": "Club, crossbow (light or heavy), dagger, handaxe, javelin, kama, nunchaku, quarterstaff, sai, shortspear, short sword, shuriken, siangham, sling",
       "armorProficiencies": "None",
       "classSkills": ["Acrobatics", "Climb", "Craft", "Escape Artist", "Intimidate", "Knowledge (history)", "Knowledge (religion)", "Perception", "Perform", "Profession", "Ride", "Sense Motive", "Stealth", "Swim"]
@@ -79,7 +268,46 @@
       "skillPoints": 2,
       "baseAttackBonus": "High",
       "saves": { "fortitude": "High", "reflex": "Low", "will": "High" },
-      "classFeatures": ["Aura of Good", "Detect Evil", "Smite Evil"],
+      "classFeatures": [
+        {
+          "name": "Aura of Good",
+          "type": "Ex",
+          "level": 1,
+          "description": "The power of a paladin's aura of good (see the detect good spell) is equal to her paladin level.",
+          "mechanics": {
+            "auraStrength": "paladin level",
+            "alignment": "good"
+          },
+          "source": "PZO1110:60"
+        },
+        {
+          "name": "Detect Evil",
+          "type": "Sp",
+          "level": 1,
+          "description": "At will, a paladin can use detect evil, as the spell. A paladin can, as a move action, concentrate on a single item or individual within 60 feet and determine if it is evil, learning the strength of its aura as if having studied it for 3 rounds.",
+          "mechanics": {
+            "frequency": "at will",
+            "actionType": "move action (to concentrate)",
+            "range": "60 feet",
+            "effect": "as detect evil spell"
+          },
+          "source": "PZO1110:60"
+        },
+        {
+          "name": "Smite Evil",
+          "type": "Su",
+          "level": 1,
+          "description": "Once per day, a paladin can call out to the powers of good to aid her in her struggle against evil. As a swift action, the paladin chooses one target within sight to smite. If this target is evil, the paladin adds her Charisma bonus (if any) to her attack rolls and adds her paladin level to all damage rolls made against the target of her smite.",
+          "mechanics": {
+            "dailyUses": "1 per day",
+            "actionType": "swift action",
+            "attackBonus": "CHA modifier vs evil",
+            "damageBonus": "paladin level vs evil",
+            "target": "evil creatures"
+          },
+          "source": "PZO1110:60"
+        }
+      ],
       "weaponProficiencies": "Simple and martial weapons",
       "armorProficiencies": "All armor and shields",
       "classSkills": ["Craft", "Diplomacy", "Handle Animal", "Heal", "Knowledge (nobility)", "Knowledge (religion)", "Profession", "Ride", "Sense Motive", "Spellcraft"]
@@ -91,7 +319,42 @@
       "skillPoints": 6,
       "baseAttackBonus": "High",
       "saves": { "fortitude": "High", "reflex": "High", "will": "Low" },
-      "classFeatures": ["1st Favored Enemy", "Track", "Wild Empathy"],
+      "classFeatures": [
+        {
+          "name": "1st Favored Enemy",
+          "type": "Ex",
+          "level": 1,
+          "description": "At 1st level, a ranger selects a creature type from the ranger favored enemies table. He gains a +2 bonus on Bluff, Knowledge, Perception, Sense Motive, and Survival checks against creatures of his selected type. Likewise, he gets a +2 bonus on weapon attack and damage rolls against them.",
+          "mechanics": {
+            "choiceType": "favored_enemy",
+            "skillBonus": "+2 to Bluff, Knowledge, Perception, Sense Motive, Survival vs favored enemy",
+            "combatBonus": "+2 attack and damage vs favored enemy"
+          },
+          "source": "PZO1110:64"
+        },
+        {
+          "name": "Track",
+          "type": "Ex",
+          "level": 1,
+          "description": "A ranger adds half his level (minimum 1) to Survival skill checks made to follow or identify tracks.",
+          "mechanics": {
+            "skillBonus": "half ranger level (min 1) to Survival for tracking"
+          },
+          "source": "PZO1110:64"
+        },
+        {
+          "name": "Wild Empathy",
+          "type": "Ex",
+          "level": 1,
+          "description": "A ranger can improve the initial attitude of an animal. This ability functions just like a Diplomacy check to improve the attitude of a person. The ranger rolls 1d20 and adds his ranger level and his Charisma modifier to determine the wild empathy check result.",
+          "mechanics": {
+            "checkBonus": "ranger level + CHA modifier",
+            "target": "animals",
+            "effect": "improve attitude (as Diplomacy)"
+          },
+          "source": "PZO1110:64"
+        }
+      ],
       "weaponProficiencies": "Simple and martial weapons",
       "armorProficiencies": "Light and medium armor, shields",
       "classSkills": ["Climb", "Craft", "Handle Animal", "Heal", "Intimidate", "Knowledge (dungeoneering)", "Knowledge (geography)", "Knowledge (nature)", "Perception", "Profession", "Ride", "Spellcraft", "Stealth", "Survival", "Swim"]
@@ -103,7 +366,30 @@
       "skillPoints": 8,
       "baseAttackBonus": "Medium",
       "saves": { "fortitude": "Low", "reflex": "High", "will": "Low" },
-      "classFeatures": ["Sneak Attack 1d6", "Trapfinding"],
+      "classFeatures": [
+        {
+          "name": "Sneak Attack",
+          "type": "Ex",
+          "level": 1,
+          "description": "If a rogue can catch an opponent when he is unable to defend himself effectively from her attack, she can strike a vital spot for extra damage. This extra damage is 1d6 at 1st level.",
+          "mechanics": {
+            "damageType": "precision",
+            "diceProgression": "1d6 at 1st, +1d6 every 2 levels"
+          },
+          "source": "PZO1110:68"
+        },
+        {
+          "name": "Trapfinding",
+          "type": "Ex",
+          "level": 1,
+          "description": "A rogue adds 1/2 her level to Perception skill checks made to locate traps and to Disable Device checks (minimum 1). She can use Disable Device to disarm magical traps.",
+          "mechanics": {
+            "skillBonus": "half level to Perception vs traps and Disable Device",
+            "special": "disarm magical traps"
+          },
+          "source": "PZO1110:63"
+        }
+      ],
       "weaponProficiencies": "Simple weapons, hand crossbow, rapier, sap, shortbow, short sword",
       "armorProficiencies": "Light armor",
       "classSkills": ["Acrobatics", "Appraise", "Bluff", "Climb", "Craft", "Diplomacy", "Disable Device", "Disguise", "Escape Artist", "Intimidate", "Knowledge (dungeoneering)", "Knowledge (local)", "Linguistics", "Perception", "Perform", "Profession", "Sense Motive", "Sleight of Hand", "Stealth", "Swim", "Use Magic Device"]
@@ -115,7 +401,32 @@
       "skillPoints": 2,
       "baseAttackBonus": "Low",
       "saves": { "fortitude": "Low", "reflex": "Low", "will": "High" },
-      "classFeatures": ["Bloodline", "Cantrips", "Eschew Materials", "Spells"],
+      "classFeatures": [
+        {
+          "name": "Bloodline",
+          "type": "Ex",
+          "level": 1,
+          "description": "Each sorcerer has a source of magic somewhere in her heritage that grants her spells, bonus feats, an additional class skill, and other special abilities. This source can represent a blood relation or an extreme event involving a creature somewhere in the family's past. At 1st level, sorcerers must select a bloodline.",
+          "mechanics": {
+            "choiceType": "bloodline_selection",
+            "choices": ["Aberrant", "Abyssal", "Arcane", "Celestial", "Destined", "Draconic", "Elemental", "Fey", "Infernal", "Undead"],
+            "benefits": ["bloodline spells", "bloodline feats", "bloodline powers", "bonus class skill"]
+          },
+          "source": "PZO1110:70"
+        },
+        {
+          "name": "Eschew Materials",
+          "type": "Ex",
+          "level": 1,
+          "description": "A sorcerer gains Eschew Materials as a bonus feat at 1st level.",
+          "mechanics": {
+            "bonusFeats": 1,
+            "featCategories": ["General"],
+            "specificFeat": "Eschew Materials"
+          },
+          "source": "PZO1110:70"
+        }
+      ],
       "weaponProficiencies": "Simple weapons",
       "armorProficiencies": "None",
       "classSkills": ["Appraise", "Bluff", "Craft", "Fly", "Intimidate", "Knowledge (arcana)", "Profession", "Spellcraft", "Use Magic Device"]
@@ -127,7 +438,46 @@
       "skillPoints": 2,
       "baseAttackBonus": "Low",
       "saves": { "fortitude": "Low", "reflex": "Low", "will": "High" },
-      "classFeatures": ["Arcane Bond", "Arcane School", "Cantrips", "Scribe Scroll", "Spells"],
+      "classFeatures": [
+        {
+          "name": "Arcane Bond",
+          "type": "Sp",
+          "level": 1,
+          "description": "At 1st level, wizards form a powerful bond with an object or a creature. This bond can take one of two forms: a familiar or a bonded object. Once a wizard makes this choice, it is permanent and cannot be changed. A bonded object can be used once per day to cast any one spell that the wizard has in his spellbook and is capable of casting, even if the spell is not prepared.",
+          "mechanics": {
+            "choiceType": "familiar_or_object",
+            "choices": ["Familiar", "Bonded Object"],
+            "bondedObjectTypes": ["amulet", "ring", "staff", "wand", "weapon"],
+            "dailyUse": "cast unprepared spell from spellbook"
+          },
+          "source": "PZO1110:78"
+        },
+        {
+          "name": "Arcane School",
+          "type": "Ex",
+          "level": 1,
+          "description": "A wizard can choose to specialize in one school of magic, gaining additional spells and powers based on that school. This choice must be made at 1st level, and once made, it cannot be changed. A wizard that does not select a school receives the universalist school instead. Specialist wizards receive an additional spell slot of each spell level he can cast.",
+          "mechanics": {
+            "choiceType": "school_specialization",
+            "choices": ["Abjuration", "Conjuration", "Divination", "Enchantment", "Evocation", "Illusion", "Necromancy", "Transmutation", "Universalist"],
+            "oppositionSchools": 2,
+            "bonusSpellSlot": "per spell level"
+          },
+          "source": "PZO1110:78-79"
+        },
+        {
+          "name": "Scribe Scroll",
+          "type": "Ex",
+          "level": 1,
+          "description": "At 1st level, a wizard gains Scribe Scroll as a bonus feat.",
+          "mechanics": {
+            "bonusFeats": 1,
+            "featCategories": ["Item Creation"],
+            "specificFeat": "Scribe Scroll"
+          },
+          "source": "PZO1110:79"
+        }
+      ],
       "weaponProficiencies": "Club, dagger, heavy crossbow, light crossbow, quarterstaff",
       "armorProficiencies": "None",
       "classSkills": ["Appraise", "Craft", "Fly", "Knowledge (all)", "Linguistics", "Profession", "Spellcraft"]

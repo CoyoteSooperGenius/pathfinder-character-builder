@@ -1,4 +1,5 @@
 node_modules
+data/pf1e-foundry-data/
 
 # Playwright test artifacts
 playwright-report/
