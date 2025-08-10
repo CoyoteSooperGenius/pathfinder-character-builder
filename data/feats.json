@@ -1,236 +1,260 @@
 {
-  "generalFeats": [
-    {
-      "name": "Alertness",
-      "description": "You get a +2 bonus on Perception and Sense Motive skill checks.",
-      "prerequisites": []
+  "categories": {
+    "general": {
+      "name": "General Feats",
+      "description": "Feats available to all characters at 1st level (if prerequisites are met)"
     },
-    {
-      "name": "Athletic",
-      "description": "You get a +2 bonus on Climb and Swim skill checks.",
-      "prerequisites": []
+    "combat": {
+      "name": "Combat Feats", 
+      "description": "Feats that enhance combat abilities"
     },
-    {
-      "name": "Blind-Fight",
-      "description": "In melee, every time you miss because of concealment, you can reroll your miss chance percentile roll one time to see if you actually hit.",
-      "prerequisites": []
+    "itemCreation": {
+      "name": "Item Creation Feats",
+      "description": "Feats that allow creation of magic items"
     },
-    {
-      "name": "Combat Reflexes",
-      "description": "You may make a number of additional attacks of opportunity per round equal to your Dexterity bonus.",
-      "prerequisites": []
-    },
-    {
-      "name": "Deceitful",
-      "description": "You get a +2 bonus on Bluff and Disguise skill checks.",
-      "prerequisites": []
-    },
-    {
-      "name": "Deft Hands",
-      "description": "You get a +2 bonus on Disable Device and Sleight of Hand skill checks.",
-      "prerequisites": []
-    },
-    {
-      "name": "Dodge",
-      "description": "You gain a +1 dodge bonus to your AC against attacks made by one opponent that you designate during your action.",
-      "prerequisites": [
-        {
-          "type": "ability",
-          "ability": "DEX",
-          "value": 13
-        }
-      ]
-    },
-    {
-      "name": "Endurance",
-      "description": "You gain a +4 bonus on checks and saves to resist nonlethal damage from forced marches, starvation, thirst, and hot or cold environments.",
-      "prerequisites": []
-    },
-    {
-      "name": "Great Fortitude",
-      "description": "You get a +2 bonus on all Fortitude saving throws.",
-      "prerequisites": []
-    },
-    {
-      "name": "Improved Initiative",
-      "description": "You get a +4 bonus on initiative checks.",
-      "prerequisites": []
-    },
-    {
-      "name": "Improved Unarmed Strike",
-      "description": "You are considered to be armed even when unarmed and can deal lethal damage with unarmed strikes.",
-      "prerequisites": []
-    },
-    {
-      "name": "Investigator",
-      "description": "You get a +2 bonus on Appraise and Linguistics skill checks.",
-      "prerequisites": []
-    },
-    {
-      "name": "Iron Will",
-      "description": "You get a +2 bonus on all Will saving throws.",
-      "prerequisites": []
-    },
-    {
-      "name": "Lightning Reflexes",
-      "description": "You get a +2 bonus on all Reflex saving throws.",
-      "prerequisites": []
-    },
-    {
-      "name": "Magical Aptitude",
-      "description": "You get a +2 bonus on Spellcraft and Use Magic Device skill checks.",
-      "prerequisites": []
-    },
-    {
-      "name": "Nimble Moves",
-      "description": "You can move through 5 feet of difficult terrain each round as if it were normal terrain.",
-      "prerequisites": [
-        {
-          "type": "ability",
-          "ability": "DEX",
-          "value": 13
-        }
-      ]
-    },
-    {
-      "name": "Persuasive",
-      "description": "You get a +2 bonus on Diplomacy and Intimidate skill checks.",
-      "prerequisites": []
-    },
-    {
-      "name": "Point-Blank Shot",
-      "description": "You get a +1 bonus on attack and damage rolls with ranged weapons at ranges of up to 30 feet.",
-      "prerequisites": []
-    },
-    {
-      "name": "Power Attack",
-      "description": "On your action, before making attack rolls for a turn, you may choose to subtract a number from all melee attack rolls and add twice that number to all melee damage rolls.",
-      "prerequisites": [
-        {
-          "type": "ability",
-          "ability": "STR",
-          "value": 13
-        },
-        {
-          "type": "bab",
-          "value": 1
-        }
-      ]
-    },
-    {
-      "name": "Precise Shot",
-      "description": "You can shoot or throw ranged weapons at an opponent engaged in melee without taking the standard –4 penalty on your attack roll.",
-      "prerequisites": [
-        {
-          "type": "feat",
-          "feat": "Point-Blank Shot"
-        }
-      ]
-    },
-    {
-      "name": "Self-Sufficient",
-      "description": "You get a +2 bonus on Heal and Survival skill checks.",
-      "prerequisites": []
-    },
-    {
-      "name": "Skill Focus",
-      "description": "You get a +3 bonus on all checks involving the chosen skill. If you have 10 or more ranks in that skill, this bonus increases to +6.",
-      "prerequisites": [],
-      "special": "Choose one skill. This feat can be taken multiple times, but each time it applies to a different skill."
-    },
-    {
-      "name": "Stealthy",
-      "description": "You get a +2 bonus on Escape Artist and Stealth skill checks.",
-      "prerequisites": []
-    },
-    {
-      "name": "Toughness",
-      "description": "You gain +3 hit points. For every Hit Die you possess beyond 3, you gain an additional +1 hit point.",
-      "prerequisites": []
-    },
-    {
-      "name": "Two-Weapon Fighting",
-      "description": "Your penalties on attack rolls for fighting with two weapons are reduced. The penalty for your primary hand lessens by 2 and the one for your off hand lessens by 6.",
-      "prerequisites": [
-        {
-          "type": "ability",
-          "ability": "DEX",
-          "value": 15
-        }
-      ]
-    },
-    {
-      "name": "Weapon Finesse",
-      "description": "With a light weapon, elven curve blade, rapier, whip, or spiked chain made for a creature of your size category, you may use your Dexterity modifier instead of your Strength modifier on attack rolls.",
-      "prerequisites": []
+    "skill": {
+      "name": "Skill Feats",
+      "description": "Feats that enhance skill usage"
     }
-  ],
-  "fighterBonusFeats": [
-    {
+  },
+  "feats": {
+    "alertness": {
+      "name": "Alertness",
+      "description": "You often notice things that others might miss. You get a +2 bonus on Perception and Sense Motive skill checks. If you have 10 or more ranks in one of these skills, the bonus increases to +4 for that skill.",
+      "categories": ["general", "skill"],
+      "prerequisites": [],
+      "source": {
+        "book": "Core Rulebook", 
+        "pages": "114, 117",
+        "id": "PZO1110"
+      },
+      "availableAt1stLevel": true,
+      "fighterBonus": false
+    },
+    "athletic": {
+      "name": "Athletic",
+      "description": "You possess inherent physical prowess. You get a +2 bonus on Climb and Swim skill checks. If you have 10 or more ranks in one of these skills, the bonus increases to +4 for that skill.",
+      "categories": ["general", "skill"],
+      "prerequisites": [],
+      "source": {
+        "book": "Core Rulebook",
+        "pages": "114, 118",
+        "id": "PZO1110"
+      },
+      "availableAt1stLevel": true,
+      "fighterBonus": false
+    },
+    "blind-fight": {
       "name": "Blind-Fight",
-      "description": "Reduces penalties for fighting while unable to see.",
-      "prerequisites": []
+      "description": "Your keen senses guide you through darkness and concealment. In melee, every time you miss because of concealment (see Combat), you can reroll your miss chance percentile roll one time to see if you actually hit.",
+      "categories": ["combat"],
+      "prerequisites": [],
+      "source": {
+        "book": "Core Rulebook",
+        "pages": "114, 119",
+        "id": "PZO1110"
+      },
+      "availableAt1stLevel": true,
+      "fighterBonus": true
     },
-    {
-      "name": "Combat Expertise",
-      "description": "Trade attack bonus for AC bonus when fighting defensively.",
-      "prerequisites": [
-        {
-          "type": "ability",
-          "ability": "INT",
-          "value": 13
-        }
-      ]
-    },
-    {
+    "combat-reflexes": {
       "name": "Combat Reflexes",
-      "description": "Make additional attacks of opportunity based on Dex modifier.",
-      "prerequisites": []
+      "description": "You can respond quickly and repeatedly to opponents who let their defenses down. You may make a number of additional attacks of opportunity per round equal to your Dexterity bonus. With this feat, you may also make attacks of opportunity while flat-footed.",
+      "categories": ["combat"],
+      "prerequisites": [],
+      "source": {
+        "book": "Core Rulebook",
+        "pages": "114, 119",
+        "id": "PZO1110"
+      },
+      "availableAt1stLevel": true,
+      "fighterBonus": true
     },
-    {
-      "name": "Deadly Aim",
-      "description": "Trade attack bonus for damage bonus with ranged weapons.",
-      "prerequisites": [
-        {
-          "type": "ability",
-          "ability": "DEX",
-          "value": 13
-        },
-        {
-          "type": "bab",
-          "value": 1
-        }
-      ]
+    "deceitful": {
+      "name": "Deceitful",
+      "description": "You are skilled at deceiving others, both with the spoken word and with physical disguises. You get a +2 bonus on Bluff and Disguise skill checks. If you have 10 or more ranks in one of these skills, the bonus increases to +4 for that skill.",
+      "categories": ["general", "skill"],
+      "prerequisites": [],
+      "source": {
+        "book": "Core Rulebook",
+        "pages": "114, 119",
+        "id": "PZO1110"
+      },
+      "availableAt1stLevel": true,
+      "fighterBonus": false
     },
-    {
+    "deft-hands": {
+      "name": "Deft Hands",
+      "description": "You have exceptional manual dexterity. You get a +2 bonus on Disable Device and Sleight of Hand skill checks. If you have 10 or more ranks in one of these skills, the bonus increases to +4 for that skill.",
+      "categories": ["general", "skill"],
+      "prerequisites": [],
+      "source": {
+        "book": "Core Rulebook",
+        "pages": "114, 119",
+        "id": "PZO1110"
+      },
+      "availableAt1stLevel": true,
+      "fighterBonus": false
+    },
+    "dodge": {
       "name": "Dodge",
-      "description": "Gain +1 dodge bonus to AC against one designated opponent.",
+      "description": "Your training and reflexes allow you to react swiftly to avoid an opponent's attacks. You gain a +1 dodge bonus to your AC against attacks made by one opponent that you designate during your action. You can select a new opponent on any action.",
+      "categories": ["combat"],
       "prerequisites": [
         {
           "type": "ability",
           "ability": "DEX",
           "value": 13
         }
-      ]
+      ],
+      "source": {
+        "book": "Core Rulebook",
+        "pages": "114, 120",
+        "id": "PZO1110"
+      },
+      "availableAt1stLevel": true,
+      "fighterBonus": true
     },
-    {
+    "endurance": {
+      "name": "Endurance",
+      "description": "Harsh conditions or long exertions do not easily tire you. You gain a +4 bonus on the following checks and saves: Swim checks made to resist nonlethal damage from exhaustion; Constitution checks made to continue running; Constitution checks made to avoid nonlethal damage from a forced march; Constitution checks made to hold your breath; Constitution checks made to avoid nonlethal damage from starvation or thirst; Fortitude saves made to avoid nonlethal damage from hot or cold environments; and Fortitude saves made to resist damage from suffocation.",
+      "categories": ["general"],
+      "prerequisites": [],
+      "source": {
+        "book": "Core Rulebook",
+        "pages": "114, 121",
+        "id": "PZO1110"
+      },
+      "availableAt1stLevel": true,
+      "fighterBonus": false
+    },
+    "great-fortitude": {
+      "name": "Great Fortitude",
+      "description": "You are resistant to poisons, diseases, and other deadly effects. You get a +2 bonus on all Fortitude saving throws.",
+      "categories": ["general"],
+      "prerequisites": [],
+      "source": {
+        "book": "Core Rulebook",
+        "pages": "114, 121",
+        "id": "PZO1110"
+      },
+      "availableAt1stLevel": true,
+      "fighterBonus": false
+    },
+    "improved-initiative": {
       "name": "Improved Initiative",
-      "description": "Gain +4 bonus on initiative checks.",
-      "prerequisites": []
+      "description": "Your quick reflexes allow you to react rapidly to danger. You get a +4 bonus on initiative checks.",
+      "categories": ["general", "combat"],
+      "prerequisites": [],
+      "source": {
+        "book": "Core Rulebook",
+        "pages": "114, 127",
+        "id": "PZO1110"
+      },
+      "availableAt1stLevel": true,
+      "fighterBonus": true
     },
-    {
+    "improved-unarmed-strike": {
       "name": "Improved Unarmed Strike",
-      "description": "Deal lethal damage with unarmed strikes without penalty.",
-      "prerequisites": []
+      "description": "You are skilled at fighting while unarmed. You are considered to be armed even when unarmed—you do not provoke attacks of opportunity when you attack foes while unarmed. Your unarmed strikes can deal lethal or nonlethal damage, at your choice.",
+      "categories": ["combat"],
+      "prerequisites": [],
+      "source": {
+        "book": "Core Rulebook",
+        "pages": "114, 128",
+        "id": "PZO1110"
+      },
+      "availableAt1stLevel": true,
+      "fighterBonus": true
     },
-    {
+    "iron-will": {
+      "name": "Iron Will",
+      "description": "Your will is unbreakable. You get a +2 bonus on all Will saving throws.",
+      "categories": ["general"],
+      "prerequisites": [],
+      "source": {
+        "book": "Core Rulebook",
+        "pages": "114, 128",
+        "id": "PZO1110"
+      },
+      "availableAt1stLevel": true,
+      "fighterBonus": false
+    },
+    "lightning-reflexes": {
+      "name": "Lightning Reflexes",
+      "description": "You have faster reflexes than normal. You get a +2 bonus on all Reflex saving throws.",
+      "categories": ["general"],
+      "prerequisites": [],
+      "source": {
+        "book": "Core Rulebook",
+        "pages": "114, 128",
+        "id": "PZO1110"
+      },
+      "availableAt1stLevel": true,
+      "fighterBonus": false
+    },
+    "magical-aptitude": {
+      "name": "Magical Aptitude",
+      "description": "You are skilled at spellcasting and using magic items. You get a +2 bonus on Spellcraft and Use Magic Device skill checks. If you have 10 or more ranks in one of these skills, the bonus increases to +4 for that skill.",
+      "categories": ["general", "skill"],
+      "prerequisites": [],
+      "source": {
+        "book": "Core Rulebook",
+        "pages": "114, 128",
+        "id": "PZO1110"
+      },
+      "availableAt1stLevel": true,
+      "fighterBonus": false
+    },
+    "nimble-moves": {
+      "name": "Nimble Moves",
+      "description": "You can move across a single obstacle with ease. Whenever you move, you can move through 5 feet of difficult terrain each round as if it were normal terrain. This feat allows you to take a 5-foot step into difficult terrain.",
+      "categories": ["general"],
+      "prerequisites": [
+        {
+          "type": "ability",
+          "ability": "DEX",
+          "value": 13
+        }
+      ],
+      "source": {
+        "book": "Core Rulebook",
+        "pages": "115, 129",
+        "id": "PZO1110"
+      },
+      "availableAt1stLevel": true,
+      "fighterBonus": false
+    },
+    "persuasive": {
+      "name": "Persuasive",
+      "description": "You are skilled at swaying attitudes and intimidating others into compliance. You get a +2 bonus on Diplomacy and Intimidate skill checks. If you have 10 or more ranks in one of these skills, the bonus increases to +4 for that skill.",
+      "categories": ["general", "skill"],
+      "prerequisites": [],
+      "source": {
+        "book": "Core Rulebook",
+        "pages": "115, 130",
+        "id": "PZO1110"
+      },
+      "availableAt1stLevel": true,
+      "fighterBonus": false
+    },
+    "point-blank-shot": {
       "name": "Point-Blank Shot",
-      "description": "Gain +1 bonus on attack and damage rolls with ranged weapons at close range.",
-      "prerequisites": []
+      "description": "You are especially accurate when making ranged attacks against close targets. You get a +1 bonus on attack and damage rolls with ranged weapons at ranges of up to 30 feet.",
+      "categories": ["combat"],
+      "prerequisites": [],
+      "source": {
+        "book": "Core Rulebook",
+        "pages": "115, 131",
+        "id": "PZO1110"
+      },
+      "availableAt1stLevel": true,
+      "fighterBonus": true
     },
-    {
+    "power-attack": {
       "name": "Power Attack",
-      "description": "Trade attack bonus for damage bonus with melee weapons.",
+      "description": "You can make exceptionally deadly melee attacks by sacrificing accuracy for strength. You can choose to take a -1 penalty on all melee attack rolls and combat maneuver checks to gain a +2 bonus on all melee damage rolls. This bonus to damage is increased by half (+50%) if you are making an attack with a two-handed weapon, a one handed weapon using two hands, or a primary natural weapon that adds 1-1/2 times your Strength modifier on damage rolls. This bonus to damage is halved (-50%) if you are making an attack with an off-hand weapon or secondary natural weapon.",
+      "categories": ["combat"],
       "prerequisites": [
         {
           "type": "ability",
@@ -241,104 +265,164 @@
           "type": "bab",
           "value": 1
         }
-      ]
+      ],
+      "source": {
+        "book": "Core Rulebook",
+        "pages": "116, 131",
+        "id": "PZO1110"
+      },
+      "availableAt1stLevel": true,
+      "fighterBonus": true
     },
-    {
+    "precise-shot": {
       "name": "Precise Shot",
-      "description": "Shoot into melee without penalty.",
+      "description": "You are adept at firing ranged attacks into melee. You can shoot or throw ranged weapons at an opponent engaged in melee without taking the standard –4 penalty on your attack roll.",
+      "categories": ["combat"],
       "prerequisites": [
         {
           "type": "feat",
           "feat": "Point-Blank Shot"
         }
-      ]
+      ],
+      "source": {
+        "book": "Core Rulebook",
+        "pages": "116, 131",
+        "id": "PZO1110"
+      },
+      "availableAt1stLevel": true,
+      "fighterBonus": true
     },
-    {
-      "name": "Quick Draw",
-      "description": "Draw weapons as a free action.",
+    "scribe-scroll": {
+      "name": "Scribe Scroll",
+      "description": "You can create magic scrolls. You can create a scroll of any spell that you know. Scribing a scroll takes 2 hours if its base price is 250 gp or less, otherwise scribing a scroll takes 1 day for each 1,000 gp in its base price. To scribe a scroll, you must use up raw materials costing half of this base price.",
+      "categories": ["general", "itemCreation"],
       "prerequisites": [
         {
-          "type": "bab",
+          "type": "casterLevel",
           "value": 1
         }
-      ]
+      ],
+      "source": {
+        "book": "Core Rulebook",
+        "pages": "117, 133",
+        "id": "PZO1110"
+      },
+      "availableAt1stLevel": true,
+      "fighterBonus": false,
+      "special": "All spellcasters gain this feat for free at 1st level"
     },
-    {
-      "name": "Rapid Shot",
-      "description": "Make one extra ranged attack per round at -2 penalty.",
-      "prerequisites": [
-        {
-          "type": "ability",
-          "ability": "DEX",
-          "value": 13
-        },
-        {
-          "type": "feat",
-          "feat": "Point-Blank Shot"
-        }
-      ]
+    "self-sufficient": {
+      "name": "Self-Sufficient",
+      "description": "You know how to get along in the wild and how to effectively treat wounds. You get a +2 bonus on Heal and Survival skill checks. If you have 10 or more ranks in one of these skills, the bonus increases to +4 for that skill.",
+      "categories": ["general", "skill"],
+      "prerequisites": [],
+      "source": {
+        "book": "Core Rulebook",
+        "pages": "117, 133",
+        "id": "PZO1110"
+      },
+      "availableAt1stLevel": true,
+      "fighterBonus": false
     },
-    {
-      "name": "Shot on the Run",
-      "description": "Move, shoot, and move again as a full-round action.",
-      "prerequisites": [
-        {
-          "type": "ability",
-          "ability": "DEX",
-          "value": 13
-        },
-        {
-          "type": "feat",
-          "feat": "Dodge"
-        },
-        {
-          "type": "feat",
-          "feat": "Mobility"
-        },
-        {
-          "type": "feat",
-          "feat": "Point-Blank Shot"
-        },
-        {
-          "type": "bab",
-          "value": 4
-        }
-      ]
+    "skill-focus": {
+      "name": "Skill Focus",
+      "description": "Choose a skill. You are particularly adept at that skill. You get a +3 bonus on all checks involving the chosen skill. If you have 10 or more ranks in that skill, this bonus increases to +6.",
+      "categories": ["general", "skill"],
+      "prerequisites": [],
+      "source": {
+        "book": "Core Rulebook",
+        "pages": "117, 134",
+        "id": "PZO1110"
+      },
+      "availableAt1stLevel": true,
+      "fighterBonus": false,
+      "special": "You can gain this feat multiple times. Its effects do not stack. Each time you take the feat, it applies to a new skill."
     },
-    {
+    "stealthy": {
+      "name": "Stealthy",
+      "description": "You are good at avoiding attention and slipping out of bonds. You get a +2 bonus on Escape Artist and Stealth skill checks. If you have 10 or more ranks in one of these skills, the bonus increases to +4 for that skill.",
+      "categories": ["general", "skill"],
+      "prerequisites": [],
+      "source": {
+        "book": "Core Rulebook",
+        "pages": "117, 134",
+        "id": "PZO1110"
+      },
+      "availableAt1stLevel": true,
+      "fighterBonus": false
+    },
+    "toughness": {
       "name": "Toughness",
-      "description": "Gain +3 hit points, +1 per HD beyond 3rd.",
-      "prerequisites": []
+      "description": "You have enhanced physical stamina. You gain +3 hit points. For every Hit Die you possess beyond 3, you gain an additional +1 hit point. If you have more than 3 Hit Dice, you gain +1 hit points whenever you gain a Hit Die (such as when you gain a level).",
+      "categories": ["general"],
+      "prerequisites": [],
+      "source": {
+        "book": "Core Rulebook",
+        "pages": "117, 135",
+        "id": "PZO1110"
+      },
+      "availableAt1stLevel": true,
+      "fighterBonus": false
     },
-    {
+    "two-weapon-fighting": {
       "name": "Two-Weapon Fighting",
-      "description": "Reduce penalties for fighting with two weapons.",
+      "description": "You can fight with a weapon wielded in each of your hands. You can fight with a weapon in each hand. Your penalties on attack rolls for fighting with two weapons are reduced. The penalty for your primary hand lessens by 2 and the one for your off hand lessens by 6. See the Two-Weapon Fighting special attack.",
+      "categories": ["combat"],
       "prerequisites": [
         {
           "type": "ability",
           "ability": "DEX",
           "value": 15
         }
-      ]
+      ],
+      "source": {
+        "book": "Core Rulebook",
+        "pages": "117, 136",
+        "id": "PZO1110"
+      },
+      "availableAt1stLevel": true,
+      "fighterBonus": true
     },
-    {
+    "weapon-finesse": {
       "name": "Weapon Finesse",
-      "description": "Use Dex modifier instead of Str for attack rolls with light weapons.",
-      "prerequisites": []
+      "description": "You are trained in using your agility in melee combat, as opposed to brute strength. With a light weapon, elven curve blade, rapier, whip, or spiked chain made for a creature of your size category, you may use your Dexterity modifier instead of your Strength modifier on attack rolls. If you carry a shield, its armor check penalty applies to your attack rolls.",
+      "categories": ["combat"],
+      "prerequisites": [
+        {
+          "type": "bab",
+          "value": 1
+        }
+      ],
+      "source": {
+        "book": "Core Rulebook",
+        "pages": "117, 136",
+        "id": "PZO1110"
+      },
+      "availableAt1stLevel": true,
+      "fighterBonus": true
     },
-    {
+    "weapon-focus": {
       "name": "Weapon Focus",
-      "description": "Gain +1 bonus on attack rolls with one weapon type.",
+      "description": "Choose one type of weapon. You can also choose unarmed strike or grapple (or ray, if you are a spellcaster) as your weapon for the purposes of this feat. You are especially good at using this weapon. You gain a +1 bonus on all attack rolls you make using the selected weapon.",
+      "categories": ["combat"],
       "prerequisites": [
         {
           "type": "proficiency",
-          "weapon": "selected_weapon"
+          "weapon": "selected weapon"
         },
         {
           "type": "bab",
           "value": 1
         }
-      ]
+      ],
+      "source": {
+        "book": "Core Rulebook",
+        "pages": "117, 136",
+        "id": "PZO1110"
+      },
+      "availableAt1stLevel": true,
+      "fighterBonus": true,
+      "special": "You can gain this feat multiple times. Its effects do not stack. Each time you take the feat, it applies to a new type of weapon."
     }
-  ]
+  }
 }
