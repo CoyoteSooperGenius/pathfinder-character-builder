@@ -2,133 +2,669 @@
   "coreRaces": [
     {
       "name": "Human",
+      "size": "Medium",
+      "speed": 30,
       "abilityAdjustments": {
         "increases": { "count": 1, "fixed": false },
         "decreases": { "count": 0, "fixed": false }
       },
-      "traits": [
-        "+2 to One Ability Score: Human characters get a +2 bonus to one ability score of their choice at creation to represent their varied nature.",
-        "Medium: Humans are Medium creatures and have no bonuses or penalties due to their size.",
-        "Normal Speed: Humans have a base speed of 30 feet.",
-        "Bonus Feat: Humans select one extra feat at 1st level.",
-        "Skilled: Humans gain an additional skill rank at first level and one additional rank whenever they gain a level.",
-        "Languages: Humans begin play speaking Common. Humans with high Intelligence scores can choose any languages they want (except secret languages, such as Druidic)."
-      ]
+      "languages": {
+        "automatic": ["Common"],
+        "bonus": "any (except secret languages)"
+      },
+      "traits": {
+        "ability": [
+          {
+            "name": "Ability Score Racial Traits",
+            "description": "Human characters gain a +2 racial bonus to one ability score of their choice at creation to represent their varied nature.",
+            "mechanics": {
+              "type": "abilityChoice",
+              "value": 2
+            }
+          }
+        ],
+        "feat": [
+          {
+            "name": "Bonus Feat",
+            "description": "Humans select one extra feat at 1st level.",
+            "mechanics": {
+              "type": "bonusFeat",
+              "count": 1
+            }
+          },
+          {
+            "name": "Skilled",
+            "description": "Humans gain an additional skill rank at first level and one additional rank whenever they gain a level.",
+            "mechanics": {
+              "type": "skillRanks",
+              "formula": "@attributes.hd.total"
+            }
+          }
+        ]
+      },
+      "source": {
+        "book": "Core Rulebook",
+        "pages": "27",
+        "id": "PZO1110"
+      }
     },
     {
       "name": "Dwarf",
+      "size": "Medium",
+      "speed": 20,
       "abilityAdjustments": {
         "increases": { "count": 2, "fixed": true, "abilities": ["CON", "WIS"] },
         "decreases": { "count": 1, "fixed": true, "abilities": ["CHA"] }
       },
-      "traits": [
-        "+2 Constitution, +2 Wisdom, –2 Charisma: Dwarves are both tough and wise, but also a bit gruff.",
-        "Medium: Dwarves are Medium creatures and have no bonuses or penalties due to their size.",
-        "Slow and Steady: Dwarves have a base speed of 20 feet, but their speed is never modified by armor or encumbrance.",
-        "Darkvision: Dwarves can see in the dark up to 60 feet.",
-        "Defensive Training: Dwarves get a +4 dodge bonus to AC against monsters of the giant subtype.",
-        "Greed: Dwarves receive a +2 racial bonus on Appraise skill checks made to determine the price of nonmagical goods that contain precious metals or gemstones.",
-        "Hatred: Dwarves receive a +1 racial bonus on attack rolls against humanoid creatures of the orc and goblinoid subtypes due to special training against these hated foes.",
-        "Hardy: Dwarves receive a +2 racial bonus on saving throws against poison, spells, and spell-like abilities.",
-        "Stability: Dwarves receive a +4 racial bonus to their Combat Maneuver Defense when resisting a bull rush or trip attempt while standing on the ground.",
-        "Stonecunning: Dwarves receive a +2 bonus on Perception checks to potentially notice unusual stonework.",
-        "Weapon Familiarity: Dwarves are proficient with battleaxes, heavy picks, and warhammers, and treat any weapon with the word \"dwarven\" in its name as a martial weapon.",
-        "Languages: Dwarves begin play speaking Common and Dwarven. Dwarves with high Intelligence scores can choose from the following: Giant, Gnome, Goblin, Orc, Terran, and Undercommon."
-      ]
+      "languages": {
+        "automatic": ["Common", "Dwarven"],
+        "bonus": ["Giant", "Gnome", "Goblin", "Orc", "Terran", "Undercommon"]
+      },
+      "weaponProficiencies": ["Battle Axe", "Heavy Pick", "Warhammer"],
+      "traits": {
+        "ability": [
+          {
+            "name": "Ability Score Racial Traits",
+            "description": "Dwarves are both tough and wise, but also a bit gruff. They gain +2 Constitution, +2 Wisdom, and –2 Charisma.",
+            "mechanics": {
+              "type": "abilityModifiers",
+              "con": 2,
+              "wis": 2,
+              "cha": -2
+            }
+          }
+        ],
+        "movement": [
+          {
+            "name": "Slow and Steady",
+            "description": "Dwarves have a base speed of 20 feet, but their speed is never modified by armor or encumbrance.",
+            "mechanics": {
+              "type": "armorSpeedReduction",
+              "immune": true
+            }
+          }
+        ],
+        "senses": [
+          {
+            "name": "Darkvision",
+            "description": "Dwarves can see perfectly in the dark up to 60 feet.",
+            "mechanics": {
+              "type": "darkvision",
+              "range": 60
+            }
+          }
+        ],
+        "defense": [
+          {
+            "name": "Defensive Training",
+            "description": "Dwarves gain a +4 dodge bonus to AC against monsters of the giant subtype.",
+            "mechanics": {
+              "type": "acBonus",
+              "value": 4,
+              "bonusType": "dodge",
+              "condition": "vs giants"
+            }
+          },
+          {
+            "name": "Hardy",
+            "description": "Dwarves gain a +2 racial bonus on saving throws against poison, spells, and spell-like abilities.",
+            "mechanics": {
+              "type": "savingThrowBonus",
+              "value": 2,
+              "bonusType": "racial",
+              "condition": "vs poisons, spells, and spell-like abilities"
+            }
+          },
+          {
+            "name": "Stability",
+            "description": "Dwarves gain a +4 racial bonus to their Combat Maneuver Defense when resisting a bull rush or trip attempt while standing on the ground.",
+            "mechanics": {
+              "type": "cmdBonus",
+              "value": 4,
+              "bonusType": "racial",
+              "condition": "vs bull rush and trip while on ground"
+            }
+          }
+        ],
+        "skill": [
+          {
+            "name": "Greed",
+            "description": "Dwarves gain a +2 racial bonus on Appraise checks made to determine the price of non-magical goods that contain precious metals or gemstones.",
+            "mechanics": {
+              "type": "skillBonus",
+              "skill": "Appraise",
+              "value": 2,
+              "bonusType": "racial",
+              "condition": "items with gems"
+            }
+          },
+          {
+            "name": "Stonecunning",
+            "description": "Dwarves gain a +2 bonus on Perception checks to notice unusual stonework, such as traps and hidden doors located in stone walls or floors. They receive a check to notice such features whenever they pass within 10 feet of them, whether or not they are actively looking.",
+            "mechanics": {
+              "type": "skillBonus",
+              "skill": "Perception",
+              "value": 2,
+              "condition": "to notice unusual stonework"
+            }
+          }
+        ],
+        "offense": [
+          {
+            "name": "Hatred",
+            "description": "Dwarves gain a +1 racial bonus on attack rolls against humanoid creatures of the orc and goblinoid subtypes because of their special training against these hated foes.",
+            "mechanics": {
+              "type": "attackBonus",
+              "value": 1,
+              "bonusType": "racial",
+              "condition": "vs humanoids (orc, goblinoid)"
+            }
+          },
+          {
+            "name": "Weapon Familiarity",
+            "description": "Dwarves are proficient with battleaxes, heavy picks, and warhammers, and treat any weapon with the word \\\"dwarven\\\" in its name as a martial weapon.",
+            "mechanics": {
+              "type": "weaponProficiency",
+              "weapons": ["battleaxe", "heavy pick", "warhammer"],
+              "martialWeapons": ["dwarven weapons"]
+            }
+          }
+        ]
+      },
+      "source": {
+        "book": "Core Rulebook",
+        "pages": "21",
+        "id": "PZO1110"
+      }
     },
     {
       "name": "Elf",
+      "size": "Medium",
+      "speed": 30,
       "abilityAdjustments": {
         "increases": { "count": 2, "fixed": true, "abilities": ["DEX", "INT"] },
         "decreases": { "count": 1, "fixed": true, "abilities": ["CON"] }
       },
-      "traits": [
-        "+2 Dexterity, +2 Intelligence, –2 Constitution: Elves are nimble, both in body and mind, but their form is frail.",
-        "Medium: Elves are Medium creatures and have no bonuses or penalties due to their size.",
-        "Normal Speed: Elves have a base speed of 30 feet.",
-        "Low-Light Vision: Elves can see twice as far as humans in conditions of dim light.",
-        "Elven Immunities: Elves are immune to magic sleep effects and get a +2 racial saving throw bonus against enchantment spells and effects.",
-        "Elven Magic: Elves receive a +2 racial bonus on caster level checks made to overcome spell resistance. In addition, elves receive a +2 racial bonus on Spellcraft skill checks made to identify the properties of magic items.",
-        "Keen Senses: Elves receive a +2 racial bonus on Perception skill checks.",
-        "Weapon Familiarity: Elves are proficient with longbows (including composite longbows), longswords, rapiers, and shortbows (including composite shortbows), and treat any weapon with the word \"elven\" in its name as a martial weapon.",
-        "Languages: Elves begin play speaking Common and Elven. Elves with high Intelligence scores can choose from the following: Celestial, Draconic, Gnoll, Gnome, Goblin, Orc, and Sylvan."
-      ]
+      "languages": {
+        "automatic": ["Common", "Elven"],
+        "bonus": ["Celestial", "Draconic", "Gnoll", "Gnome", "Goblin", "Orc", "Sylvan"]
+      },
+      "weaponProficiencies": ["Longbow", "Longsword", "Rapier", "Shortbow"],
+      "traits": {
+        "ability": [
+          {
+            "name": "Ability Score Racial Traits",
+            "description": "Elves are nimble, both in body and mind, but their form is frail. They gain +2 Dexterity, +2 Intelligence, and –2 Constitution.",
+            "mechanics": {
+              "type": "abilityModifiers",
+              "dex": 2,
+              "int": 2,
+              "con": -2
+            }
+          }
+        ],
+        "senses": [
+          {
+            "name": "Low-Light Vision",
+            "description": "Elves can see twice as far as humans in conditions of dim light.",
+            "mechanics": {
+              "type": "lowLightVision",
+              "multiplier": 2
+            }
+          }
+        ],
+        "defense": [
+          {
+            "name": "Elven Immunities",
+            "description": "Elves are immune to magic sleep effects and gain a +2 racial saving throw bonus against enchantment spells and effects.",
+            "mechanics": {
+              "type": "savingThrowBonus",
+              "value": 2,
+              "bonusType": "racial",
+              "condition": "vs enchantment spells and effects",
+              "immunity": "magic sleep effects"
+            }
+          }
+        ],
+        "skill": [
+          {
+            "name": "Keen Senses",
+            "description": "Elves receive a +2 racial bonus on Perception skill checks.",
+            "mechanics": {
+              "type": "skillBonus",
+              "skill": "Perception",
+              "value": 2,
+              "bonusType": "racial"
+            }
+          }
+        ],
+        "offense": [
+          {
+            "name": "Weapon Familiarity",
+            "description": "Elves are proficient with longbows (including composite longbows), longswords, rapiers, and shortbows (including composite shortbows), and treat any weapon with the word \"elven\" in its name as a martial weapon.",
+            "mechanics": {
+              "type": "weaponProficiency",
+              "weapons": ["longbow", "longsword", "rapier", "shortbow", "composite longbow", "composite shortbow"],
+              "martialWeapons": ["elven weapons"]
+            }
+          }
+        ],
+        "magical": [
+          {
+            "name": "Elven Magic",
+            "description": "Elves receive a +2 racial bonus on caster level checks made to overcome spell resistance. In addition, elves receive a +2 racial bonus on Spellcraft skill checks made to identify the properties of magic items.",
+            "mechanics": {
+              "type": "casterLevelBonus",
+              "value": 2,
+              "bonusType": "racial",
+              "condition": "to overcome spell resistance",
+              "skillBonus": {
+                "skill": "Spellcraft",
+                "value": 2,
+                "condition": "to identify magic items"
+              }
+            }
+          }
+        ]
+      },
+      "source": {
+        "book": "Core Rulebook",
+        "pages": "22",
+        "id": "PZO1110"
+      }
     },
     {
       "name": "Gnome",
+      "size": "Small",
+      "speed": 20,
       "abilityAdjustments": {
         "increases": { "count": 2, "fixed": true, "abilities": ["CON", "CHA"] },
         "decreases": { "count": 1, "fixed": true, "abilities": ["STR"] }
       },
-      "traits": [
-        "+2 Constitution, +2 Charisma, –2 Strength: Gnomes are physically weak but surprisingly hardy and have strong personalities.",
-        "Small: Gnomes are Small creatures and gain a +1 size bonus to their AC, a +1 size bonus on attack rolls, a –1 penalty to their Combat Maneuver Bonus and Combat Maneuver Defense, and a +4 size bonus on Stealth checks.",
-        "Slow Speed: Gnomes have a base speed of 20 feet.",
-        "Low-Light Vision: Gnomes can see twice as far as humans in conditions of dim light.",
-        "Defensive Training: Gnomes get a +4 dodge bonus to AC against monsters of the giant subtype.",
-        "Gnome Magic: Gnomes add +1 to the DC of any saving throws against illusion spells that they cast. Gnomes with a Charisma of 11 or higher also gain the following spell-like abilities: 1/day—dancing lights, ghost sound, prestidigitation, and speak with animals. The caster level for these effects is equal to the gnome's level. The DC for these spells is equal to 10 + the spell's level + the gnome's Charisma modifier.",
-        "Hatred: Gnomes receive a +1 racial bonus on attack rolls against humanoid creatures of the reptilian and goblinoid subtypes due to special training against these hated foes.",
-        "Illusion Resistance: Gnomes get a +2 racial saving throw bonus against illusion spells and effects.",
-        "Keen Senses: Gnomes receive a +2 racial bonus on Perception skill checks.",
-        "Obsessive: Gnomes receive a +2 racial bonus on a Craft or Profession skill of their choice.",
-        "Weapon Familiarity: Gnomes treat any weapon with the word \"gnome\" in its name as a martial weapon.",
-        "Languages: Gnomes begin play speaking Common, Gnome, and Sylvan. Gnomes with high Intelligence scores can choose from the following: Draconic, Dwarven, Elven, Giant, Goblin, and Orc."
-      ]
+      "languages": {
+        "automatic": ["Common", "Gnome", "Sylvan"],
+        "bonus": ["Draconic", "Dwarven", "Elven", "Giant", "Goblin", "Orc"]
+      },
+      "traits": {
+        "ability": [
+          {
+            "name": "Ability Score Racial Traits",
+            "description": "Gnomes are physically weak but surprisingly hardy, and their attitude makes them naturally agreeable. They gain +2 Constitution, +2 Charisma, and –2 Strength.",
+            "mechanics": {
+              "type": "abilityModifiers",
+              "con": 2,
+              "cha": 2,
+              "str": -2
+            }
+          }
+        ],
+        "senses": [
+          {
+            "name": "Low-Light Vision",
+            "description": "Gnomes can see twice as far as humans in conditions of dim light.",
+            "mechanics": {
+              "type": "lowLightVision",
+              "multiplier": 2
+            }
+          }
+        ],
+        "defense": [
+          {
+            "name": "Defensive Training",
+            "description": "Gnomes gain a +4 dodge bonus to AC against monsters of the giant subtype.",
+            "mechanics": {
+              "type": "acBonus",
+              "value": 4,
+              "bonusType": "dodge",
+              "condition": "vs giants"
+            }
+          },
+          {
+            "name": "Illusion Resistance",
+            "description": "Gnomes gain a +2 racial saving throw bonus against illusion spells and effects.",
+            "mechanics": {
+              "type": "savingThrowBonus",
+              "value": 2,
+              "bonusType": "racial",
+              "condition": "vs illusion spells and effects"
+            }
+          }
+        ],
+        "skill": [
+          {
+            "name": "Keen Senses",
+            "description": "Gnomes receive a +2 racial bonus on Perception skill checks.",
+            "mechanics": {
+              "type": "skillBonus",
+              "skill": "Perception",
+              "value": 2,
+              "bonusType": "racial"
+            }
+          },
+          {
+            "name": "Obsessive",
+            "description": "Gnomes receive a +2 racial bonus on a Craft or Profession skill of their choice.",
+            "mechanics": {
+              "type": "skillBonus",
+              "skill": "Craft or Profession",
+              "value": 2,
+              "bonusType": "racial",
+              "choice": true
+            }
+          }
+        ],
+        "offense": [
+          {
+            "name": "Hatred",
+            "description": "Gnomes receive a +1 bonus on attack rolls against humanoid creatures of the reptilian and goblinoid subtypes because of their special training against these hated foes.",
+            "mechanics": {
+              "type": "attackBonus",
+              "value": 1,
+              "bonusType": "racial",
+              "condition": "vs humanoids (reptilian, goblinoid)"
+            }
+          },
+          {
+            "name": "Weapon Familiarity",
+            "description": "Gnomes treat any weapon with the word \"gnome\" in its name as a martial weapon.",
+            "mechanics": {
+              "type": "weaponProficiency",
+              "martialWeapons": ["gnome weapons"]
+            }
+          }
+        ],
+        "magical": [
+          {
+            "name": "Gnome Magic",
+            "description": "Gnomes add +1 to the DC of any saving throws against illusion spells that they cast. Gnomes with Charisma scores of 11 or higher also gain the following spell-like abilities: 1/day—dancing lights, ghost sound, prestidigitation, and speak with animals. The caster level for these effects is equal to the gnome's level. The DC for these spells is equal to 10 + the spell's level + the gnome's Charisma modifier.",
+            "mechanics": {
+              "type": "spellDCBonus",
+              "value": 1,
+              "school": "illusion",
+              "spellLikeAbilities": {
+                "frequency": "1/day",
+                "spells": ["dancing lights", "ghost sound", "prestidigitation", "speak with animals"],
+                "casterLevel": "character level",
+                "dcModifier": "Charisma",
+                "requirement": "Charisma 11+"
+              }
+            }
+          }
+        ]
+      },
+      "source": {
+        "book": "Core Rulebook",
+        "pages": "23",
+        "id": "PZO1110"
+      }
     },
     {
       "name": "Half-Elf",
+      "size": "Medium",
+      "speed": 30,
       "abilityAdjustments": {
         "increases": { "count": 1, "fixed": false },
         "decreases": { "count": 0, "fixed": false }
       },
-      "traits": [
-        "+2 to One Ability Score: Half-elf characters get a +2 bonus to one ability score of their choice at creation to represent their varied nature.",
-        "Medium: Half-elves are Medium creatures and have no bonuses or penalties due to their size.",
-        "Normal Speed: Half-elves have a base speed of 30 feet.",
-        "Low-Light Vision: Half-elves can see twice as far as humans in conditions of dim light.",
-        "Adaptability: Half-elves receive Skill Focus as a bonus feat at 1st level.",
-        "Elf Blood: Half-elves count as both elves and humans for any effect related to race.",
-        "Elven Immunities: Half-elves are immune to magic sleep effects and get a +2 racial saving throw bonus against enchantment spells and effects.",
-        "Keen Senses: Half-elves receive a +2 racial bonus on Perception skill checks.",
-        "Multitalented: Half-elves choose two favored classes at first level and gain +1 hit point or +1 skill point whenever they take a level in either one of those classes.",
-        "Languages: Half-elves begin play speaking Common and Elven. Half-elves with high Intelligence scores can choose any languages they want (except secret languages, such as Druidic)."
-      ]
+      "languages": {
+        "automatic": ["Common", "Elven"],
+        "bonus": "any (except secret languages)"
+      },
+      "traits": {
+        "ability": [
+          {
+            "name": "Ability Score Racial Traits",
+            "description": "Half-elf characters gain a +2 bonus to one ability score of their choice at creation to represent their varied nature.",
+            "mechanics": {
+              "type": "abilityChoice",
+              "value": 2
+            }
+          }
+        ],
+        "senses": [
+          {
+            "name": "Low-Light Vision",
+            "description": "Half-elves can see twice as far as humans in conditions of dim light.",
+            "mechanics": {
+              "type": "lowLightVision",
+              "multiplier": 2
+            }
+          }
+        ],
+        "defense": [
+          {
+            "name": "Elven Immunities",
+            "description": "Half-elves are immune to magic sleep effects and gain a +2 racial saving throw bonus against enchantment spells and effects.",
+            "mechanics": {
+              "type": "savingThrowBonus",
+              "value": 2,
+              "bonusType": "racial",
+              "condition": "vs enchantment spells and effects",
+              "immunity": "magic sleep effects"
+            }
+          }
+        ],
+        "skill": [
+          {
+            "name": "Keen Senses",
+            "description": "Half-elves receive a +2 racial bonus on Perception skill checks.",
+            "mechanics": {
+              "type": "skillBonus",
+              "skill": "Perception",
+              "value": 2,
+              "bonusType": "racial"
+            }
+          }
+        ],
+        "feat": [
+          {
+            "name": "Adaptability",
+            "description": "Half-elves receive Skill Focus as a bonus feat at 1st level.",
+            "mechanics": {
+              "type": "bonusFeat",
+              "feat": "Skill Focus",
+              "level": 1
+            }
+          },
+          {
+            "name": "Multitalented",
+            "description": "Half-elves choose two favored classes at first level and gain +1 hit point or +1 skill point whenever they take a level in either one of those classes.",
+            "mechanics": {
+              "type": "favoredClass",
+              "count": 2,
+              "bonus": "+1 hp or +1 skill point per level"
+            }
+          }
+        ],
+        "other": [
+          {
+            "name": "Elf Blood",
+            "description": "Half-elves count as both elves and humans for any effect related to race.",
+            "mechanics": {
+              "type": "dualRace",
+              "races": ["elf", "human"]
+            }
+          }
+        ]
+      },
+      "source": {
+        "book": "Core Rulebook",
+        "pages": "24",
+        "id": "PZO1110"
+      }
     },
     {
       "name": "Half-Orc",
+      "size": "Medium",
+      "speed": 30,
       "abilityAdjustments": {
         "increases": { "count": 1, "fixed": false },
         "decreases": { "count": 0, "fixed": false }
       },
-      "traits": [
-        "+2 to One Ability Score: Half-orc characters get a +2 bonus to one ability score of their choice at creation to represent their varied nature.",
-        "Medium: Half-orcs are Medium creatures and have no bonuses or penalties due to their size.",
-        "Normal Speed: Half-orcs have a base speed of 30 feet.",
-        "Darkvision: Half-orcs can see in the dark up to 60 feet.",
-        "Intimidating: Half-orcs receive a +2 racial bonus on Intimidate skill checks due to their fearsome nature.",
-        "Orc Blood: Half-orcs count as both humans and orcs for any effect related to race.",
-        "Orc Ferocity: Once per day, when a half-orc is brought below 0 hit points but not killed, he can fight on for one more round as if disabled. At the end of his next turn, unless brought to above 0 hit points, he immediately falls unconscious and begins dying.",
-        "Weapon Familiarity: Half-orcs are proficient with falchions and greataxes, and treat any weapon with the word \"orc\" in its name as a martial weapon.",
-        "Languages: Half-orcs begin play speaking Common and Orc. Half-orcs with high Intelligence scores can choose from the following: Abyssal, Draconic, Giant, Gnoll, and Goblin."
-      ]
+      "languages": {
+        "automatic": ["Common", "Orc"],
+        "bonus": ["Abyssal", "Draconic", "Giant", "Gnoll", "Goblin"]
+      },
+      "weaponProficiencies": ["Greataxe", "Falchion"],
+      "traits": {
+        "ability": [
+          {
+            "name": "Ability Score Racial Traits",
+            "description": "Half-orc characters gain a +2 bonus to one ability score of their choice at creation to represent their varied nature.",
+            "mechanics": {
+              "type": "abilityChoice",
+              "value": 2
+            }
+          }
+        ],
+        "senses": [
+          {
+            "name": "Darkvision",
+            "description": "Half-orcs can see in the dark up to 60 feet.",
+            "mechanics": {
+              "type": "darkvision",
+              "range": 60
+            }
+          }
+        ],
+        "skill": [
+          {
+            "name": "Intimidating",
+            "description": "Half-orcs receive a +2 racial bonus on Intimidate skill checks due to their fearsome nature.",
+            "mechanics": {
+              "type": "skillBonus",
+              "skill": "Intimidate",
+              "value": 2,
+              "bonusType": "racial"
+            }
+          }
+        ],
+        "offense": [
+          {
+            "name": "Orc Ferocity",
+            "description": "Once per day, when a half-orc is brought below 0 hit points but not killed, he can fight on for one more round as if disabled. At the end of his next turn, unless brought to above 0 hit points, he immediately falls unconscious and begins dying.",
+            "mechanics": {
+              "type": "specialAbility",
+              "frequency": "1/day",
+              "trigger": "brought below 0 hp but not killed",
+              "effect": "fight on for 1 round as if disabled"
+            }
+          },
+          {
+            "name": "Weapon Familiarity",
+            "description": "Half-orcs are proficient with greataxes and falchions and treat any weapon with the word \"orc\" in its name as a martial weapon.",
+            "mechanics": {
+              "type": "weaponProficiency",
+              "weapons": ["greataxe", "falchion"],
+              "martialWeapons": ["orc weapons"]
+            }
+          }
+        ],
+        "other": [
+          {
+            "name": "Orc Blood",
+            "description": "Half-orcs count as both humans and orcs for any effect related to race.",
+            "mechanics": {
+              "type": "dualRace",
+              "races": ["human", "orc"]
+            }
+          }
+        ]
+      },
+      "source": {
+        "book": "Core Rulebook",
+        "pages": "25",
+        "id": "PZO1110"
+      }
     },
     {
       "name": "Halfling",
+      "size": "Small",
+      "speed": 20,
       "abilityAdjustments": {
         "increases": { "count": 2, "fixed": true, "abilities": ["DEX", "CHA"] },
         "decreases": { "count": 1, "fixed": true, "abilities": ["STR"] }
       },
-      "traits": [
-        "+2 Dexterity, +2 Charisma, –2 Strength: Halflings are nimble and strong-willed, but their small stature makes them weaker than other races.",
-        "Small: Halflings are Small creatures and gain a +1 size bonus to their AC, a +1 size bonus on attack rolls, a –1 penalty to their Combat Maneuver Bonus and Combat Maneuver Defense, and a +4 size bonus on Stealth checks.",
-        "Slow Speed: Halflings have a base speed of 20 feet.",
-        "Fearless: Halflings receive a +2 racial bonus on saving throws against fear. This bonus stacks with the bonus granted by halfling luck.",
-        "Halfling Luck: Halflings receive a +1 racial bonus on all saving throws.",
-        "Keen Senses: Halflings receive a +2 racial bonus on Perception skill checks.",
-        "Sure-Footed: Halflings receive a +2 racial bonus on Acrobatics and Climb skill checks.",
-        "Weapon Familiarity: Halflings are proficient with slings and treat any weapon with the word \"halfling\" in its name as a martial weapon.",
-        "Languages: Halflings begin play speaking Common and Halfling. Halflings with high Intelligence scores can choose from the following: Dwarven, Elven, Gnome, and Goblin."
-      ]
+      "languages": {
+        "automatic": ["Common", "Halfling"],
+        "bonus": ["Dwarven", "Elven", "Gnome", "Goblin"]
+      },
+      "weaponProficiencies": ["Sling"],
+      "traits": {
+        "ability": [
+          {
+            "name": "Ability Score Racial Traits",
+            "description": "Halflings are nimble and strong-willed, but their small stature makes them weaker than other races. They gain +2 Dexterity, +2 Charisma, and –2 Strength.",
+            "mechanics": {
+              "type": "abilityModifiers",
+              "dex": 2,
+              "cha": 2,
+              "str": -2
+            }
+          }
+        ],
+        "defense": [
+          {
+            "name": "Fearless",
+            "description": "Halflings receive a +2 racial bonus on saving throws against fear. This bonus stacks with the bonus granted by halfling luck.",
+            "mechanics": {
+              "type": "savingThrowBonus",
+              "value": 2,
+              "bonusType": "racial",
+              "condition": "vs fear",
+              "stacks": true
+            }
+          },
+          {
+            "name": "Halfling Luck",
+            "description": "Halflings receive a +1 racial bonus on all saving throws.",
+            "mechanics": {
+              "type": "savingThrowBonus",
+              "value": 1,
+              "bonusType": "racial",
+              "condition": "all saving throws"
+            }
+          }
+        ],
+        "skill": [
+          {
+            "name": "Keen Senses",
+            "description": "Halflings receive a +2 racial bonus on Perception skill checks.",
+            "mechanics": {
+              "type": "skillBonus",
+              "skill": "Perception",
+              "value": 2,
+              "bonusType": "racial"
+            }
+          },
+          {
+            "name": "Sure-Footed",
+            "description": "Halflings receive a +2 racial bonus on Acrobatics and Climb skill checks.",
+            "mechanics": {
+              "type": "skillBonus",
+              "skill": ["Acrobatics", "Climb"],
+              "value": 2,
+              "bonusType": "racial"
+            }
+          }
+        ],
+        "offense": [
+          {
+            "name": "Weapon Familiarity",
+            "description": "Halflings are proficient with slings and treat any weapon with the word \"halfling\" in its name as a martial weapon.",
+            "mechanics": {
+              "type": "weaponProficiency",
+              "weapons": ["sling"],
+              "martialWeapons": ["halfling weapons"]
+            }
+          }
+        ]
+      },
+      "source": {
+        "book": "Core Rulebook",
+        "pages": "26",
+        "id": "PZO1110"
+      }
     }
   ]
 }
