@@ -10,13 +10,303 @@
     <div id="app" class="container-fluid py-4">
     </div>  
     <script src="js/vue.js"></script>
+    <script src="js/utilities/game-utils.js"></script>
+    <script src="js/utilities/data-utils.js"></script>
     
     <script>
-    new Vue({
-      el: '#app',
-      data: {},
-      methods: {}
-    });
-    </script>
+new Vue({
+  el: '#app',
+  data: {
+    // Application state
+    currentView: 'landing', // 'landing', 'create-character', 'character-sheet', 'load-character'
+    currentStep: 1, // Current step in character creation (1-9)
+    
+    // Character data structure (will be loaded from schema)
+    currentCharacter: {},
+    
+    // Game data (will be loaded from JSON files)
+    gameData: {
+      races: [],
+      classes: [],
+      feats: [],
+      spells: [],
+      skills: [],
+      equipment: [],
+      characterSchema: null
+    },
+    
+    // Saved characters list
+    savedCharacters: [],
+    
+    // UI state
+    loading: false,
+    error: null
+  },
+  
+  computed: {
+    // Calculate ability score modifiers using game utils
+    abilityModifiers() {
+      if (!this.currentCharacter.abilityScores) return {};
+      return GameUtils.calculateAbilityModifiers(this.currentCharacter.abilityScores);
+    },
+    
+    // Get character's full name using game utils
+    characterFullName() {
+      return GameUtils.getCharacterFullName(this.currentCharacter.name);
+    },
+    
+    // Check if character creation step is complete
+    isStepComplete() {
+      return (step) => {
+        switch (step) {
+          case 1: return this.isAbilityScoresComplete();
+          case 2: return this.isConceptComplete();
+          case 3: return this.isRaceComplete();
+          case 4: return this.isClassComplete();
+          case 5: return this.isSkillsComplete();
+          case 6: return this.isFeatsComplete();
+          case 7: return this.isEquipmentComplete();
+          case 8: return this.isSpellsComplete();
+          case 9: return this.isDetailsComplete();
+          default: return false;
+        }
+      };
+    }
+  },
+  
+  methods: {
+    // Application navigation
+    showLanding() {
+      this.currentView = 'landing';
+      this.currentStep = 1;
+    },
+
+    startCharacterCreation() {
+      this.currentView = 'create-character';
+      this.currentStep = 1;
+      this.resetCurrentCharacter();
+      this.saveCurrentCharacterToLocalStorage();
+    },
+
+    showCharacterSheet(character = null) {
+      if (character) {
+        this.currentCharacter = JSON.parse(JSON.stringify(character));
+      }
+      this.currentView = 'character-sheet';
+    },
+
+    showLoadCharacter() {
+      this.currentView = 'load-character';
+      this.loadSavedCharacters();
+    },
+
+    // Character creation navigation
+    nextStep() {
+      if (this.currentStep < 9) {
+        this.currentStep++;
+        this.saveCurrentCharacterToLocalStorage();
+      } else {
+        this.completeCharacterCreation();
+      }
+    },
+
+    previousStep() {
+      if (this.currentStep > 1) {
+        this.currentStep--;
+      }
+    },
+
+    goToStep(step) {
+      if (step >= 1 && step <= 9) {
+        this.currentStep = step;
+      }
+    },
+
+    // Character data management
+    resetCurrentCharacter() {
+      this.currentCharacter = this.createDefaultCharacter();
+    },
+
+    createDefaultCharacter() {
+      if (this.gameData.characterSchema) {
+        return JSON.parse(JSON.stringify(this.gameData.characterSchema.defaultCharacter));
+      } else {
+        console.error('Character schema not loaded - cannot create default character');
+        return {};
+      }
+    },
+
+    updateCalculatedValues() {
+      if (this.currentCharacter && Object.keys(this.currentCharacter).length > 0) {
+        GameUtils.updateCalculatedValues(this.currentCharacter);
+        this.saveCurrentCharacterToLocalStorage();
+      }
+    },
+
+    // localStorage operations
+    saveCurrentCharacterToLocalStorage() {
+      DataUtils.saveCurrentCharacterToLocalStorage(this.currentCharacter, (msg) => { this.error = msg; });
+    },
+
+    loadCurrentCharacterFromLocalStorage() {
+      this.currentCharacter = DataUtils.loadCurrentCharacterFromLocalStorage(
+        this.createDefaultCharacter,
+        (msg) => { this.error = msg; }
+      );
+    },
+
+    saveCharacter(character) {
+      return DataUtils.saveCharacter(
+        character,
+        DataUtils.generateCharacterStorageKey,
+        (msg) => { this.error = msg; },
+        this.loadSavedCharacters
+      );
+    },
+
+    loadCharacter(characterKey) {
+      return DataUtils.loadCharacter(
+        characterKey,
+        (msg) => { this.error = msg; }
+      );
+    },
+
+    deleteCharacter(characterKey) {
+      return DataUtils.deleteCharacter(
+        characterKey,
+        this.loadSavedCharacters,
+        (msg) => { this.error = msg; }
+      );
+    },
+
+    loadSavedCharacters() {
+      DataUtils.loadSavedCharacters(
+        (characters) => { this.savedCharacters = characters; },
+        (msg) => { this.error = msg; }
+      );
+    },
+
+    // Character creation completion validation
+    isAbilityScoresComplete() {
+      if (!this.currentCharacter.abilityScores) return false;
+      return Object.values(this.currentCharacter.abilityScores).every(score => GameUtils.isValidAbilityScore(score));
+    },
+
+    isConceptComplete() {
+      return this.currentCharacter.concept.trim().length > 0;
+    },
+
+    isRaceComplete() {
+      return this.currentCharacter.race !== null;
+    },
+
+    isClassComplete() {
+      return this.currentCharacter.characterClass !== null;
+    },
+
+    isSkillsComplete() {
+      return true; // Can be completed with 0 skills allocated
+    },
+
+    isFeatsComplete() {
+      return true; // Can be completed with 0 feats selected
+    },
+
+    isEquipmentComplete() {
+      return true; // Can be completed with starting equipment
+    },
+
+    isSpellsComplete() {
+      return true; // Not all classes have spells
+    },
+
+    isDetailsComplete() {
+      return this.currentCharacter.name.first.trim().length > 0 && 
+             this.currentCharacter.name.last.trim().length > 0;
+    },
+
+    completeCharacterCreation() {
+      this.updateCalculatedValues();
+      const validation = GameUtils.validateCharacterData(this.currentCharacter);
+      if (!validation.isValid) {
+        this.error = `Character validation failed: ${validation.errors.join(', ')}`;
+        return;
+      }
+
+      if (this.isDetailsComplete()) {
+        if (this.saveCharacter(this.currentCharacter)) {
+          this.showCharacterSheet(this.currentCharacter);
+        }
+      } else {
+        this.error = 'Please complete all required character details.';
+      }
+    },
+
+    // Game data loading
+    async loadGameData() {
+      this.loading = true;
+      try {
+        // Load character schema first
+        try {
+          const schemaResponse = await fetch('data/character-schema.json');
+          if (schemaResponse.ok) {
+            this.gameData.characterSchema = await schemaResponse.json();
+            // Initialize current character with default schema
+            this.currentCharacter = this.resetCurrentCharacter();
+          }
+        } catch (error) {
+          console.error('Failed to load character-schema.json:', error);
+          this.error = 'Failed to load character schema.';
+        }
+        
+        // Load all other game data files
+        const dataFiles = ['races', 'classes', 'feats', 'spells'];
+        
+        for (const dataFile of dataFiles) {
+          try {
+            const response = await fetch(`data/${dataFile}.json`);
+            if (response.ok) {
+              const data = await response.json();
+              this.gameData[dataFile] = data[Object.keys(data)[0]] || data;
+            }
+          } catch (error) {
+            console.warn(`Failed to load ${dataFile}.json:`, error);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load game data:', error);
+        this.error = 'Failed to load game data.';
+      } finally {
+        this.loading = false;
+      }
+    },
+    
+    // Utility methods
+    clearError() {
+      this.error = null;
+    }
+  },
+  
+  // Initialize application
+  async mounted() {
+    this.loading = true;
+    await DataUtils.loadGameData(
+      this.gameData,
+      (msg) => { this.error = msg; },
+      () => { this.currentCharacter = this.resetCurrentCharacter(); }
+    );
+    this.loading = false;
+
+    this.loadCurrentCharacterFromLocalStorage();
+    this.loadSavedCharacters();
+
+    if (this.currentCharacter.race || this.currentCharacter.characterClass || 
+        this.currentCharacter.concept.trim() || 
+        Object.values(this.currentCharacter.abilityScores).some(score => score !== 10)) {
+      this.currentView = 'create-character';
+    }
+  }
+});
+</script>
   </body>
 </html>
