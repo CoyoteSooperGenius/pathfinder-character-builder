@@ -28,15 +28,15 @@
   - [x] Implement named character storage with collision handling
 
 ### 1.2 Landing Page & Navigation
-- [ ] **Create landing page**
-  - [ ] Simple title and application description
-  - [ ] "Create New Character" button
-  - [ ] "Load Existing Character" button with character list
+- [x] **Create landing page**
+  - [x] Simple title and application description
+  - [x] "Create New Character" button
+  - [x] "Load Existing Character" button with character list
 
-- [ ] **Character loading functionality**
-  - [ ] List saved characters from localStorage
-  - [ ] Character preview cards showing basic info
-  - [ ] Load character into character sheet view
+- [x] **Character loading functionality**
+  - [x] List saved characters from localStorage
+  - [x] Character preview cards showing basic info
+  - [x] Load character into character sheet view
 
 ---
 

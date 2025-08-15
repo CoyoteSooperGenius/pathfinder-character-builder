@@ -8,6 +8,214 @@
   </head> 
   <body>
     <div id="app" class="container-fluid py-4">
+      <!-- Error Alert -->
+      <pf-alert 
+        v-if="error" 
+        variant="danger" 
+        :dismissible="true" 
+        @dismiss="clearError"
+      >
+        {{ error }}
+      </pf-alert>
+
+      <!-- Loading State -->
+      <div v-if="loading" class="text-center py-5">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-3 text-muted">Loading game data...</p>
+      </div>
+
+      <!-- Landing Page -->
+      <div v-else-if="currentView === 'landing'" class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+          <div class="text-center mb-5">
+            <h1 class="display-4 text-primary">
+              <i class="fas fa-scroll me-3"></i>
+              Pathfinder Character Generator
+            </h1>
+            <p class="lead text-muted">
+              Create and manage your Pathfinder 1st Edition characters with ease
+            </p>
+            <p class="text-muted">
+              Build 1st level characters using the core rulebook races, classes, and features. 
+              Generate ability scores, select feats, manage equipment, and create complete character sheets.
+            </p>
+          </div>
+
+          <div class="row g-4">
+            <div class="col-md-6">
+              <pf-card title="Create New Character" class="h-100">
+                <template #default>
+                  <p class="card-text">
+                    Start the character creation wizard to build a new 1st level Pathfinder character.
+                  </p>
+                </template>
+                <template #footer>
+                  <pf-button 
+                    variant="primary" 
+                    icon="fa-plus" 
+                    block 
+                    @click="startCharacterCreation"
+                  >
+                    Create Character
+                  </pf-button>
+                </template>
+              </pf-card>
+            </div>
+
+            <div class="col-md-6">
+              <pf-card title="Load Character" class="h-100">
+                <template #default>
+                  <p class="card-text">
+                    Load and edit previously saved characters from your browser storage.
+                  </p>
+                  <small class="text-muted">
+                    {{ savedCharacters.length }} saved character{{ savedCharacters.length !== 1 ? 's' : '' }}
+                  </small>
+                </template>
+                <template #footer>
+                  <pf-button 
+                    variant="secondary" 
+                    icon="fa-folder-open" 
+                    block 
+                    :disabled="savedCharacters.length === 0"
+                    @click="showLoadCharacter"
+                  >
+                    Load Character
+                  </pf-button>
+                </template>
+              </pf-card>
+            </div>
+          </div>
+
+          <div class="text-center mt-5">
+            <small class="text-muted">
+              Built for Pathfinder 1st Edition Core Rulebook
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Load Character View -->
+      <div v-else-if="currentView === 'load-character'">
+        <div class="row">
+          <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h2>
+                <i class="fas fa-folder-open me-2"></i>
+                Load Character
+              </h2>
+              <pf-button variant="secondary" icon="fa-arrow-left" @click="showLanding">
+                Back to Home
+              </pf-button>
+            </div>
+
+            <div v-if="savedCharacters.length === 0" class="text-center py-5">
+              <i class="fas fa-user-slash text-muted" style="font-size: 4rem;"></i>
+              <h4 class="mt-3 text-muted">No Saved Characters</h4>
+              <p class="text-muted">You haven't created any characters yet.</p>
+              <pf-button variant="primary" icon="fa-plus" @click="startCharacterCreation">
+                Create Your First Character
+              </pf-button>
+            </div>
+
+            <div v-else class="row g-4">
+              <div v-for="character in savedCharacters" :key="character.storageKey" class="col-md-6 col-lg-4">
+                <pf-card :title="character.name" class="h-100">
+                  <template #default>
+                    <div class="character-preview">
+                      <div class="row text-center mb-3">
+                        <div class="col-6">
+                          <small class="text-muted d-block">Race</small>
+                          <strong>{{ character.race?.name || 'Unknown' }}</strong>
+                        </div>
+                        <div class="col-6">
+                          <small class="text-muted d-block">Class</small>
+                          <strong>{{ character.characterClass?.name || 'Unknown' }}</strong>
+                        </div>
+                      </div>
+                      
+                      <div class="row text-center mb-3">
+                        <div class="col-4">
+                          <small class="text-muted d-block">Level</small>
+                          <strong>{{ character.level || 1 }}</strong>
+                        </div>
+                        <div class="col-4">
+                          <small class="text-muted d-block">HP</small>
+                          <strong>{{ character.hitPoints?.current || '—' }}</strong>
+                        </div>
+                        <div class="col-4">
+                          <small class="text-muted d-block">AC</small>
+                          <strong>{{ character.armorClass?.total || '—' }}</strong>
+                        </div>
+                      </div>
+
+                      <div v-if="character.concept" class="mb-3">
+                        <small class="text-muted d-block">Concept</small>
+                        <p class="small mb-0">{{ character.concept }}</p>
+                      </div>
+
+                      <div class="text-muted small">
+                        <i class="fas fa-clock me-1"></i>
+                        Last modified: {{ formatDate(character.lastModified) }}
+                      </div>
+                    </div>
+                  </template>
+                  <template #footer>
+                    <div class="btn-group w-100" role="group">
+                      <pf-button 
+                        variant="primary" 
+                        @click="loadCharacterAndView(character.storageKey)"
+                        class="flex-fill"
+                      >
+                        <i class="fas fa-eye me-1"></i>
+                        View
+                      </pf-button>
+                      <pf-button 
+                        variant="warning" 
+                        @click="loadCharacterAndEdit(character.storageKey)"
+                        class="flex-fill"
+                      >
+                        <i class="fas fa-edit me-1"></i>
+                        Edit
+                      </pf-button>
+                      <pf-button 
+                        variant="danger" 
+                        @click="confirmDeleteCharacter(character.storageKey, character.name)"
+                        class="flex-fill"
+                      >
+                        <i class="fas fa-trash me-1"></i>
+                        Delete
+                      </pf-button>
+                    </div>
+                  </template>
+                </pf-card>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Character Creation View -->
+      <div v-else-if="currentView === 'create-character'">
+        <!-- Character creation stepper will go here -->
+        <div class="text-center py-5">
+          <h2>Character Creation - Step {{ currentStep }}</h2>
+          <p class="text-muted">Character creation wizard coming soon...</p>
+          <pf-button variant="secondary" @click="showLanding">Back to Home</pf-button>
+        </div>
+      </div>
+
+      <!-- Character Sheet View -->
+      <div v-else-if="currentView === 'character-sheet'">
+        <!-- Character sheet display will go here -->
+        <div class="text-center py-5">
+          <h2>Character Sheet</h2>
+          <p class="text-muted">Character sheet display coming soon...</p>
+          <pf-button variant="secondary" @click="showLanding">Back to Home</pf-button>
+        </div>
+      </div>
     </div>  
     <script src="js/vue.js"></script>
     <script src="js/utilities/game-utils.js"></script>
@@ -290,6 +498,46 @@ new Vue({
       }
     },
     
+    // Character loading and management methods
+    loadCharacterAndView(characterKey) {
+      const character = this.loadCharacter(characterKey);
+      if (character) {
+        this.showCharacterSheet(character);
+      }
+    },
+
+    loadCharacterAndEdit(characterKey) {
+      const character = this.loadCharacter(characterKey);
+      if (character) {
+        this.currentCharacter = JSON.parse(JSON.stringify(character));
+        this.saveCurrentCharacterToLocalStorage();
+        this.currentView = 'create-character';
+        // Determine which step to start on based on character completion
+        this.currentStep = this.getNextIncompleteStep();
+      }
+    },
+
+    confirmDeleteCharacter(characterKey, characterName) {
+      if (confirm(`Are you sure you want to delete "${characterName}"? This action cannot be undone.`)) {
+        this.deleteCharacter(characterKey);
+      }
+    },
+
+    getNextIncompleteStep() {
+      for (let step = 1; step <= 9; step++) {
+        if (!this.isStepComplete(step)) {
+          return step;
+        }
+      }
+      return 9; // If all steps are complete, go to final step
+    },
+
+    formatDate(timestamp) {
+      if (!timestamp) return 'Unknown';
+      const date = new Date(timestamp);
+      return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    },
+
     // Utility methods
     clearError() {
       this.error = null;
