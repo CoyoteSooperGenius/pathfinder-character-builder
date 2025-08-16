@@ -15,7 +15,6 @@ Components must be loaded in the following order in `index.html`:
 ### 2. Complex Components
 - `selection-grid.js` - Item selection grid (depends on basic components)
 - `character-summary.js` - Character state display (depends on pf-card)
-- `character-stepper.js` - Character creation wizard (depends on pf-button)
 
 ## Usage
 
@@ -26,8 +25,11 @@ All components are globally registered with Vue.js and can be used in templates 
 <pf-card title="Card Title">Card content</pf-card>
 <selection-grid :items="items" @selection-changed="onSelect" />
 <character-summary :character="currentCharacter" />
-<character-stepper :current-step="step" :character="character" />
 ```
+
+## Character Creation Components
+
+Character creation components are located in `/js/components/stepper/` and handle the step-by-step character creation workflow. These are loaded separately and managed by the `character-wizard` component.
 
 ## Dependencies
 
