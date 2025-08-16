@@ -47,8 +47,8 @@ Vue.component('character-wizard', {
   },
 
   mounted() {
-    // Set initial step based on character completion
-    this.currentStep = this.getNextIncompleteStep();
+    // Always start at step 1 for character creation
+    this.currentStep = 1;
   },
 
   methods: {
@@ -137,19 +137,19 @@ Vue.component('character-wizard', {
     },
 
     isSkillsComplete() {
-      return true; // Can be completed with 0 skills allocated
+      return false; // Not yet implemented
     },
 
     isFeatsComplete() {
-      return true; // Can be completed with 0 feats selected
+      return false; // Not yet implemented
     },
 
     isEquipmentComplete() {
-      return true; // Can be completed with starting equipment
+      return false; // Not yet implemented
     },
 
     isSpellsComplete() {
-      return true; // Not all classes have spells
+      return false; // Not yet implemented
     },
 
     isDetailsComplete() {
@@ -237,7 +237,8 @@ Vue.component('character-wizard', {
           <!-- Navigation Buttons -->
           <div class="d-flex justify-content-between mt-4 pt-3 border-top">
             <pf-button 
-              variant="outline-secondary" 
+              variant="secondary" 
+              outline
               icon="fa-arrow-left"
               :disabled="!canGoPrevious"
               @click="previousStep"
