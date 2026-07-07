@@ -65,6 +65,11 @@ Vue.component('point-buy-method', {
       return this.pointBuyBudget - this.pointBuySpent;
     },
 
+    // Complete when the full point budget has been spent
+    isComplete() {
+      return this.pointBuyRemaining === 0;
+    },
+
     currentFantasyLevel() {
       return this.pointBuyLevels[this.pointBuyBudget] || { name: 'Custom', description: 'Custom point buy level' };
     },
@@ -102,6 +107,13 @@ Vue.component('point-buy-method', {
         if (newValue) {
           this.initializePointBuy();
         }
+      }
+    },
+
+    isComplete: {
+      immediate: true,
+      handler(complete) {
+        this.$emit('completion-changed', complete);
       }
     }
   },
@@ -220,7 +232,8 @@ Vue.component('point-buy-method', {
                   <div class="ability-controls d-flex align-items-center">
                     <pf-button 
                       size="sm" 
-                      variant="outline-secondary"
+                      variant="secondary"
+                      outline
                       :disabled="!canAffordDecrease[ability]"
                       @click="decreaseScore(ability)"
                     >
@@ -234,7 +247,8 @@ Vue.component('point-buy-method', {
                     </div>
                     <pf-button 
                       size="sm" 
-                      variant="outline-secondary"
+                      variant="secondary"
+                      outline
                       :disabled="!canAffordIncrease[ability]"
                       @click="increaseScore(ability)"
                     >

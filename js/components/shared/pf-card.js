@@ -86,7 +86,7 @@ Vue.component('pf-card', {
     },
     
     hasHeader() {
-      return this.title || this.subtitle || this.$slots.header;
+      return this.title || this.subtitle || this.$slots.header || this.$slots.subtitle;
     },
     
     hasFooter() {
@@ -115,7 +115,9 @@ Vue.component('pf-card', {
           <div class="d-flex justify-content-between align-items-center">
             <div>
               <h5 v-if="title" class="card-title mb-0">{{ title }}</h5>
-              <h6 v-if="subtitle" class="card-subtitle mb-0 text-muted">{{ subtitle }}</h6>
+              <h6 v-if="subtitle || $slots.subtitle" class="card-subtitle mb-0 text-muted">
+                <slot name="subtitle">{{ subtitle }}</slot>
+              </h6>
             </div>
             <i 
               v-if="collapsible" 

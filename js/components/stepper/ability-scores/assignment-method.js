@@ -95,9 +95,15 @@ Vue.component('assignment-method', {
 
     // Determine instruction text based on method
     instructionText() {
-      return this.method === 'standardArray' 
+      return this.method === 'standardArray'
         ? 'Assign these standard values to your abilities'
         : 'Roll 6 sets of dice, then drag or click to assign to abilities';
+    },
+
+    // Complete when every ability has a value assigned for the current method
+    isComplete() {
+      const assignments = this.method === 'standardArray' ? this.standardArrayAssignments : this.diceAssignments;
+      return Object.values(assignments).every(assignment => assignment !== null);
     }
   },
 
@@ -117,6 +123,13 @@ Vue.component('assignment-method', {
         if (this.isActive) {
           this.initializeMethod();
         }
+      }
+    },
+
+    isComplete: {
+      immediate: true,
+      handler(complete) {
+        this.$emit('completion-changed', complete);
       }
     }
   },

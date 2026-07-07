@@ -1,7 +1,7 @@
 # Pathfinder Character Generator - Development TODO
 
 ## Project Status
-**Current State**: Clean slate - all previous implementation files have been removed. Only core project structure, data files, and configuration remain.
+**Current State**: Phase 1 (infrastructure, landing page, wizard shell) is complete. Step 1 (Ability Scores) is fully implemented with per-method completion validation. Steps 2-9 exist as placeholder components. Next up: Race Selection.
 
 **Updated Character Creation Flow**: Steps have been reordered to follow proper Pathfinder 1e sequence starting with Ability Scores.
 
@@ -43,16 +43,17 @@
 ## Phase 2: Character Creation Wizard (Steps 1-9)
 
 ### 2.1 Step 1: Ability Scores
-- [ ] **Create ability score generation methods**
-  - [ ] Point buy system (25 point buy default)
-  - [ ] Standard array method (15, 14, 13, 12, 10, 8)
-  - [ ] Dice rolling method (4d6 drop lowest, 6 times)
+- [x] **Create ability score generation methods**
+  - [x] Point buy system (25 point buy default, selectable 15/20/25/30 budgets)
+  - [x] Standard array method (15, 14, 13, 12, 10, 8)
+  - [x] Dice rolling method (4d6 drop lowest, 6 times)
+  - [x] Manual entry method
 
-- [ ] **Ability score assignment interface**
-  - [ ] Display all six abilities (STR, DEX, CON, INT, WIS, CHA)
-  - [ ] Interactive assignment based on chosen method
-  - [ ] Real-time calculation of modifiers
-  - [ ] Validation and constraints
+- [x] **Ability score assignment interface**
+  - [x] Display all six abilities (STR, DEX, CON, INT, WIS, CHA)
+  - [x] Interactive assignment based on chosen method (click or drag-and-drop)
+  - [x] Real-time calculation of modifiers
+  - [x] Validation and constraints (per-method step completion)
 
 ### 2.2 Step 2: Character Concept
 - [ ] **Create concept definition interface**

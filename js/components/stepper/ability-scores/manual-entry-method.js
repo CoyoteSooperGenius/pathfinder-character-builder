@@ -24,6 +24,7 @@ Vue.component('manual-entry-method', {
         wisdom: 10,
         charisma: 10
       },
+      applied: false,
 
       // Make GameUtils available to the template
       GameUtils: window.GameUtils,
@@ -49,6 +50,13 @@ Vue.component('manual-entry-method', {
     };
   },
 
+  computed: {
+    // Complete once the entered scores have been applied to the character
+    isComplete() {
+      return this.applied;
+    }
+  },
+
   watch: {
     isActive: {
       immediate: true,
@@ -57,23 +65,33 @@ Vue.component('manual-entry-method', {
           this.initializeManual();
         }
       }
+    },
+
+    isComplete: {
+      immediate: true,
+      handler(complete) {
+        this.$emit('completion-changed', complete);
+      }
     }
   },
 
   methods: {
     initializeManual() {
       this.tempScores = { ...this.character.abilityScores };
+      this.applied = false;
     },
 
     setManualScore(ability, value) {
       const numValue = parseInt(value);
       if (GameUtils.isValidAbilityScore(numValue)) {
         this.tempScores[ability] = numValue;
+        this.applied = false;
       }
     },
 
     applyManualScores() {
       this.updateCharacterScores(this.tempScores);
+      this.applied = true;
     },
 
     updateCharacterScores(scores) {

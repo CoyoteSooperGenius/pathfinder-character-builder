@@ -12,62 +12,54 @@ Vue.component('ability-score-generator', {
   data() {
     return {
       selectedMethod: this.character.abilityScoreMethod || 'pointBuy',
-      
-      
-      
-      
-      // Make GameUtils available to the template
-      GameUtils: window.GameUtils,
-      
-      // Ability information
-      abilityNames: {
-        strength: 'Strength',
-        dexterity: 'Dexterity', 
-        constitution: 'Constitution',
-        intelligence: 'Intelligence',
-        wisdom: 'Wisdom',
-        charisma: 'Charisma'
-      },
-      
-      abilityDescriptions: {
-        strength: 'Physical power, affects melee attack rolls, damage, carrying capacity',
-        dexterity: 'Agility and reflexes, affects AC, ranged attacks, initiative',
-        constitution: 'Health and stamina, affects hit points and fortitude saves',
-        intelligence: 'Reasoning and memory, affects skill points and knowledge',
-        wisdom: 'Awareness and insight, affects perception and will saves',
-        charisma: 'Force of personality, affects social skills and spell DCs'
+
+      // Completion state reported up by each method component
+      methodCompletion: {
+        pointBuy: false,
+        assignment: false,
+        manual: false
       }
     };
   },
 
   computed: {
-    currentScores() {
-      return this.character.abilityScores;
-    },
-
-    abilityModifiers() {
-      return GameUtils.calculateAbilityModifiers(this.currentScores);
-    },
-
+    // Completion of whichever method is currently selected
+    isComplete() {
+      switch (this.selectedMethod) {
+        case 'pointBuy':
+          return this.methodCompletion.pointBuy;
+        case 'standardArray':
+        case 'diceRoll':
+          return this.methodCompletion.assignment;
+        case 'manual':
+          return this.methodCompletion.manual;
+        default:
+          return false;
+      }
+    }
   },
 
   watch: {
     selectedMethod(newMethod) {
-      this.initializeMethod(newMethod);
       this.updateCharacterMethod(newMethod);
+    },
+
+    isComplete: {
+      immediate: true,
+      handler(complete) {
+        this.$emit('completion-changed', complete);
+      }
     }
   },
 
   mounted() {
-    this.initializeMethod(this.selectedMethod);
+    this.updateCharacterMethod(this.selectedMethod);
   },
 
   methods: {
     // Handle method change from child component
     onMethodChanged(method) {
       this.selectedMethod = method;
-      this.initializeMethod(method);
-      this.updateCharacterMethod(method);
     },
 
     // Handle scores changed from child components
@@ -75,43 +67,13 @@ Vue.component('ability-score-generator', {
       this.$emit('scores-changed');
     },
 
-    // Initialization methods
-    initializeMethod(method) {
-      switch (method) {
-        case 'pointBuy':
-          // Point Buy initialization is handled by the component
-          break;
-        case 'standardArray':
-          // Standard Array initialization is handled by the component
-          break;
-        case 'diceRoll':
-          // Dice Roll initialization is handled by the component
-          break;
-        case 'manual':
-          // Manual entry initialization is handled by the component
-          break;
-      }
+    // Handle completion state reported by a method component
+    onMethodCompletionChanged(methodKey, complete) {
+      this.methodCompletion[methodKey] = complete;
     },
 
-
-
-
-
-    updateCharacterScores(scores) {
-      Object.assign(this.character.abilityScores, scores);
-      this.$emit('scores-changed');
-    },
-    
     updateCharacterMethod(method) {
       this.character.abilityScoreMethod = method;
-    },
-
-
-
-
-    // Utility methods
-    getModifierText(modifier) {
-      return modifier >= 0 ? `+${modifier}` : `${modifier}`;
     }
   },
 
@@ -128,14 +90,16 @@ Vue.component('ability-score-generator', {
         :character="character"
         :is-active="selectedMethod === 'pointBuy'"
         @scores-changed="onScoresChanged"
+        @completion-changed="onMethodCompletionChanged('pointBuy', $event)"
       ></point-buy-method>
 
       <!-- Assignment Method (Standard Array + Dice Roll) -->
       <assignment-method
         :character="character"
-        :method="selectedMethod"
+        :method="selectedMethod === 'standardArray' || selectedMethod === 'diceRoll' ? selectedMethod : 'standardArray'"
         :is-active="selectedMethod === 'standardArray' || selectedMethod === 'diceRoll'"
         @scores-changed="onScoresChanged"
+        @completion-changed="onMethodCompletionChanged('assignment', $event)"
       ></assignment-method>
 
       <!-- Manual Entry Method -->
@@ -143,6 +107,7 @@ Vue.component('ability-score-generator', {
         :character="character"
         :is-active="selectedMethod === 'manual'"
         @scores-changed="onScoresChanged"
+        @completion-changed="onMethodCompletionChanged('manual', $event)"
       ></manual-entry-method>
     </div>
   `

@@ -11,7 +11,9 @@ Vue.component('character-wizard', {
 
   data() {
     return {
-      currentStep: 1
+      currentStep: 1,
+      // Completion state reported up by the ability scores step
+      abilityScoresComplete: false
     };
   },
 
@@ -94,6 +96,10 @@ Vue.component('character-wizard', {
       this.$emit('character-updated');
     },
 
+    handleAbilityScoresCompletionChanged(complete) {
+      this.abilityScoresComplete = complete;
+    },
+
     handleRaceChanged() {
       this.$emit('character-updated');
     },
@@ -124,8 +130,7 @@ Vue.component('character-wizard', {
 
     // Step completion validation methods
     isAbilityScoresComplete() {
-      if (!this.character.abilityScores) return false;
-      return Object.values(this.character.abilityScores).every(score => GameUtils.isValidAbilityScore(score));
+      return this.abilityScoresComplete;
     },
 
     isRaceComplete() {
@@ -178,10 +183,11 @@ Vue.component('character-wizard', {
         <div class="col-lg-9 col-md-8">
           <div class="character-creation-content">
             <!-- Step 1: Ability Scores -->
-            <ability-scores-step 
+            <ability-scores-step
               v-if="currentStep === 1"
               :character="character"
               @scores-changed="handleAbilityScoresChanged"
+              @completion-changed="handleAbilityScoresCompletionChanged"
             ></ability-scores-step>
 
             <!-- Step 2: Race Selection -->

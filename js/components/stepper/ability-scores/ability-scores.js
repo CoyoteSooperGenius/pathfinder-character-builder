@@ -11,22 +11,20 @@ Vue.component('ability-scores-step', {
 
   data() {
     return {
-      // Make GameUtils available to the template
-      GameUtils: window.GameUtils
+      // Completion state reported up by the generator for the selected method
+      isComplete: false
     };
-  },
-
-  computed: {
-    // Check if ability scores are valid and complete
-    isComplete() {
-      return Object.values(this.character.abilityScores).every(score => GameUtils.isValidAbilityScore(score));
-    }
   },
 
   methods: {
     handleScoresChanged() {
       // Emit event to parent when scores change
       this.$emit('scores-changed');
+    },
+
+    handleCompletionChanged(complete) {
+      this.isComplete = complete;
+      this.$emit('completion-changed', complete);
     }
   },
 
@@ -41,18 +39,13 @@ Vue.component('ability-scores-step', {
             </span>
           </div>
         </template>
-        
+
         <!-- Use the ability score generator component -->
-        <ability-score-generator 
+        <ability-score-generator
           :character="character"
           @scores-changed="handleScoresChanged"
+          @completion-changed="handleCompletionChanged"
         ></ability-score-generator>
-        
-        <!-- Character Sheet Summary (if scores are set) -->
-        <ability-scores-summary
-          :character="character"
-          :is-visible="isComplete"
-        ></ability-scores-summary>
       </pf-card>
     </div>
   `
