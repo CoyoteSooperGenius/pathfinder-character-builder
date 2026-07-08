@@ -1,0 +1,107 @@
+/* Design tokens — Pathfinder Character Builder
+   Light theme (parchment & ink) on :root, dark theme (candlelit study)
+   via [data-theme="dark"]. The data-theme attribute is always stamped on
+   <html> by the inline head script before stylesheets load. */
+
+:root {
+  color-scheme: light;
+
+  /* Parchment & ink */
+  --color-bg:             #efe6d0;
+  --color-surface:        #f9f3e3;
+  --color-surface-raised: #fffbef;
+  --color-text:           #2b2118;
+  --color-text-muted:     #6f6152;
+  --color-heading:        #3d2b1f;
+  --color-border:         #d5c5a1;
+  --color-border-strong:  #b8a67e;
+
+  /* Deep crimson accent */
+  --color-accent:         #8a2422;
+  --color-accent-hover:   #6e1b19;
+  --color-accent-subtle:  rgba(138, 36, 34, 0.08);
+  --color-on-accent:      #f9f3e3;
+
+  /* Semantic */
+  --color-success:        #4a7043;
+  --color-success-subtle: rgba(74, 112, 67, 0.12);
+  --color-danger:         #b3402e;
+  --color-danger-subtle:  rgba(179, 64, 46, 0.12);
+  --color-warning:        #a8741f;
+  --color-warning-subtle: rgba(168, 116, 31, 0.14);
+  --color-info:           #33627e;
+  --color-info-subtle:    rgba(51, 98, 126, 0.12);
+  --color-secondary:      #6f6152;
+  --color-light:          #efe6d0;
+  --color-dark:           #2b2118;
+  /* Text color placed on top of the semantic (success/danger/warning/info) fills */
+  --color-on-semantic:    #ffffff;
+
+  --focus-ring: 0 0 0 3px rgba(138, 36, 34, 0.35);
+
+  /* Typography */
+  --font-display: 'Alegreya', Georgia, 'Times New Roman', serif;
+  --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-lg: 1.125rem;
+  --fs-h3: 1.35rem;
+  --fs-h2: 1.75rem;
+  --fs-h1: 2.25rem;
+  --fs-display: 3rem;
+
+  /* Spacing (Bootstrap-compatible steps: 1=.25 2=.5 3=1 4=1.5 5=3 rem) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 3rem;
+
+  --radius-sm: 4px;
+  --radius: 8px;
+  --radius-lg: 12px;
+
+  --shadow-sm: 0 1px 3px rgba(43, 33, 24, 0.12);
+  --shadow-md: 0 2px 8px rgba(43, 33, 24, 0.16);
+  --shadow-lg: 0 8px 24px rgba(43, 33, 24, 0.22);
+
+  --header-height: 3.5rem;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-bg:             #1e1912;
+  --color-surface:        #2a2319;
+  --color-surface-raised: #352d20;
+  --color-text:           #e6dbc2;
+  --color-text-muted:     #a2947a;
+  --color-heading:        #f0e6cd;
+  --color-border:         #4a4030;
+  --color-border-strong:  #63563f;
+
+  --color-accent:         #c9564a;
+  --color-accent-hover:   #d96e62;
+  --color-accent-subtle:  rgba(201, 86, 74, 0.14);
+  --color-on-accent:      #1e1912;
+
+  --color-success:        #7dae6f;
+  --color-success-subtle: rgba(125, 174, 111, 0.14);
+  --color-danger:         #d97659;
+  --color-danger-subtle:  rgba(217, 118, 89, 0.14);
+  --color-warning:        #cfa04a;
+  --color-warning-subtle: rgba(207, 160, 74, 0.16);
+  --color-info:           #6fa3c0;
+  --color-info-subtle:    rgba(111, 163, 192, 0.14);
+  --color-secondary:      #a2947a;
+  --color-light:          #4a4030;
+  --color-dark:           #e6dbc2;
+  /* Dark theme semantic fills are lighter, so ink-dark text reads better */
+  --color-on-semantic:    #1e1912;
+
+  --focus-ring: 0 0 0 3px rgba(201, 86, 74, 0.45);
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6);
+}
