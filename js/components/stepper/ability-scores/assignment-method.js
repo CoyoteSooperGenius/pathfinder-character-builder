@@ -461,7 +461,7 @@ Vue.component('assignment-method', {
                 <div 
                   :class="[
                     'ability-score-control', 'p-3', 'border', 'rounded',
-                    selectedIndex !== null && !getAssignedValue(ability) ? 'border-primary bg-light' : ''
+                    selectedIndex !== null && !getAssignedValue(ability) ? 'drop-target' : ''
                   ]"
                   :style="{
                     cursor: selectedIndex !== null ? 'pointer' : 'default',

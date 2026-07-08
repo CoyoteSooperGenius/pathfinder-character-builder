@@ -7,6 +7,27 @@
 
 ---
 
+## Known Bugs (from 2026-07-07 code review — fix each with a clean context)
+
+### KB-1. Load Character view reads fields the data layer never returns
+**Where**: `index.html` load-character view (~line 156) vs `DataUtils.loadSavedCharacters` (`js/utilities/data-utils.js` ~line 154).
+**Symptom**: Saved-character cards always show Race/Class "Unknown", HP/AC "—", date "Unknown"; View and Edit buttons silently do nothing; Delete removes a literal `"undefined"` localStorage key.
+**Cause**: `loadSavedCharacters` returns items shaped `{ key, character, name, race: string, characterClass: string }`, but the template reads `character.storageKey` (should be `character.key`), `character.race?.name` (race is already a flattened string), `character.hitPoints?.current`, `character.armorClass?.total`, `character.level`, `character.concept`, and `character.lastModified` — none of which exist on the wrapper.
+**Fix direction**: Decide on one shape. Either enrich the wrapper in `loadSavedCharacters` (add `storageKey`, `lastModified`, and pass the nested `character` through for stats) or change the template to read `character.key` and `character.character.*`. Add the missing fields (level, HP, AC, concept, lastModified) to what gets returned.
+
+### KB-2. Dismissing the error alert permanently swallows all future errors
+**Where**: `index.html` (~line 60) `<pf-alert ... @dismiss="clearError">` vs `js/components/shared/pf-alert.js` which emits `dismissed` (not `dismiss`).
+**Symptom**: First error displays fine. After the user clicks the X once, no error message ever appears again until page reload.
+**Cause**: `clearError` never runs (wrong event name), so `error` stays truthy and `v-if="error"` never destroys the pf-alert instance; its internal `visible` is now false and nothing resets it (no `show` prop is bound; its watcher only fires on `show` changes).
+**Fix direction**: Change the listener to `@dismissed="clearError"` (or emit both names from pf-alert). Consider also binding `:show="!!error"` or keying the alert on the message so a new error re-shows a previously dismissed alert.
+
+### KB-3. Root app still runs the old 9-step model; "Edit character" resume is dead code
+**Where**: `index.html` root Vue app — `isStepComplete` switch (case 2 = Concept … case 9 = Details, ~line 327), `nextStep`/`goToStep` capping at 9, `getNextIncompleteStep` looping 1..9, `loadCharacterAndEdit` (~line 575) — vs the 8-step model in `character-wizard.js`, `simple-stepper.js`, `character-summary.js` (step 2 = Race, step 8 = Details, no Concept).
+**Symptom**: "Edit" on a saved character always opens the wizard at step 1 regardless of progress; the root's step bookkeeping (`currentStep`, `nextStep`, `previousStep`, `goToStep`, `getNextIncompleteStep`, `onStepChanged` writes) is never read by anything. Also `isConceptComplete()` calls `.concept.trim()` and throws if a loaded character has no `concept` field.
+**Fix direction**: Single source of truth for step definitions (shared constant used by wizard/stepper/summary), delete or renumber the root app's 9-step methods, and make resume real: pass an `initial-step` prop into `<character-wizard>` (wizard currently force-resets `currentStep = 1` in `mounted()`) computed from the wizard's own completion rules, not the root's stale ones. Note the Edit flow is also blocked by KB-1 (undefined storage key), so fix that first.
+
+---
+
 ## Phase 1: Core Infrastructure & Foundation
 
 ### 1.1 Basic Application Structures

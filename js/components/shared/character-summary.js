@@ -232,7 +232,7 @@ Vue.component('character-summary', {
       </div>
 
       <!-- Ability Scores -->
-      <div v-if="showDetails && character.abilityScores" class="mb-3">
+      <div v-if="showDetails && character.abilityScores && !compact" class="mb-3">
         <h6 class="mb-2">Ability Scores</h6>
         <div class="pf-grid pf-grid--abilities gap-2">
           <div v-for="(score, ability) in character.abilityScores" :key="ability" class="text-center">
@@ -252,7 +252,7 @@ Vue.component('character-summary', {
       </div>
 
       <!-- Step Completion List -->
-      <div v-if="showProgress" class="completion-steps">
+      <div v-if="!compact && showProgress" class="completion-steps">
         <h6 class="mb-2">Creation Steps</h6>
         <div class="pf-grid pf-grid--pairs gap-1">
           <div

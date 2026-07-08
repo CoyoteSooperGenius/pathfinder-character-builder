@@ -1,6 +1,22 @@
 // Pathfinder Modal Component
 // Self-contained modal (no Bootstrap JS) with Vue.js integration
 
+// Shared scroll-lock accounting: the body class is only removed when the
+// last open modal releases it, so stacked modals can't clobber each other
+const PfModalScrollLock = {
+  count: 0,
+  acquire() {
+    this.count++;
+    document.body.classList.add('pf-modal-open');
+  },
+  release() {
+    this.count = Math.max(0, this.count - 1);
+    if (this.count === 0) {
+      document.body.classList.remove('pf-modal-open');
+    }
+  }
+};
+
 Vue.component('pf-modal', {
   props: {
     show: {
@@ -59,6 +75,13 @@ Vue.component('pf-modal', {
     }
   },
 
+  data() {
+    return {
+      isOpen: false,
+      previouslyFocused: null
+    };
+  },
+
   computed: {
     dialogClasses() {
       const classes = ['pf-modal__dialog'];
@@ -91,25 +114,48 @@ Vue.component('pf-modal', {
     show: {
       immediate: true,
       handler(visible) {
-        // Lock page scroll while any modal is open; Esc listener lives on
-        // document because focus may sit anywhere inside the dialog
-        document.body.classList.toggle('pf-modal-open', visible);
         if (visible) {
-          document.addEventListener('keydown', this.handleKeydown);
-          this.$emit('show');
+          this.openModal();
         } else {
-          document.removeEventListener('keydown', this.handleKeydown);
+          this.closeModal();
         }
       }
     }
   },
 
   beforeDestroy() {
-    document.removeEventListener('keydown', this.handleKeydown);
-    document.body.classList.remove('pf-modal-open');
+    this.closeModal();
   },
 
   methods: {
+    openModal() {
+      if (this.isOpen) return;
+      this.isOpen = true;
+      PfModalScrollLock.acquire();
+      // Esc/Tab listener lives on document because focus may sit anywhere
+      // inside the dialog
+      document.addEventListener('keydown', this.handleKeydown);
+      // Move focus into the dialog and remember where it came from
+      this.previouslyFocused = document.activeElement;
+      this.$nextTick(() => {
+        if (this.$refs.content) {
+          this.$refs.content.focus();
+        }
+      });
+      this.$emit('show');
+    },
+
+    closeModal() {
+      if (!this.isOpen) return;
+      this.isOpen = false;
+      PfModalScrollLock.release();
+      document.removeEventListener('keydown', this.handleKeydown);
+      if (this.previouslyFocused && typeof this.previouslyFocused.focus === 'function') {
+        this.previouslyFocused.focus();
+      }
+      this.previouslyFocused = null;
+    },
+
     handleHide() {
       this.$emit('hide');
     },
@@ -117,6 +163,38 @@ Vue.component('pf-modal', {
     handleKeydown(event) {
       if (event.key === 'Escape' && this.keyboard) {
         this.handleHide();
+      } else if (event.key === 'Tab') {
+        this.containFocus(event);
+      }
+    },
+
+    // Keep Tab cycling inside the dialog while the modal is open
+    containFocus(event) {
+      const root = this.$refs.content;
+      if (!root) return;
+
+      const focusables = root.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusables.length === 0) {
+        event.preventDefault();
+        root.focus();
+        return;
+      }
+
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      const active = document.activeElement;
+
+      if (!root.contains(active)) {
+        event.preventDefault();
+        first.focus();
+      } else if (event.shiftKey && (active === first || active === root)) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && active === last) {
+        event.preventDefault();
+        first.focus();
       }
     },
 
@@ -136,7 +214,7 @@ Vue.component('pf-modal', {
       @click.self="handleBackdropClick"
     >
       <div :class="dialogClasses">
-        <div class="pf-modal__content">
+        <div ref="content" class="pf-modal__content" tabindex="-1">
           <!-- Header -->
           <div
             v-if="hasHeader"

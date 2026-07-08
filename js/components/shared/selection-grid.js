@@ -216,7 +216,7 @@ Vue.component('selection-grid', {
       
       <!-- Loading State -->
       <div v-if="loading" class="text-center py-5">
-        <div class="pf-spinner" role="status">
+        <div class="pf-spinner text-primary" role="status">
           <span class="visually-hidden">{{ loadingMessage }}</span>
         </div>
         <div class="mt-2 text-muted">{{ loadingMessage }}</div>
