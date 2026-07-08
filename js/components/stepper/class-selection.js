@@ -11,8 +11,8 @@ Vue.component('class-selection-step', {
 
   template: `
     <div class="class-selection-step">
-      <div class="row">
-        <div class="col-12">
+      <div>
+        <div>
           <h3>
             <i class="fas fa-shield-alt me-2"></i>
             Step 3: Class Selection

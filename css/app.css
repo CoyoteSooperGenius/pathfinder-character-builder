@@ -97,6 +97,10 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .app-header__brand i { color: var(--color-accent); }
 .app-header__title {
   letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+@media (max-width: 575px) {
+  .app-header__title { display: none; }
 }
 
 .app-header__actions {
@@ -286,6 +290,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 
 .card-img-top-wrapper { overflow: hidden; border-radius: var(--radius) var(--radius) 0 0; }
+.card-img-top { width: 100%; display: block; }
 
 /* ===== pf-modal ===== */
 .pf-modal {

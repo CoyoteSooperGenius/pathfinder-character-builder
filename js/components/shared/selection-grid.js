@@ -185,21 +185,21 @@ Vue.component('selection-grid', {
     <div class="selection-grid">
       <!-- Filters -->
       <div v-if="hasFilters" class="mb-3">
-        <div class="row g-3">
-          <div v-if="searchable" class="col-md-6">
+        <div class="pf-grid pf-grid--2">
+          <div v-if="searchable">
             <div class="input-group">
               <span class="input-group-text">
                 <i class="fas fa-search"></i>
               </span>
-              <input 
+              <input
                 v-model="searchQuery"
-                type="text" 
-                class="form-control" 
+                type="text"
+                class="form-control"
                 placeholder="Search items..."
               >
             </div>
           </div>
-          <div v-if="filterable" class="col-md-6">
+          <div v-if="filterable">
             <select v-model="selectedFilter" class="form-select">
               <option value="all">All {{ filterProperty }}s</option>
               <option 

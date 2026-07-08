@@ -11,8 +11,8 @@ Vue.component('race-selection-step', {
 
   template: `
     <div class="race-selection-step">
-      <div class="row">
-        <div class="col-12">
+      <div>
+        <div>
           <h3>
             <i class="fas fa-users me-2"></i>
             Step 2: Race Selection

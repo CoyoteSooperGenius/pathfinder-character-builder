@@ -11,8 +11,8 @@ Vue.component('equipment-step', {
 
   template: `
     <div class="equipment-step">
-      <div class="row">
-        <div class="col-12">
+      <div>
+        <div>
           <h3>
             <i class="fas fa-sword me-2"></i>
             Step 6: Equipment

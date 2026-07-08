@@ -11,8 +11,8 @@ Vue.component('skills-step', {
 
   template: `
     <div class="skills-step">
-      <div class="row">
-        <div class="col-12">
+      <div>
+        <div>
           <h3>
             <i class="fas fa-tools me-2"></i>
             Step 4: Skills

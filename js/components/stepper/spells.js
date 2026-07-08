@@ -11,8 +11,8 @@ Vue.component('spells-step', {
 
   template: `
     <div class="spells-step">
-      <div class="row">
-        <div class="col-12">
+      <div>
+        <div>
           <h3>
             <i class="fas fa-magic me-2"></i>
             Step 7: Spells

@@ -106,15 +106,15 @@ Vue.component('manual-entry-method', {
 
   template: `
     <div v-if="isActive" class="manual-entry-method">
-      <div class="row mb-4">
-        <div class="col-12">
+      <div class="mb-4">
+        <div>
           <pf-card title="Manual Entry">
             <template #subtitle>
               Enter ability scores between 3 and 25
             </template>
             
-            <div class="row g-3">
-              <div v-for="ability in Object.keys(abilityNames)" :key="ability" class="col-md-6">
+            <div class="pf-grid pf-grid--2">
+              <div v-for="ability in Object.keys(abilityNames)" :key="ability">
                 <div class="ability-score-control p-3 border rounded">
                   <div class="mb-2">
                     <strong>{{ abilityNames[ability] }}</strong>

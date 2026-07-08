@@ -178,8 +178,8 @@ Vue.component('point-buy-method', {
 
   template: `
     <div v-if="isActive" class="point-buy-method">
-      <div class="row mb-4">
-        <div class="col-12">
+      <div class="mb-4">
+        <div>
           <pf-card title="Point Buy System">
             <template #subtitle>
               <div class="d-flex flex-wrap align-items-center gap-3">
@@ -195,8 +195,8 @@ Vue.component('point-buy-method', {
             
             <!-- Point Buy Level Selector -->
             <div class="mb-4">
-              <div class="row align-items-center">
-                <div class="col-md-6">
+              <div class="pf-grid pf-grid--2 align-items-center">
+                <div>
                   <label class="form-label fw-bold">Fantasy Level:</label>
                   <select 
                     class="form-select" 
@@ -212,7 +212,7 @@ Vue.component('point-buy-method', {
                     </option>
                   </select>
                 </div>
-                <div class="col-md-6">
+                <div>
                   <small class="text-muted">
                     <strong>{{ currentFantasyLevel.name }}:</strong><br>
                     {{ currentFantasyLevel.description }}
@@ -221,8 +221,8 @@ Vue.component('point-buy-method', {
               </div>
             </div>
             
-            <div class="row g-3">
-              <div v-for="ability in Object.keys(abilityNames)" :key="ability" class="col-md-6">
+            <div class="pf-grid pf-grid--2">
+              <div v-for="ability in Object.keys(abilityNames)" :key="ability">
                 <div class="ability-score-control d-flex align-items-center justify-content-between p-3 border rounded">
                   <div class="ability-info">
                     <strong>{{ abilityNames[ability] }}</strong>

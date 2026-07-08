@@ -390,8 +390,8 @@ Vue.component('assignment-method', {
 
   template: `
     <div v-if="isActive" class="assignment-method">
-      <div class="row mb-4">
-        <div class="col-12">
+      <div class="mb-4">
+        <div>
           <pf-card :title="cardTitle">
             <div class="d-flex justify-content-between align-items-center mb-3">
               <span>{{ instructionText }}</span>
@@ -416,9 +416,9 @@ Vue.component('assignment-method', {
                   v-for="(value, index) in valuesPool" 
                   :key="value.id"
                   :class="[
-                    'dice-value', 'btn', 'position-relative',
-                    value.assigned ? 'btn-outline-secondary' : 
-                    selectedIndex === index ? 'btn-warning' : 'btn-primary'
+                    'dice-value', 'pf-btn', 'position-relative',
+                    value.assigned ? 'pf-btn--outline-secondary' :
+                    selectedIndex === index ? 'pf-btn--warning' : 'pf-btn--primary'
                   ]"
                   :style="{
                     cursor: value.assigned ? 'not-allowed' : 'grab',
@@ -456,8 +456,8 @@ Vue.component('assignment-method', {
             </div>
             
             <!-- Ability Score Assignment Grid -->
-            <div v-if="valuesPool.length" class="row g-3">
-              <div v-for="ability in Object.keys(abilityNames)" :key="ability" class="col-md-6">
+            <div v-if="valuesPool.length" class="pf-grid pf-grid--2">
+              <div v-for="ability in Object.keys(abilityNames)" :key="ability">
                 <div 
                   :class="[
                     'ability-score-control', 'p-3', 'border', 'rounded',

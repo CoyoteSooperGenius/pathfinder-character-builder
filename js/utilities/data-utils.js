@@ -157,7 +157,17 @@ const DataUtils = {
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
         if (key && key !== 'current-character' && !key.startsWith('.')) {
-          const character = JSON.parse(localStorage.getItem(key));
+          // localStorage may hold non-character entries (e.g. app settings
+          // like pf-theme) — skip anything that isn't a character object
+          let character;
+          try {
+            character = JSON.parse(localStorage.getItem(key));
+          } catch (parseError) {
+            continue;
+          }
+          if (!character || typeof character !== 'object' || !character.name) {
+            continue;
+          }
           savedCharacters.push({
             key: key,
             character: character,

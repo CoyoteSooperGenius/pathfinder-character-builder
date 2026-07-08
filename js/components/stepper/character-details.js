@@ -11,8 +11,8 @@ Vue.component('character-details-step', {
 
   template: `
     <div class="character-details-step">
-      <div class="row">
-        <div class="col-12">
+      <div>
+        <div>
           <h3>
             <i class="fas fa-id-card me-2"></i>
             Step 8: Character Details

@@ -18,11 +18,11 @@ Vue.component('generation-method-selector', {
 
   template: `
     <div class="generation-method-selector">
-      <div class="row mb-4">
-        <div class="col-12">
+      <div class="mb-4">
+        <div>
           <pf-card title="Choose Generation Method">
-            <div class="row g-3">
-              <div class="col-md-6">
+            <div class="pf-grid pf-grid--2">
+              <div>
                 <div class="form-check">
                   <input 
                     class="form-check-input" 
@@ -40,7 +40,7 @@ Vue.component('generation-method-selector', {
                 </div>
               </div>
               
-              <div class="col-md-6">
+              <div>
                 <div class="form-check">
                   <input 
                     class="form-check-input" 
@@ -58,7 +58,7 @@ Vue.component('generation-method-selector', {
                 </div>
               </div>
               
-              <div class="col-md-6">
+              <div>
                 <div class="form-check">
                   <input 
                     class="form-check-input" 
@@ -76,7 +76,7 @@ Vue.component('generation-method-selector', {
                 </div>
               </div>
               
-              <div class="col-md-6">
+              <div>
                 <div class="form-check">
                   <input 
                     class="form-check-input" 

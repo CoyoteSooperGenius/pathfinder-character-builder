@@ -11,8 +11,8 @@ Vue.component('feats-step', {
 
   template: `
     <div class="feats-step">
-      <div class="row">
-        <div class="col-12">
+      <div>
+        <div>
           <h3>
             <i class="fas fa-star me-2"></i>
             Step 5: Feats
