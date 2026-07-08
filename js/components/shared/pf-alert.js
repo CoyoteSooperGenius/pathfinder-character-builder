@@ -35,11 +35,7 @@ Vue.component('pf-alert', {
   
   computed: {
     alertClasses() {
-      const classes = ['alert', `alert-${this.variant}`];
-      if (this.dismissible) {
-        classes.push('alert-dismissible');
-      }
-      return classes.join(' ');
+      return ['pf-alert', `pf-alert--${this.variant}`].join(' ');
     },
     
     defaultIcon() {
@@ -113,13 +109,13 @@ Vue.component('pf-alert', {
         <div class="flex-grow-1">
           <slot></slot>
         </div>
-        <button 
+        <button
           v-if="dismissible"
-          type="button" 
-          class="btn-close" 
+          type="button"
+          class="pf-close"
           aria-label="Close"
           @click="dismiss"
-        ></button>
+        ><i class="fas fa-xmark"></i></button>
       </div>
     </div>
   `

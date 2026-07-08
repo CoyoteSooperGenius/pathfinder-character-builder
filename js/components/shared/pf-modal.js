@@ -1,5 +1,5 @@
 // Pathfinder Modal Component
-// Bootstrap modal wrapper with Vue.js integration
+// Self-contained modal (no Bootstrap JS) with Vue.js integration
 
 Vue.component('pf-modal', {
   props: {
@@ -58,152 +58,111 @@ Vue.component('pf-modal', {
       default: false
     }
   },
-  
-  data() {
-    return {
-      modalInstance: null
-    };
-  },
-  
+
   computed: {
-    modalClasses() {
-      const classes = ['modal-dialog'];
-      
+    dialogClasses() {
+      const classes = ['pf-modal__dialog'];
+
       if (this.size !== 'md') {
-        classes.push(`modal-${this.size}`);
+        classes.push(`pf-modal__dialog--${this.size}`);
       }
-      
+
       if (this.centered) {
-        classes.push('modal-dialog-centered');
+        classes.push('pf-modal__dialog--centered');
       }
-      
+
       if (this.scrollable) {
-        classes.push('modal-dialog-scrollable');
+        classes.push('pf-modal__dialog--scrollable');
       }
-      
+
       return classes.join(' ');
     },
-    
+
     hasHeader() {
       return !this.hideHeader && (this.title || this.$slots.header);
     },
-    
+
     hasFooter() {
       return !this.hideFooter && this.$slots.footer;
     }
   },
-  
+
   watch: {
-    show(newValue) {
-      if (newValue) {
-        this.showModal();
-      } else {
-        this.hideModal();
+    show: {
+      immediate: true,
+      handler(visible) {
+        // Lock page scroll while any modal is open; Esc listener lives on
+        // document because focus may sit anywhere inside the dialog
+        document.body.classList.toggle('pf-modal-open', visible);
+        if (visible) {
+          document.addEventListener('keydown', this.handleKeydown);
+          this.$emit('show');
+        } else {
+          document.removeEventListener('keydown', this.handleKeydown);
+        }
       }
     }
   },
-  
+
+  beforeDestroy() {
+    document.removeEventListener('keydown', this.handleKeydown);
+    document.body.classList.remove('pf-modal-open');
+  },
+
   methods: {
-    showModal() {
-      if (this.modalInstance) {
-        this.modalInstance.show();
-      }
-    },
-    
-    hideModal() {
-      if (this.modalInstance) {
-        this.modalInstance.hide();
-      }
-    },
-    
     handleHide() {
       this.$emit('hide');
     },
-    
-    handleShow() {
-      this.$emit('show');
-    },
-    
+
     handleKeydown(event) {
       if (event.key === 'Escape' && this.keyboard) {
         this.handleHide();
       }
     },
-    
-    handleBackdropClick(event) {
-      if (event.target === this.$refs.modal && this.backdrop === true) {
+
+    handleBackdropClick() {
+      if (this.backdrop === true) {
         this.handleHide();
       }
     }
   },
-  
-  mounted() {
-    // Initialize Bootstrap modal
-    const modalEl = this.$refs.modal;
-    if (window.bootstrap && window.bootstrap.Modal) {
-      this.modalInstance = new window.bootstrap.Modal(modalEl, {
-        backdrop: this.backdrop,
-        keyboard: this.keyboard
-      });
-      
-      modalEl.addEventListener('hide.bs.modal', this.handleHide);
-      modalEl.addEventListener('show.bs.modal', this.handleShow);
-    }
-    
-    // Show modal if initially visible
-    if (this.show) {
-      this.$nextTick(() => {
-        this.showModal();
-      });
-    }
-  },
-  
-  beforeDestroy() {
-    if (this.modalInstance) {
-      const modalEl = this.$refs.modal;
-      modalEl.removeEventListener('hide.bs.modal', this.handleHide);
-      modalEl.removeEventListener('show.bs.modal', this.handleShow);
-      this.modalInstance.dispose();
-    }
-  },
-  
+
   template: `
-    <div 
-      ref="modal"
-      class="modal fade" 
-      tabindex="-1" 
-      aria-hidden="true"
-      @keydown="handleKeydown"
-      @click="handleBackdropClick"
+    <div
+      v-if="show"
+      class="pf-modal"
+      role="dialog"
+      aria-modal="true"
+      @click.self="handleBackdropClick"
     >
-      <div :class="modalClasses">
-        <div class="modal-content">
+      <div :class="dialogClasses">
+        <div class="pf-modal__content">
           <!-- Header -->
-          <div 
+          <div
             v-if="hasHeader"
-            :class="['modal-header', headerClass]"
+            :class="['pf-modal__header', headerClass]"
           >
             <slot name="header">
-              <h5 class="modal-title">{{ title }}</h5>
+              <h5 class="pf-modal__title">{{ title }}</h5>
             </slot>
-            <button 
+            <button
               v-if="!hideCloseButton"
-              type="button" 
-              class="btn-close" 
+              type="button"
+              class="pf-close"
               aria-label="Close"
               @click="handleHide"
-            ></button>
+            ><i class="fas fa-xmark"></i></button>
           </div>
-          
+
           <!-- Body -->
-          <div :class="['modal-body', bodyClass]">
+          <div :class="['pf-modal__body', bodyClass]">
             <slot></slot>
           </div>
-          
+
           <!-- Footer -->
-          <div 
+          <div
             v-if="hasFooter"
-            :class="['modal-footer', footerClass]"
+            :class="['pf-modal__footer', footerClass]"
           >
             <slot name="footer">
               <pf-button variant="secondary" @click="handleHide">

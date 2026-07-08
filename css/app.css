@@ -670,6 +670,11 @@ body.pf-modal-open { overflow: hidden; }
 }
 
 /* ===== Character summary panel ===== */
+/* Fixed-column grids for the summary's small tiles — these must not
+   collapse at breakpoints the way the page-level pf-grid--N helpers do */
+.pf-grid--pairs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.pf-grid--abilities { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
 .stat-block {
   background: var(--color-accent-subtle);
   border-radius: var(--radius-sm);
@@ -688,20 +693,26 @@ body.pf-modal-open { overflow: hidden; }
 }
 
 .ability-score {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 0.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   background: var(--color-surface-raised);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  padding: 0.35rem 0.2rem;
-  text-align: center;
+  border: 2px solid var(--color-border-strong);
+  border-radius: 50%;
 }
-.ability-score .ability-name {
-  font-size: 0.7rem;
+.ability-score .score { font-weight: 700; font-size: var(--fs-sm); line-height: 1; }
+.ability-score .modifier { font-size: 0.65rem; color: var(--color-text-muted); line-height: 1; margin-top: 2px; }
+.ability-name {
+  font-size: 0.65rem;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: var(--color-text-muted);
 }
-.ability-score .score { font-weight: 700; line-height: 1.2; }
-.ability-score .modifier { font-size: var(--fs-sm); color: var(--color-text-muted); }
 
 /* ===== Step widgets ===== */
 .ability-score-control {

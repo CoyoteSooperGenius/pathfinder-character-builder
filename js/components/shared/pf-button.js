@@ -42,22 +42,22 @@ Vue.component('pf-button', {
   
   computed: {
     buttonClasses() {
-      const classes = ['btn'];
-      
+      const classes = ['pf-btn'];
+
       // Variant
       if (this.outline) {
-        classes.push(`btn-outline-${this.variant}`);
+        classes.push(`pf-btn--outline-${this.variant}`);
       } else {
-        classes.push(`btn-${this.variant}`);
+        classes.push(`pf-btn--${this.variant}`);
       }
-      
+
       // Size
-      if (this.size === 'sm') classes.push('btn-sm');
-      if (this.size === 'lg') classes.push('btn-lg');
-      
+      if (this.size === 'sm') classes.push('pf-btn--sm');
+      if (this.size === 'lg') classes.push('pf-btn--lg');
+
       // Block
-      if (this.block) classes.push('btn-block', 'd-grid');
-      
+      if (this.block) classes.push('pf-btn--block');
+
       return classes.join(' ');
     }
   },
@@ -77,7 +77,7 @@ Vue.component('pf-button', {
       @click="handleClick"
       type="button"
     >
-      <span v-if="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+      <span v-if="loading" class="pf-spinner pf-spinner--sm me-2" role="status" aria-hidden="true"></span>
       <i v-else-if="icon && iconPosition === 'left'" :class="['fas', icon, 'me-2']"></i>
       <slot></slot>
       <i v-if="icon && iconPosition === 'right'" :class="['fas', icon, 'ms-2']"></i>

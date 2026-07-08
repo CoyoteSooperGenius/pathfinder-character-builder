@@ -26,7 +26,7 @@ Vue.component('selection-grid', {
     },
     columns: {
       type: String,
-      default: 'col-md-6 col-lg-4'
+      default: 'pf-grid--3'
     },
     itemKey: {
       type: String,
@@ -165,19 +165,17 @@ Vue.component('selection-grid', {
     },
     
     getCardClasses(item) {
-      const classes = ['card', 'h-100', 'selection-card'];
+      const classes = ['pf-card', 'pf-card--selectable', 'h-100', 'selection-card'];
       if (this.isSelected(item)) {
-        classes.push('border-primary', 'bg-light');
-      } else {
-        classes.push('border-light');
+        classes.push('pf-card--selected');
       }
       return classes.join(' ');
     },
-    
+
     getListItemClasses(item) {
-      const classes = ['list-group-item', 'list-group-item-action', 'selection-item'];
+      const classes = ['pf-list__item', 'pf-list__item--action', 'selection-item'];
       if (this.isSelected(item)) {
-        classes.push('active');
+        classes.push('pf-list__item--active');
       }
       return classes.join(' ');
     }
@@ -218,29 +216,27 @@ Vue.component('selection-grid', {
       
       <!-- Loading State -->
       <div v-if="loading" class="text-center py-5">
-        <div class="spinner-border text-primary" role="status">
+        <div class="pf-spinner" role="status">
           <span class="visually-hidden">{{ loadingMessage }}</span>
         </div>
         <div class="mt-2 text-muted">{{ loadingMessage }}</div>
       </div>
-      
+
       <!-- Empty State -->
       <div v-else-if="filteredItems.length === 0" class="text-center py-5">
         <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
         <p class="text-muted">{{ emptyMessage }}</p>
       </div>
-      
+
       <!-- Cards Display -->
-      <div v-else-if="displayMode === 'cards'" class="row g-3">
-        <div 
-          v-for="item in filteredItems" 
+      <div v-else-if="displayMode === 'cards'" :class="['pf-grid', columns]">
+        <div
+          v-for="item in filteredItems"
           :key="getItemKey(item)"
-          :class="columns"
         >
-          <div 
+          <div
             :class="getCardClasses(item)"
             @click="selectItem(item)"
-            style="cursor: pointer; transition: all 0.2s;"
           >
             <div v-if="imageProperty && getItemProperty(item, imageProperty)" class="card-img-top-wrapper">
               <img 
@@ -251,13 +247,13 @@ Vue.component('selection-grid', {
               >
             </div>
             
-            <div class="card-body">
-              <h5 class="card-title">
+            <div class="pf-card__body">
+              <h5 class="pf-card__title">
                 {{ getItemProperty(item, titleProperty) }}
                 <i v-if="isSelected(item)" class="fas fa-check-circle text-primary float-end"></i>
               </h5>
-              
-              <p v-if="getItemProperty(item, descriptionProperty)" class="card-text text-muted">
+
+              <p v-if="getItemProperty(item, descriptionProperty)" class="text-muted">
                 {{ getItemProperty(item, descriptionProperty) }}
               </p>
               
@@ -269,13 +265,12 @@ Vue.component('selection-grid', {
       </div>
       
       <!-- List Display -->
-      <div v-else-if="displayMode === 'list'" class="list-group">
+      <div v-else-if="displayMode === 'list'" class="pf-list">
         <div
           v-for="item in filteredItems"
           :key="getItemKey(item)"
           :class="getListItemClasses(item)"
           @click="selectItem(item)"
-          style="cursor: pointer;"
         >
           <div class="d-flex align-items-center">
             <div class="flex-grow-1">
@@ -288,7 +283,7 @@ Vue.component('selection-grid', {
               <slot name="list-content" :item="item"></slot>
             </div>
             <div>
-              <i v-if="isSelected(item)" class="fas fa-check text-white"></i>
+              <i v-if="isSelected(item)" class="fas fa-check"></i>
             </div>
           </div>
         </div>
@@ -296,7 +291,7 @@ Vue.component('selection-grid', {
       
       <!-- Table Display -->
       <div v-else-if="displayMode === 'table'" class="table-responsive">
-        <table class="table table-hover">
+        <table class="pf-table pf-table--hover">
           <thead>
             <tr>
               <th v-if="multiSelect" width="50">
@@ -308,12 +303,11 @@ Vue.component('selection-grid', {
             </tr>
           </thead>
           <tbody>
-            <tr 
+            <tr
               v-for="item in filteredItems"
               :key="getItemKey(item)"
               @click="selectItem(item)"
-              :class="{ 'table-primary': isSelected(item) }"
-              style="cursor: pointer;"
+              :class="{ 'pf-table__row--selected': isSelected(item) }"
             >
               <td v-if="multiSelect">
                 <input 

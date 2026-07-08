@@ -56,18 +56,15 @@ Vue.component('pf-card', {
   
   computed: {
     cardClasses() {
-      const classes = ['card'];
+      const classes = ['pf-card'];
       if (this.variant) {
-        classes.push(`border-${this.variant}`);
+        classes.push(`pf-card--${this.variant}`);
       }
       return classes.join(' ');
     },
-    
+
     headerClasses() {
-      const classes = ['card-header'];
-      if (this.variant) {
-        classes.push(`bg-${this.variant}`, `text-${this.variant === 'light' ? 'dark' : 'white'}`);
-      }
+      const classes = ['pf-card__header'];
       if (this.collapsible) {
         classes.push('cursor-pointer');
       }
@@ -76,9 +73,9 @@ Vue.component('pf-card', {
       }
       return classes.join(' ');
     },
-    
+
     bodyClasses() {
-      const classes = this.noPadding ? [] : ['card-body'];
+      const classes = this.noPadding ? [] : ['pf-card__body'];
       if (this.bodyClass) {
         classes.push(this.bodyClass);
       }
@@ -114,8 +111,8 @@ Vue.component('pf-card', {
         <slot name="header">
           <div class="d-flex justify-content-between align-items-center">
             <div>
-              <h5 v-if="title" class="card-title mb-0">{{ title }}</h5>
-              <h6 v-if="subtitle || $slots.subtitle" class="card-subtitle mb-0 text-muted">
+              <h5 v-if="title" class="pf-card__title">{{ title }}</h5>
+              <h6 v-if="subtitle || $slots.subtitle" class="pf-card__subtitle">
                 <slot name="subtitle">{{ subtitle }}</slot>
               </h6>
             </div>
@@ -133,17 +130,17 @@ Vue.component('pf-card', {
         :class="bodyClasses"
       >
         <div v-if="loading" class="text-center py-4">
-          <div class="spinner-border" role="status">
+          <div class="pf-spinner" role="status">
             <span class="visually-hidden">Loading...</span>
           </div>
         </div>
         <slot v-else></slot>
       </div>
-      
+
       <!-- Footer -->
-      <div 
-        v-if="hasFooter && !isCollapsed" 
-        class="card-footer"
+      <div
+        v-if="hasFooter && !isCollapsed"
+        class="pf-card__footer"
       >
         <slot name="footer"></slot>
       </div>
