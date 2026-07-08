@@ -121,6 +121,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .theme-toggle:hover { color: var(--color-accent); border-color: var(--color-accent); }
 
 /* ===== Landing hero ===== */
+.landing { max-width: 760px; margin-inline: auto; }
 .hero { text-align: center; padding: var(--space-5) 0 var(--space-4); }
 .hero__title {
   font-family: var(--font-display);
@@ -673,6 +674,7 @@ body.pf-modal-open { overflow: hidden; }
 /* Fixed-column grids for the summary's small tiles — these must not
    collapse at breakpoints the way the page-level pf-grid--N helpers do */
 .pf-grid--pairs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.pf-grid--trio { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .pf-grid--abilities { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 
 .stat-block {

@@ -121,18 +121,13 @@ Vue.component('simple-stepper', {
   },
   
   template: `
-    <div class="simple-stepper" style="
-      background: #f8f9fa;
-      border-radius: 8px;
-      padding: 1.5rem;
-      border: 1px solid #dee2e6;
-    ">
+    <div class="pf-stepper pf-stepper--rail">
       <!-- Progress Overview -->
-      <div class="stepper-progress mb-4">
-        <div class="progress mb-2" style="height: 8px;">
-          <div 
-            class="progress-bar bg-success" 
-            role="progressbar" 
+      <div class="mb-3">
+        <div class="pf-progress mb-2">
+          <div
+            class="pf-progress__bar pf-progress__bar--success"
+            role="progressbar"
             :style="{ width: progressPercentage + '%' }"
           ></div>
         </div>
@@ -141,102 +136,34 @@ Vue.component('simple-stepper', {
           <small class="text-muted">{{ progressPercentage }}%</small>
         </div>
       </div>
-      
+
       <!-- Steps List -->
-      <div class="stepper-steps" style="position: relative;">
-        <div 
-          v-for="step in steps" 
+      <div class="pf-stepper__steps">
+        <div
+          v-for="step in steps"
           :key="step.number"
           :class="[
-            'stepper-step', 
-            'stepper-step-' + getStepStatus(step.number),
-            { 'stepper-step-clickable': isStepAccessible(step.number) }
+            'pf-stepper__step',
+            'pf-stepper__step--' + getStepStatus(step.number),
+            { 'pf-stepper__step--clickable': isStepAccessible(step.number) }
           ]"
           @click="goToStep(step.number)"
-          style="position: relative; margin-bottom: 1.5rem;"
-          :style="{ marginBottom: step.number === 9 ? '0' : '1.5rem' }"
         >
-          <div 
-            class="stepper-step-inner"
-            :style="{
-              display: 'flex',
-              alignItems: 'center',
-              padding: '0.75rem',
-              borderRadius: '6px',
-              transition: 'all 0.2s ease',
-              background: getStepStatus(step.number) === 'current' ? 'rgba(13, 110, 253, 0.05)' :
-                         getStepStatus(step.number) === 'completed' ? 'rgba(25, 135, 84, 0.05)' :
-                         getStepStatus(step.number) === 'disabled' ? '#f8f9fa' : 'white',
-              border: '2px solid ' + 
-                      (getStepStatus(step.number) === 'current' ? '#0d6efd' :
-                       getStepStatus(step.number) === 'completed' ? '#198754' : 'transparent'),
-              boxShadow: getStepStatus(step.number) === 'current' ? '0 2px 8px rgba(13, 110, 253, 0.2)' : 'none',
-              cursor: isStepAccessible(step.number) ? 'pointer' : 'default',
-              opacity: getStepStatus(step.number) === 'disabled' ? '0.5' : '1'
-            }"
-          >
-            <!-- Step Number/Icon -->
-            <div 
-              class="stepper-step-icon"
-              :style="{
-                width: '40px',
-                height: '40px',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontWeight: '600',
-                flexShrink: '0',
-                marginRight: '1rem',
-                background: getStepStatus(step.number) === 'current' ? '#0d6efd' :
-                           getStepStatus(step.number) === 'completed' ? '#198754' : '#e9ecef',
-                color: (getStepStatus(step.number) === 'current' || getStepStatus(step.number) === 'completed') ? 'white' : '#6c757d',
-                border: (getStepStatus(step.number) === 'accessible' || getStepStatus(step.number) === 'disabled') ? '2px solid #dee2e6' : 'none'
-              }"
-            >
-              <i v-if="isStepComplete(step.number)" class="fas fa-check"></i>
-              <i v-else-if="step.number === currentStep" :class="['fas', step.icon]"></i>
-              <span v-else style="font-size: 0.9rem; font-weight: 600;">{{ step.number }}</span>
-            </div>
-            
-            <!-- Step Content -->
-            <div class="stepper-step-content" style="flex-grow: 1;">
-              <div 
-                class="stepper-step-name"
-                :style="{
-                  fontWeight: '600',
-                  fontSize: '0.95rem',
-                  marginBottom: '0.25rem',
-                  color: getStepStatus(step.number) === 'current' ? '#0d6efd' :
-                         getStepStatus(step.number) === 'completed' ? '#198754' : '#212529'
-                }"
-              >
-                {{ step.name }}
-              </div>
-              <div 
-                class="stepper-step-description d-none d-md-block"
-                style="font-size: 0.8rem; color: #6c757d; line-height: 1.2;"
-              >
-                {{ step.description }}
-              </div>
-            </div>
+          <div class="pf-stepper__icon">
+            <i v-if="isStepComplete(step.number)" class="fas fa-check"></i>
+            <i v-else-if="step.number === currentStep" :class="['fas', step.icon]"></i>
+            <span v-else>{{ step.number }}</span>
           </div>
-          
-          <!-- Connector Line -->
-          <div 
-            v-if="step.number < 8" 
-            class="stepper-step-connector"
-            :style="{
-              position: 'absolute',
-              left: '1.5rem',
-              top: 'calc(100% - 1.5rem)',
-              width: '2px',
-              height: '1.5rem',
-              background: isStepComplete(step.number) ? '#198754' : '#dee2e6',
-              transform: 'translateX(-50%)'
-            }"
-          ></div>
+          <div>
+            <div class="pf-stepper__name">{{ step.name }}</div>
+            <div class="pf-stepper__desc">{{ step.description }}</div>
+          </div>
         </div>
+      </div>
+
+      <!-- Current step callout, shown only in the horizontal mobile mode -->
+      <div class="pf-stepper__current-label">
+        Step {{ currentStep }} of 8 — {{ steps[currentStep - 1].name }}
       </div>
     </div>
   `

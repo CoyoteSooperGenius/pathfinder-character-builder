@@ -45,6 +45,14 @@ Vue.component('character-wizard', {
 
     canFinish() {
       return this.currentStep === 8 && this.isStepComplete(8);
+    },
+
+    completedStepsCount() {
+      let count = 0;
+      for (let step = 1; step <= 8; step++) {
+        if (this.isStepComplete(step)) count++;
+      }
+      return count;
     }
   },
 
@@ -164,24 +172,36 @@ Vue.component('character-wizard', {
   },
 
   template: `
-    <div class="character-wizard">
-      <!-- Main Layout: Stepper + Content -->
-      <div class="row">
-        <!-- Left Sidebar: Stepper Navigation -->
-        <div class="col-lg-3 col-md-4">
-          <div class="character-creation-stepper sticky-top">
-            <simple-stepper 
-              :current-step="currentStep"
-              :character="character"
-              :is-step-complete="isStepComplete"
-              @step-changed="goToStep"
-            ></simple-stepper>
-          </div>
-        </div>
+    <div class="character-wizard pf-wizard">
+      <!-- Left Rail: Stepper Navigation -->
+      <div class="pf-wizard__stepper">
+        <simple-stepper
+          :current-step="currentStep"
+          :character="character"
+          :is-step-complete="isStepComplete"
+          @step-changed="goToStep"
+        ></simple-stepper>
+      </div>
 
-        <!-- Main Content Area -->
-        <div class="col-lg-9 col-md-8">
-          <div class="character-creation-content">
+      <!-- Main Content Column -->
+      <div class="pf-wizard__content">
+        <!-- Collapsible summary drawer (shown below the xl breakpoint) -->
+        <details class="pf-summary-drawer">
+          <summary>
+            <span>Character Summary</span>
+            <small class="text-muted me-2">{{ completedStepsCount }}/8 steps</small>
+          </summary>
+          <div class="pf-summary-drawer__body">
+            <character-summary
+              :character="character"
+              :current-step="currentStep"
+              :is-step-complete="isStepComplete"
+              compact
+            ></character-summary>
+          </div>
+        </details>
+
+        <div class="character-creation-content">
             <!-- Step 1: Ability Scores -->
             <ability-scores-step
               v-if="currentStep === 1"
@@ -238,32 +258,40 @@ Vue.component('character-wizard', {
               :character="character"
               @details-changed="handleDetailsChanged"
             ></character-details-step>
-          </div>
+        </div>
 
-          <!-- Navigation Buttons -->
-          <div class="d-flex justify-content-between mt-4 pt-3 border-top">
-            <pf-button 
-              variant="secondary" 
-              outline
-              icon="fa-arrow-left"
-              :disabled="!canGoPrevious"
-              @click="previousStep"
-            >
-              Previous
-            </pf-button>
-            
-            <pf-button 
-              variant="primary" 
-              :icon="currentStep === 8 ? 'fa-check' : 'fa-arrow-right'"
-              :icon-position="currentStep === 8 ? 'left' : 'right'"
-              :disabled="currentStep < 8 && !canGoNext"
-              @click="nextStep"
-            >
-              {{ currentStep === 8 ? 'Complete Character' : 'Next' }}
-            </pf-button>
-          </div>
+        <!-- Sticky Navigation Footer -->
+        <div class="pf-wizard__footer">
+          <pf-button
+            variant="secondary"
+            outline
+            icon="fa-arrow-left"
+            :disabled="!canGoPrevious"
+            @click="previousStep"
+          >
+            Previous
+          </pf-button>
+
+          <pf-button
+            variant="primary"
+            :icon="currentStep === 8 ? 'fa-check' : 'fa-arrow-right'"
+            :icon-position="currentStep === 8 ? 'left' : 'right'"
+            :disabled="currentStep < 8 && !canGoNext"
+            @click="nextStep"
+          >
+            {{ currentStep === 8 ? 'Complete Character' : 'Next' }}
+          </pf-button>
         </div>
       </div>
+
+      <!-- Right Rail: Live Character Summary (xl and up) -->
+      <aside class="pf-wizard__summary">
+        <character-summary
+          :character="character"
+          :current-step="currentStep"
+          :is-step-complete="isStepComplete"
+        ></character-summary>
+      </aside>
     </div>
   `
 });
