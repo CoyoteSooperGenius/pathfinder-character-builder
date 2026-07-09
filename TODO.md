@@ -9,7 +9,8 @@
 
 ## Known Bugs (from 2026-07-07 code review — fix each with a clean context)
 
-### KB-1. Load Character view reads fields the data layer never returns
+### KB-1. ~~Load Character view reads fields the data layer never returns~~ FIXED 2026-07-08
+**Resolution**: Option 1 — `loadSavedCharacters` now returns a flat display wrapper (`storageKey`, `name`, flattened `race`/`characterClass` via `GameUtils.flattenEntityName`, `level`, `hitPoints`/`armorClass` as raw numbers or null, `concept`, `lastModified`); consumers re-load the full character by `storageKey`. `saveCharacter` stamps `lastModified` (also declared in `character-schema.json`); template reads aligned (`??` so HP/AC 0 displays as 0). Covered by `tests/unit/data-utils.test.js`.
 **Where**: `index.html` load-character view (~line 156) vs `DataUtils.loadSavedCharacters` (`js/utilities/data-utils.js` ~line 154).
 **Symptom**: Saved-character cards always show Race/Class "Unknown", HP/AC "—", date "Unknown"; View and Edit buttons silently do nothing; Delete removes a literal `"undefined"` localStorage key.
 **Cause**: `loadSavedCharacters` returns items shaped `{ key, character, name, race: string, characterClass: string }`, but the template reads `character.storageKey` (should be `character.key`), `character.race?.name` (race is already a flattened string), `character.hitPoints?.current`, `character.armorClass?.total`, `character.level`, `character.concept`, and `character.lastModified` — none of which exist on the wrapper.

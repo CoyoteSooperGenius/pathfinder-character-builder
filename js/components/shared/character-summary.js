@@ -47,13 +47,11 @@ Vue.component('character-summary', {
     },
 
     raceName() {
-      if (!this.character.race) return 'No race selected';
-      return typeof this.character.race === 'string' ? this.character.race : this.character.race.name;
+      return GameUtils.flattenEntityName(this.character.race, 'No race selected');
     },
 
     className() {
-      if (!this.character.characterClass) return 'No class selected';
-      return typeof this.character.characterClass === 'string' ? this.character.characterClass : this.character.characterClass.name;
+      return GameUtils.flattenEntityName(this.character.characterClass, 'No class selected');
     },
 
     characterLevel() {

@@ -159,26 +159,26 @@
                 <div class="pf-grid pf-grid--pairs text-center mb-3">
                   <div>
                     <small class="text-muted d-block">Race</small>
-                    <strong>{{ character.race?.name || 'Unknown' }}</strong>
+                    <strong>{{ character.race }}</strong>
                   </div>
                   <div>
                     <small class="text-muted d-block">Class</small>
-                    <strong>{{ character.characterClass?.name || 'Unknown' }}</strong>
+                    <strong>{{ character.characterClass }}</strong>
                   </div>
                 </div>
 
                 <div class="pf-grid pf-grid--trio text-center mb-3">
                   <div>
                     <small class="text-muted d-block">Level</small>
-                    <strong>{{ character.level || 1 }}</strong>
+                    <strong>{{ character.level }}</strong>
                   </div>
                   <div>
                     <small class="text-muted d-block">HP</small>
-                    <strong>{{ character.hitPoints?.current || '—' }}</strong>
+                    <strong>{{ character.hitPoints ?? '—' }}</strong>
                   </div>
                   <div>
                     <small class="text-muted d-block">AC</small>
-                    <strong>{{ character.armorClass?.total || '—' }}</strong>
+                    <strong>{{ character.armorClass ?? '—' }}</strong>
                   </div>
                 </div>
 

@@ -1,23 +1,13 @@
 // Jest setup file for unit tests
 
-// Mock global objects that our services might need
-global.window = {};
-global.localStorage = {
-  store: {},
-  getItem: jest.fn((key) => global.localStorage.store[key] || null),
-  setItem: jest.fn((key, value) => {
-    global.localStorage.store[key] = value;
-  }),
-  removeItem: jest.fn((key) => {
-    delete global.localStorage.store[key];
-  }),
-  clear: jest.fn(() => {
-    global.localStorage.store = {};
-  })
-};
+// In the browser GameUtils is a global loaded before data-utils.js; mirror that
+// for modules (like DataUtils) that reference it as a bare identifier.
+global.GameUtils = require('../../js/utilities/game-utils.js');
 
-// Reset localStorage before each test
+// jsdom provides a fully functional localStorage (getItem/setItem/removeItem/
+// clear/key/length); a plain-object mock can't replace it because jsdom defines
+// window.localStorage as a non-configurable accessor. Just reset it between tests.
 beforeEach(() => {
-  global.localStorage.store = {};
+  localStorage.clear();
   jest.clearAllMocks();
 });

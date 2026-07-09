@@ -36,6 +36,7 @@
     "background": "",
     "level": 1,
     "experiencePoints": 0,
+    "lastModified": null,
     "armorClass": 10,
     "initiative": 0,
     "baseAttackBonus": 0,
