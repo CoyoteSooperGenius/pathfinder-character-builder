@@ -96,6 +96,7 @@ const DataUtils = {
   saveCharacter(character, generateCharacterStorageKey, setError, loadSavedCharacters) {
     try {
       const characterName = generateCharacterStorageKey(character.name.first, character.name.last);
+      character.lastModified = new Date().toISOString();
       localStorage.setItem(characterName, JSON.stringify(character));
       // Remove current-character since it's now saved permanently
       localStorage.removeItem('current-character');
@@ -148,6 +149,11 @@ const DataUtils = {
 
   /**
    * Load all saved characters from localStorage
+   * Each entry is a display-ready wrapper: { storageKey, name, race,
+   * characterClass, level, hitPoints, armorClass, concept, lastModified }
+   * with race/characterClass flattened to strings and hitPoints/armorClass
+   * null when absent (0 is a legitimate value). Load the full character on
+   * demand via loadCharacter(storageKey).
    * @param {Function} setSavedCharacters - Callback to set saved characters array
    * @param {Function} setError - Error callback function
    */
@@ -169,11 +175,15 @@ const DataUtils = {
             continue;
           }
           savedCharacters.push({
-            key: key,
-            character: character,
-            name: `${character.name.first} ${character.name.last}`.trim(),
-            race: character.race ? character.race.name || character.race : 'Unknown',
-            characterClass: character.characterClass ? character.characterClass.name || character.characterClass : 'Unknown'
+            storageKey: key,
+            name: GameUtils.getCharacterFullName(character.name),
+            race: GameUtils.flattenEntityName(character.race),
+            characterClass: GameUtils.flattenEntityName(character.characterClass),
+            level: character.level || 1,
+            hitPoints: character.hitPoints ?? null,
+            armorClass: character.armorClass ?? null,
+            concept: character.concept || '',
+            lastModified: character.lastModified || null
           });
         }
       }
@@ -316,7 +326,7 @@ const DataUtils = {
               stats.storageUsed += item.length;
               stats.characters.push({
                 key: key,
-                name: `${character.name.first} ${character.name.last}`.trim(),
+                name: GameUtils.getCharacterFullName(character.name),
                 size: item.length
               });
             }

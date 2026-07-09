@@ -22,6 +22,14 @@ const GameUtils = {
     return `${first} ${last}`.trim();
   },
 
+  // Flatten a race/class value that may be stored as a string or as an
+  // object with a name (legacy/imported data may lack the name)
+  flattenEntityName(entity, fallback = 'Unknown') {
+    if (!entity) return fallback;
+    if (typeof entity === 'string') return entity;
+    return entity.name || fallback;
+  },
+
   // Combat Statistics Calculations
   calculateArmorClass(character) {
     // Base AC = 10 + armor bonus + shield bonus + DEX modifier + size modifier + natural armor + deflection + misc
