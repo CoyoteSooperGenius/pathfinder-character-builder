@@ -3,164 +3,626 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pathfinder Character Generator</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="css/sandstone.css">
-    <link rel="stylesheet" href="css/utilities.css">
-  </head> 
-  <body>
-    <div id="app" class="container-fluid py-4">
-      <!-- Dev Tools -->
-      <div class="mb-3 text-end">
-        <button 
-          @click="resetLocalStorage" 
-          class="btn btn-outline-danger btn-sm"
-          title="Clear all saved character data"
-        >
-          <i class="fas fa-trash"></i> Reset Data
-        </button>
-      </div>
-      
-      <main-page 
-        v-if="showMainPage" 
-        @create-character="showStepperComponent"
-        class="mb-4">
-      </main-page>
-      <div v-if="showStepper" class="row justify-content-center">
-        <div class="col-md-6 mb-3">
-          <stepper 
-            class="stepper-panel card p-3"
-            @finished="onStepperFinished"
-            @ability-scores-saved="onAbilityScoresSaved"
-            @race-data-saved="onRaceDataSaved"
-            @class-data-saved="onClassDataSaved"
-            @step-changed="onStepChanged"
-            ref="stepper"
-          ></stepper>
-        </div>
-        <div class="col-md-6 mb-3">
-          <character-sheet-hybrid 
-            class="card p-3"
-            :character="currentCharacter"
-            :current-step="currentStep"
-            ref="characterSheet"
-          ></character-sheet-hybrid>
-        </div>
-      </div>
-    </div>
-
-    <script src="js/vue.js"></script>
-    <script src="js/services/character-data-service.js"></script>
-    <script src="js/services/character-display-service.js"></script>
-    <script src="js/services/character-progress-service.js"></script>
-    <script src="js/services/ability-calculator.js"></script>
-    <script src="js/services/prerequisite-checker.js"></script>
-    <script src="js/services/language-data.js"></script>
-    <script src="js/components/ui/collapsible-card.js"></script>
-    <script src="js/components/ui/selection-grid.js"></script>
-    <script src="js/components/ui/checkbox-group.js"></script>
-    <script src="js/components/ui/progress-indicator.js"></script>
-    <script src="js/components/ui/feat-selector.js"></script>
-    <script src="js/components/ui/spell-selector.js"></script>
-    <script src="js/components/ui/ability-score-adjuster.js"></script>
-    <script src="js/components/ui/prerequisite-display.js"></script>
-    <script src="js/components/ui/info-panel.js"></script>
-    <script src="js/components/ui/stat-block.js"></script>
-    <script src="js/components/ui/tag-list.js"></script>
-    <script src="js/components/main-page.js"></script>
-    <script src="js/components/stepper/stepper.js"></script>
-    <script src="js/components/stepper/step-ability-scores.js"></script>
-    <script src="js/components/stepper/ability-scores/point-buy-method.js"></script>
-    <script src="js/components/stepper/ability-scores/standard-array-method.js"></script>
-    <script src="js/components/stepper/ability-scores/roll-dice-method.js"></script>
-    <script src="js/components/stepper/step-details.js"></script>
-    <script src="js/components/stepper/class/fighter-bonus-feat.js"></script>
-    <script src="js/components/stepper/class/wizard-options.js"></script>
-    <script src="js/components/stepper/class/bard-options.js"></script>
-    <script src="js/components/stepper/class/ranger-options.js"></script>
-    <script src="js/components/stepper/class/class-selector.js"></script>
-    <script src="js/components/stepper/class/class-details-display.js"></script>
-    <script src="js/components/stepper/class/first-level-options.js"></script>
-    <script src="js/components/stepper/class/class-step-coordinator.js"></script>
-    <script src="js/components/stepper/step-race.js"></script>
-    <script src="js/components/stepper/race/available-races-card.js"></script>
-    <script src="js/components/stepper/race/ability-adjustments-card.js"></script>
-    <script src="js/components/stepper/race/favored-class-card.js"></script>
-    <script src="js/components/stepper/race/automatic-languages.js"></script>
-    <script src="js/components/stepper/race/bonus-languages.js"></script>
-    <script src="js/components/stepper/race/language-summary.js"></script>
-    <script src="js/components/stepper/race/language-selector.js"></script>
-    <script src="js/components/stepper/race/racial-traits-card.js"></script>
-    <script src="js/components/stepper/race/human-bonus-feat.js"></script>
-    <script src="js/components/stepper/step-skills.js"></script>
-    <script src="js/components/stepper/step-feats.js"></script>
-    <script src="js/components/stepper/step-equipment.js"></script>
-    <script src="js/components/character-sheet/character-summary-header.js"></script>
-    <script src="js/components/character-sheet/tab-navigation.js"></script>
-    <script src="js/components/character-sheet/character-summary-tab.js"></script>
-    <script src="js/components/character-sheet/abilities-display-tab.js"></script>
-    <script src="js/components/character-sheet/background-display-tab.js"></script>
-    <script src="js/components/character-sheet/combat-display-tab.js"></script>
-    <script src="js/components/character-sheet/class-features-display.js"></script>
-    <script src="js/components/character-sheet/feats-display.js"></script>
-    <script src="js/components/character-sheet/skills-display.js"></script>
-    <script src="js/components/character-sheet/features-display-tab.js"></script>
-    <script src="js/components/character-sheet/character-sheet-hybrid.js"></script>
     <script>
-    new Vue({
-      el: '#app',
-      data: {
-        showMainPage: true,
-        showStepper: false,
-        currentCharacter: {},
-        currentStep: 0
-      },
-      methods: {
-        showStepperComponent() {
-          this.showMainPage = false;
-          this.showStepper = true;
-          this.currentCharacter = {}; // Reset for new character
-          this.currentStep = 0; // Reset step
-        },
-        onStepChanged(stepNumber) {
-          this.currentStep = stepNumber;
-          // Update character sheet when step changes
-          if (this.$refs.characterSheet) {
-            this.$refs.characterSheet.updateFromLocalStorage();
+      // Stamp the theme on <html> before stylesheets load to avoid a flash
+      // of the wrong theme. Stored preference wins, otherwise follow the OS.
+      (function () {
+        var theme = localStorage.getItem('pf-theme');
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/utilities.css">
+  </head>
+  <body>
+    <div id="app">
+      <!-- App Header -->
+      <header class="app-header">
+        <div class="app-header__brand" @click="showLanding">
+          <i class="fas fa-scroll"></i>
+          <span class="app-header__title">Pathfinder Character Generator</span>
+        </div>
+        <div class="app-header__actions">
+          <pf-button
+            v-if="currentView !== 'landing'"
+            variant="secondary"
+            outline
+            size="sm"
+            icon="fa-home"
+            @click="showLanding"
+          >
+            Home
+          </pf-button>
+          <button
+            class="theme-toggle"
+            :aria-label="theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'"
+            @click="toggleTheme"
+          >
+            <i :class="theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon'"></i>
+          </button>
+        </div>
+      </header>
+
+      <main class="pf-container">
+      <!-- Error Alert -->
+      <pf-alert
+        v-if="error"
+        variant="danger"
+        :dismissible="true"
+        @dismiss="clearError"
+      >
+        {{ error }}
+      </pf-alert>
+
+      <!-- Loading State -->
+      <div v-if="loading" class="text-center py-5">
+        <div class="pf-spinner pf-spinner--lg text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-3 text-muted">Loading game data...</p>
+      </div>
+
+      <!-- Landing Page -->
+      <div v-else-if="currentView === 'landing'" class="landing">
+        <div class="hero">
+          <h1 class="hero__title">
+            <i class="fas fa-scroll me-3"></i>
+            Pathfinder Character Generator
+          </h1>
+          <hr class="hero__rule">
+          <p class="lead text-muted">
+            Create and manage your Pathfinder 1st Edition characters with ease
+          </p>
+          <p class="text-muted">
+            Build 1st level characters using the core rulebook races, classes, and features.
+            Generate ability scores, select feats, manage equipment, and create complete character sheets.
+          </p>
+        </div>
+
+        <div class="pf-grid pf-grid--2 gap-4">
+          <pf-card title="Create New Character" class="h-100 pf-card--primary">
+            <template #default>
+              <p>
+                Start the character creation wizard to build a new 1st level Pathfinder character.
+              </p>
+            </template>
+            <template #footer>
+              <pf-button
+                variant="primary"
+                icon="fa-plus"
+                block
+                @click="startCharacterCreation"
+              >
+                Create Character
+              </pf-button>
+            </template>
+          </pf-card>
+
+          <pf-card title="Load Character" class="h-100 pf-card--secondary">
+            <template #default>
+              <p>
+                Load and edit previously saved characters from your browser storage.
+              </p>
+              <small class="text-muted">
+                {{ savedCharacters.length }} saved character{{ savedCharacters.length !== 1 ? 's' : '' }}
+              </small>
+            </template>
+            <template #footer>
+              <pf-button
+                variant="secondary"
+                icon="fa-folder-open"
+                block
+                :disabled="savedCharacters.length === 0"
+                @click="showLoadCharacter"
+              >
+                Load Character
+              </pf-button>
+            </template>
+          </pf-card>
+        </div>
+
+        <div class="text-center mt-5">
+          <small class="text-muted">
+            Built for Pathfinder 1st Edition Core Rulebook
+          </small>
+        </div>
+      </div>
+
+      <!-- Load Character View -->
+      <div v-else-if="currentView === 'load-character'">
+        <h2 class="mb-4">
+          <i class="fas fa-folder-open me-2"></i>
+          Load Character
+        </h2>
+
+        <div v-if="savedCharacters.length === 0" class="text-center py-5">
+          <i class="fas fa-user-slash text-muted" style="font-size: 4rem;"></i>
+          <h4 class="mt-3 text-muted">No Saved Characters</h4>
+          <p class="text-muted">You haven't created any characters yet.</p>
+          <pf-button variant="primary" icon="fa-plus" @click="startCharacterCreation">
+            Create Your First Character
+          </pf-button>
+        </div>
+
+        <div v-else class="pf-grid pf-grid--3 gap-4">
+          <pf-card v-for="character in savedCharacters" :key="character.storageKey" :title="character.name" class="h-100">
+            <template #default>
+              <div class="character-preview">
+                <div class="pf-grid pf-grid--pairs text-center mb-3">
+                  <div>
+                    <small class="text-muted d-block">Race</small>
+                    <strong>{{ character.race }}</strong>
+                  </div>
+                  <div>
+                    <small class="text-muted d-block">Class</small>
+                    <strong>{{ character.characterClass }}</strong>
+                  </div>
+                </div>
+
+                <div class="pf-grid pf-grid--trio text-center mb-3">
+                  <div>
+                    <small class="text-muted d-block">Level</small>
+                    <strong>{{ character.level }}</strong>
+                  </div>
+                  <div>
+                    <small class="text-muted d-block">HP</small>
+                    <strong>{{ character.hitPoints ?? '—' }}</strong>
+                  </div>
+                  <div>
+                    <small class="text-muted d-block">AC</small>
+                    <strong>{{ character.armorClass ?? '—' }}</strong>
+                  </div>
+                </div>
+
+                <div v-if="character.concept" class="mb-3">
+                  <small class="text-muted d-block">Concept</small>
+                  <p class="small mb-0">{{ character.concept }}</p>
+                </div>
+
+                <div class="text-muted small">
+                  <i class="fas fa-clock me-1"></i>
+                  Last modified: {{ formatDate(character.lastModified) }}
+                </div>
+              </div>
+            </template>
+            <template #footer>
+              <div class="pf-btn-group w-100" role="group">
+                <pf-button
+                  variant="primary"
+                  @click="loadCharacterAndView(character.storageKey)"
+                  class="flex-fill"
+                >
+                  <i class="fas fa-eye me-1"></i>
+                  View
+                </pf-button>
+                <pf-button
+                  variant="warning"
+                  @click="loadCharacterAndEdit(character.storageKey)"
+                  class="flex-fill"
+                >
+                  <i class="fas fa-edit me-1"></i>
+                  Edit
+                </pf-button>
+                <pf-button
+                  variant="danger"
+                  @click="confirmDeleteCharacter(character.storageKey, character.name)"
+                  class="flex-fill"
+                >
+                  <i class="fas fa-trash me-1"></i>
+                  Delete
+                </pf-button>
+              </div>
+            </template>
+          </pf-card>
+        </div>
+      </div>
+
+      <!-- Character Creation View -->
+      <div v-else-if="currentView === 'create-character'">
+        <!-- Character Creation Wizard -->
+        <character-wizard
+          :character="currentCharacter"
+          @step-changed="onStepChanged"
+          @character-updated="updateCalculatedValues"
+          @character-complete="completeCharacterCreation"
+        ></character-wizard>
+      </div>
+
+      <!-- Character Sheet View -->
+      <div v-else-if="currentView === 'character-sheet'">
+        <!-- Character sheet display will go here -->
+        <div class="text-center py-5">
+          <h2>Character Sheet</h2>
+          <p class="text-muted">Character sheet display coming soon...</p>
+          <pf-button variant="secondary" @click="showLanding">Back to Home</pf-button>
+        </div>
+      </div>
+      </main>
+    </div>
+    <script src="js/vue.js"></script>
+    <script src="js/utilities/game-utils.js"></script>
+    <script src="js/utilities/data-utils.js"></script>
+    
+    <!-- Shared Components -->
+    <script src="js/components/shared/pf-button.js"></script>
+    <script src="js/components/shared/pf-card.js"></script>
+    <script src="js/components/shared/pf-modal.js"></script>
+    <script src="js/components/shared/pf-alert.js"></script>
+    <script src="js/components/shared/selection-grid.js"></script>
+    <script src="js/components/shared/character-summary.js"></script>
+    
+    <!-- Character Creation Step Components -->
+    <script src="js/components/stepper/simple-stepper.js"></script>
+    <script src="js/components/stepper/ability-scores/generation-method-selector.js"></script>
+    <script src="js/components/stepper/ability-scores/point-buy-method.js"></script>
+    <script src="js/components/stepper/ability-scores/assignment-method.js"></script>
+    <script src="js/components/stepper/ability-scores/manual-entry-method.js"></script>
+    <script src="js/components/stepper/ability-scores/ability-score-generator.js"></script>
+    <script src="js/components/stepper/ability-scores/ability-scores.js"></script>
+    <script src="js/components/stepper/race-selection.js"></script>
+    <script src="js/components/stepper/class-selection.js"></script>
+    <script src="js/components/stepper/skills.js"></script>
+    <script src="js/components/stepper/feats.js"></script>
+    <script src="js/components/stepper/equipment.js"></script>
+    <script src="js/components/stepper/spells.js"></script>
+    <script src="js/components/stepper/character-details.js"></script>
+    <script src="js/components/stepper/character-wizard.js"></script>
+    
+    <script>
+new Vue({
+  el: '#app',
+  data: {
+    // Application state
+    currentView: 'landing', // 'landing', 'create-character', 'character-sheet', 'load-character'
+    currentStep: 1, // Current step in character creation (1-9)
+    theme: document.documentElement.getAttribute('data-theme') || 'light',
+    
+    // Character data structure (will be loaded from schema)
+    currentCharacter: {},
+    
+    // Game data (will be loaded from JSON files)
+    gameData: {
+      races: [],
+      classes: [],
+      feats: [],
+      spells: [],
+      skills: [],
+      equipment: [],
+      characterSchema: null
+    },
+    
+    // Saved characters list
+    savedCharacters: [],
+    
+    // UI state
+    loading: false,
+    error: null
+  },
+  
+  computed: {
+    // Calculate ability score modifiers using game utils
+    abilityModifiers() {
+      if (!this.currentCharacter.abilityScores) return {};
+      return GameUtils.calculateAbilityModifiers(this.currentCharacter.abilityScores);
+    },
+    
+    // Get character's full name using game utils
+    characterFullName() {
+      return GameUtils.getCharacterFullName(this.currentCharacter.name);
+    },
+    
+    // Check if character creation step is complete
+    isStepComplete() {
+      return (step) => {
+        switch (step) {
+          case 1: return this.isAbilityScoresComplete();
+          case 2: return this.isConceptComplete();
+          case 3: return this.isRaceComplete();
+          case 4: return this.isClassComplete();
+          case 5: return this.isSkillsComplete();
+          case 6: return this.isFeatsComplete();
+          case 7: return this.isEquipmentComplete();
+          case 8: return this.isSpellsComplete();
+          case 9: return this.isDetailsComplete();
+          default: return false;
+        }
+      };
+    }
+  },
+  
+  methods: {
+    // Application navigation
+    showLanding() {
+      this.currentView = 'landing';
+      this.currentStep = 1;
+    },
+
+    toggleTheme() {
+      this.theme = this.theme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', this.theme);
+      localStorage.setItem('pf-theme', this.theme);
+    },
+
+    startCharacterCreation() {
+      this.currentView = 'create-character';
+      this.currentStep = 1;
+      this.resetCurrentCharacter();
+      this.saveCurrentCharacterToLocalStorage();
+    },
+
+    showCharacterSheet(character = null) {
+      if (character) {
+        this.currentCharacter = JSON.parse(JSON.stringify(character));
+      }
+      this.currentView = 'character-sheet';
+    },
+
+    showLoadCharacter() {
+      this.currentView = 'load-character';
+      this.loadSavedCharacters();
+    },
+
+    // Character creation navigation
+    nextStep() {
+      if (this.currentStep < 9) {
+        this.currentStep++;
+        this.saveCurrentCharacterToLocalStorage();
+      } else {
+        this.completeCharacterCreation();
+      }
+    },
+
+    previousStep() {
+      if (this.currentStep > 1) {
+        this.currentStep--;
+      }
+    },
+
+    goToStep(step) {
+      if (step >= 1 && step <= 9) {
+        this.currentStep = step;
+      }
+    },
+
+    // Character data management
+    resetCurrentCharacter() {
+      this.currentCharacter = this.createDefaultCharacter();
+    },
+
+    createDefaultCharacter() {
+      if (this.gameData.characterSchema) {
+        return JSON.parse(JSON.stringify(this.gameData.characterSchema.defaultCharacter));
+      } else {
+        console.error('Character schema not loaded - cannot create default character');
+        return {};
+      }
+    },
+
+    updateCalculatedValues() {
+      if (this.currentCharacter && Object.keys(this.currentCharacter).length > 0) {
+        GameUtils.updateCalculatedValues(this.currentCharacter);
+        this.saveCurrentCharacterToLocalStorage();
+      }
+    },
+
+    // localStorage operations
+    saveCurrentCharacterToLocalStorage() {
+      DataUtils.saveCurrentCharacterToLocalStorage(this.currentCharacter, (msg) => { this.error = msg; });
+    },
+
+    loadCurrentCharacterFromLocalStorage() {
+      this.currentCharacter = DataUtils.loadCurrentCharacterFromLocalStorage(
+        this.createDefaultCharacter,
+        (msg) => { this.error = msg; }
+      );
+    },
+
+    saveCharacter(character) {
+      return DataUtils.saveCharacter(
+        character,
+        DataUtils.generateCharacterStorageKey,
+        (msg) => { this.error = msg; },
+        this.loadSavedCharacters
+      );
+    },
+
+    loadCharacter(characterKey) {
+      return DataUtils.loadCharacter(
+        characterKey,
+        (msg) => { this.error = msg; }
+      );
+    },
+
+    deleteCharacter(characterKey) {
+      return DataUtils.deleteCharacter(
+        characterKey,
+        this.loadSavedCharacters,
+        (msg) => { this.error = msg; }
+      );
+    },
+
+    loadSavedCharacters() {
+      DataUtils.loadSavedCharacters(
+        (characters) => { this.savedCharacters = characters; },
+        (msg) => { this.error = msg; }
+      );
+    },
+
+    // Character creation completion validation
+    isAbilityScoresComplete() {
+      if (!this.currentCharacter.abilityScores) return false;
+      return Object.values(this.currentCharacter.abilityScores).every(score => GameUtils.isValidAbilityScore(score));
+    },
+
+    isConceptComplete() {
+      return this.currentCharacter.concept.trim().length > 0;
+    },
+
+    isRaceComplete() {
+      return this.currentCharacter.race !== null;
+    },
+
+    isClassComplete() {
+      return this.currentCharacter.characterClass !== null;
+    },
+
+    isSkillsComplete() {
+      return true; // Can be completed with 0 skills allocated
+    },
+
+    isFeatsComplete() {
+      return true; // Can be completed with 0 feats selected
+    },
+
+    isEquipmentComplete() {
+      return true; // Can be completed with starting equipment
+    },
+
+    isSpellsComplete() {
+      return true; // Not all classes have spells
+    },
+
+    isDetailsComplete() {
+      return this.currentCharacter.name.first.trim().length > 0 && 
+             this.currentCharacter.name.last.trim().length > 0;
+    },
+
+    completeCharacterCreation() {
+      this.updateCalculatedValues();
+      const validation = GameUtils.validateCharacterData(this.currentCharacter);
+      if (!validation.isValid) {
+        this.error = `Character validation failed: ${validation.errors.join(', ')}`;
+        return;
+      }
+
+      if (this.isDetailsComplete()) {
+        if (this.saveCharacter(this.currentCharacter)) {
+          this.showCharacterSheet(this.currentCharacter);
+        }
+      } else {
+        this.error = 'Please complete all required character details.';
+      }
+    },
+
+    // Game data loading
+    async loadGameData() {
+      this.loading = true;
+      try {
+        // Load character schema first
+        try {
+          const schemaResponse = await fetch('data/character-schema.json');
+          if (schemaResponse.ok) {
+            this.gameData.characterSchema = await schemaResponse.json();
+            // Initialize current character with default schema
+            this.currentCharacter = this.resetCurrentCharacter();
           }
-        },
-        updateCharacter(character) {
-          this.currentCharacter = character;
-        },
-        onStepperFinished() {
-          this.showStepper = false;
-          this.showMainPage = true;
-        },
-        onAbilityScoresSaved() {
-          // Call the character sheet's update method
-          if (this.$refs.characterSheet) {
-            this.$refs.characterSheet.updateFromLocalStorage();
-          }
-        },
-        resetLocalStorage() {
-          if (confirm('This will clear all saved character data. Are you sure?')) {
-            localStorage.clear();
-            location.reload();
-          }
-        },
-        onRaceDataSaved() {
-          // Call the character sheet's update method for all race-related data
-          if (this.$refs.characterSheet) {
-            this.$refs.characterSheet.updateFromLocalStorage();
-          }
-        },
-        onClassDataSaved() {
-          // Call the character sheet's update method for class data
-          if (this.$refs.characterSheet) {
-            this.$refs.characterSheet.updateFromLocalStorage();
+        } catch (error) {
+          console.error('Failed to load character-schema.json:', error);
+          this.error = 'Failed to load character schema.';
+        }
+        
+        // Load all other game data files
+        const dataFiles = ['races', 'classes', 'feats', 'spells'];
+        
+        for (const dataFile of dataFiles) {
+          try {
+            const response = await fetch(`data/${dataFile}.json`);
+            if (response.ok) {
+              const data = await response.json();
+              this.gameData[dataFile] = data[Object.keys(data)[0]] || data;
+            }
+          } catch (error) {
+            console.warn(`Failed to load ${dataFile}.json:`, error);
           }
         }
+      } catch (error) {
+        console.error('Failed to load game data:', error);
+        this.error = 'Failed to load game data.';
+      } finally {
+        this.loading = false;
       }
-    });
-    </script>
+    },
+    
+    // Character creation event handlers
+    onStepChanged(stepNumber) {
+      this.currentStep = stepNumber;
+      this.saveCurrentCharacterToLocalStorage();
+    },
+
+    // Character loading and management methods
+    loadCharacterAndView(characterKey) {
+      const character = this.loadCharacter(characterKey);
+      if (character) {
+        this.showCharacterSheet(character);
+      }
+    },
+
+    loadCharacterAndEdit(characterKey) {
+      const character = this.loadCharacter(characterKey);
+      if (character) {
+        this.currentCharacter = JSON.parse(JSON.stringify(character));
+        this.saveCurrentCharacterToLocalStorage();
+        this.currentView = 'create-character';
+        // Determine which step to start on based on character completion
+        this.currentStep = this.getNextIncompleteStep();
+      }
+    },
+
+    confirmDeleteCharacter(characterKey, characterName) {
+      if (confirm(`Are you sure you want to delete "${characterName}"? This action cannot be undone.`)) {
+        this.deleteCharacter(characterKey);
+      }
+    },
+
+    getNextIncompleteStep() {
+      for (let step = 1; step <= 9; step++) {
+        if (!this.isStepComplete(step)) {
+          return step;
+        }
+      }
+      return 9; // If all steps are complete, go to final step
+    },
+
+    formatDate(timestamp) {
+      if (!timestamp) return 'Unknown';
+      const date = new Date(timestamp);
+      return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    },
+
+    // Utility methods
+    clearError() {
+      this.error = null;
+    }
+  },
+  
+  // Initialize application
+  async mounted() {
+    this.loading = true;
+    await DataUtils.loadGameData(
+      this.gameData,
+      (msg) => { this.error = msg; },
+      () => { this.currentCharacter = this.resetCurrentCharacter(); }
+    );
+    this.loading = false;
+
+    this.loadCurrentCharacterFromLocalStorage();
+    this.loadSavedCharacters();
+
+    if (this.currentCharacter.race || this.currentCharacter.characterClass || 
+        this.currentCharacter.concept.trim() || 
+        Object.values(this.currentCharacter.abilityScores).some(score => score !== 10)) {
+      this.currentView = 'create-character';
+    }
+  }
+});
+</script>
   </body>
 </html>

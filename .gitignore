@@ -7,3 +7,6 @@ test-results/
 
 .claude
 CLAUDE.md
+# Local logs
+server.log
+*.log

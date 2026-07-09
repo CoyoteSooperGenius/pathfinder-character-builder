@@ -1,0 +1,51 @@
+{
+  "defaultCharacter": {
+    "abilityScores": {
+      "strength": 10,
+      "dexterity": 10,
+      "constitution": 10,
+      "intelligence": 10,
+      "wisdom": 10,
+      "charisma": 10
+    },
+    "abilityScoreMethod": "pointBuy",
+    "concept": "",
+    "alignment": "",
+    "race": null,
+    "racialTraits": [],
+    "languages": [],
+    "characterClass": null,
+    "classFeatures": [],
+    "hitPoints": 0,
+    "skills": {},
+    "skillPoints": 0,
+    "feats": [],
+    "equipment": [],
+    "startingGold": 0,
+    "spells": [],
+    "spellsPerDay": {},
+    "name": {
+      "first": "",
+      "last": ""
+    },
+    "age": "",
+    "gender": "",
+    "height": "",
+    "weight": "",
+    "appearance": "",
+    "background": "",
+    "level": 1,
+    "experiencePoints": 0,
+    "lastModified": null,
+    "armorClass": 10,
+    "initiative": 0,
+    "baseAttackBonus": 0,
+    "combatManeuverBonus": 0,
+    "combatManeuverDefense": 10,
+    "savingThrows": {
+      "fortitude": 0,
+      "reflex": 0,
+      "will": 0
+    }
+  }
+}

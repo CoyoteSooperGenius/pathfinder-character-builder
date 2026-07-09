@@ -1,90 +1,266 @@
+// Point Buy Method Component
+// Handles the Point Buy system for ability score generation
+
 Vue.component('point-buy-method', {
+  props: {
+    character: {
+      type: Object,
+      required: true
+    },
+    isActive: {
+      type: Boolean,
+      default: false
+    }
+  },
+
   data() {
     return {
-      totalPoints: 20,
-      currentScores: {
-        STR: 10, DEX: 10, CON: 10, INT: 10, WIS: 10, CHA: 10
+      // Point Buy state
+      pointBuyBudget: 25,
+      pointBuySpent: 0,
+      pointBuyLevels: {
+        15: { name: 'Low Fantasy', description: 'Gritty, realistic campaigns' },
+        20: { name: 'Standard Fantasy', description: 'Balanced heroic adventures' },
+        25: { name: 'High Fantasy', description: 'Powerful heroes and epic quests' },
+        30: { name: 'Epic Fantasy', description: 'Legendary heroes and cosmic threats' }
       },
-      pointBuyOptions: [
-        { value: 15, label: '15 Points (Low Fantasy)' },
-        { value: 20, label: '20 Points (Standard Fantasy)' },
-        { value: 25, label: '25 Points (High Fantasy)' },
-        { value: 30, label: '30 Points (Epic Fantasy)' }
-      ]
+      pointBuyCosts: {
+        7: -4, 8: -2, 9: -1, 10: 0, 11: 1, 12: 2, 13: 3, 14: 5, 15: 7, 16: 10, 17: 13, 18: 17
+      },
+
+      // Make GameUtils available to the template
+      GameUtils: window.GameUtils,
+
+      // Ability information
+      abilityNames: {
+        strength: 'Strength',
+        dexterity: 'Dexterity',
+        constitution: 'Constitution',
+        intelligence: 'Intelligence',
+        wisdom: 'Wisdom',
+        charisma: 'Charisma'
+      },
+
+      abilityDescriptions: {
+        strength: 'Physical power, affects melee attack rolls, damage, carrying capacity',
+        dexterity: 'Agility and reflexes, affects AC, ranged attacks, initiative',
+        constitution: 'Health and stamina, affects hit points and fortitude saves',
+        intelligence: 'Reasoning and memory, affects skill points and knowledge',
+        wisdom: 'Awareness and insight, affects perception and will saves',
+        charisma: 'Force of personality, affects social skills and spell DCs'
+      }
     };
   },
-  methods: {
-    onPointBuyChange() {
-      this.resetScores();
+
+  computed: {
+    currentScores() {
+      return this.character.abilityScores;
     },
-    resetScores() {
-      this.currentScores = {
-        STR: 10, DEX: 10, CON: 10, INT: 10, WIS: 10, CHA: 10
-      };
+
+    abilityModifiers() {
+      return GameUtils.calculateAbilityModifiers(this.currentScores);
     },
-    setAll14s() {
-      this.currentScores = {
-        STR: 14, DEX: 14, CON: 14, INT: 14, WIS: 14, CHA: 14
-      };
-      
-      // Calculate points needed for six 14s (6 * 5 = 30 points)
-      const pointsNeeded = 6 * AbilityCalculator.getPointBuyCost(14);
-      
-      // If we don't have enough points, automatically increase to 30 points (Epic Fantasy)
-      if (pointsNeeded > this.totalPoints) {
-        this.totalPoints = 30;
+
+    pointBuyRemaining() {
+      return this.pointBuyBudget - this.pointBuySpent;
+    },
+
+    // Complete when the full point budget has been spent
+    isComplete() {
+      return this.pointBuyRemaining === 0;
+    },
+
+    currentFantasyLevel() {
+      return this.pointBuyLevels[this.pointBuyBudget] || { name: 'Custom', description: 'Custom point buy level' };
+    },
+
+    totalPointsSpent() {
+      return this.pointBuySpent;
+    },
+
+    canAffordIncrease() {
+      const result = {};
+      for (const ability of Object.keys(this.abilityNames)) {
+        const currentScore = this.currentScores[ability];
+        const newCost = this.pointBuyCosts[currentScore + 1] || 0;
+        const currentCost = this.pointBuyCosts[currentScore] || 0;
+        const additionalCost = newCost - currentCost;
+        result[ability] = currentScore < 18 && this.pointBuyRemaining >= additionalCost;
+      }
+      return result;
+    },
+
+    canAffordDecrease() {
+      const result = {};
+      for (const ability of Object.keys(this.abilityNames)) {
+        const currentScore = this.currentScores[ability];
+        result[ability] = currentScore > 7;
+      }
+      return result;
+    }
+  },
+
+  watch: {
+    isActive: {
+      immediate: true,
+      handler(newValue) {
+        if (newValue) {
+          this.initializePointBuy();
+        }
       }
     },
-    onScoresChanged(newScores) {
-      this.currentScores = { ...newScores };
-      this.checkCompletion();
-    },
-    checkCompletion() {
-      const totalCost = AbilityCalculator.calculatePointBuyTotal(this.currentScores);
-      const isComplete = totalCost === this.totalPoints;
-      
-      if (isComplete) {
-        const abilityScores = {
-          method: 'point-buy',
-          totalPoints: this.totalPoints,
-          scores: { ...this.currentScores }
-        };
-        this.$emit('complete', { isComplete: true, abilityScores });
-      } else {
-        this.$emit('incomplete');
+
+    isComplete: {
+      immediate: true,
+      handler(complete) {
+        this.$emit('completion-changed', complete);
       }
     }
   },
+
+  methods: {
+    initializePointBuy() {
+      const scores = {};
+      for (const ability of Object.keys(this.abilityNames)) {
+        scores[ability] = 10;
+      }
+      this.updateCharacterScores(scores);
+      this.calculatePointBuySpent();
+    },
+
+    setPointBuyLevel(points) {
+      this.pointBuyBudget = parseInt(points);
+      if (this.pointBuySpent > this.pointBuyBudget) {
+        this.initializePointBuy();
+      }
+    },
+
+    increaseScore(ability) {
+      if (!this.canAffordIncrease[ability]) return;
+
+      const currentScore = this.character.abilityScores[ability];
+      this.character.abilityScores[ability] = currentScore + 1;
+      this.calculatePointBuySpent();
+      this.$emit('scores-changed');
+    },
+
+    decreaseScore(ability) {
+      if (!this.canAffordDecrease[ability]) return;
+
+      const currentScore = this.character.abilityScores[ability];
+      this.character.abilityScores[ability] = currentScore - 1;
+      this.calculatePointBuySpent();
+      this.$emit('scores-changed');
+    },
+
+    calculatePointBuySpent() {
+      let spent = 0;
+      for (const ability of Object.keys(this.abilityNames)) {
+        const score = this.character.abilityScores[ability];
+        spent += this.pointBuyCosts[score] || 0;
+      }
+      this.pointBuySpent = spent;
+    },
+
+    getPointCost(score) {
+      return this.pointBuyCosts[score] || 0;
+    },
+
+    updateCharacterScores(scores) {
+      Object.assign(this.character.abilityScores, scores);
+      this.$emit('scores-changed');
+    },
+
+    getModifierText(modifier) {
+      return modifier >= 0 ? `+${modifier}` : `${modifier}`;
+    }
+  },
+
   template: `
-    <div>
-      <div class="mb-3">
-        <label for="point-buy-total" class="form-label fw-bold">Point Buy Total:</label>
-        <select id="point-buy-total" v-model="totalPoints" @change="onPointBuyChange" class="form-select mb-3">
-          <option v-for="option in pointBuyOptions" :key="option.value" :value="option.value">
-            {{ option.label }}
-          </option>
-        </select>
-      </div>
-      
-      <div class="mb-3">
-        <div class="d-flex gap-2">
-          <button @click="setAll14s" class="btn btn-success">Quick Set (All 14s)</button>
+    <div v-if="isActive" class="point-buy-method">
+      <div class="mb-4">
+        <div>
+          <pf-card title="Point Buy System">
+            <template #subtitle>
+              <div class="d-flex flex-wrap align-items-center gap-3">
+                <span class="badge bg-primary fs-6">{{ currentFantasyLevel.name }}</span>
+                <span :class="pointBuyRemaining < 0 ? 'text-danger' : 'text-success'">
+                  {{ totalPointsSpent }}/{{ pointBuyBudget }} points spent
+                </span>
+                <span :class="pointBuyRemaining < 0 ? 'text-danger' : 'text-muted'">
+                  ({{ pointBuyRemaining }} remaining)
+                </span>
+              </div>
+            </template>
+            
+            <!-- Point Buy Level Selector -->
+            <div class="mb-4">
+              <div class="pf-grid pf-grid--2 align-items-center">
+                <div>
+                  <label class="form-label fw-bold">Fantasy Level:</label>
+                  <select 
+                    class="form-select" 
+                    :value="pointBuyBudget" 
+                    @change="setPointBuyLevel($event.target.value)"
+                  >
+                    <option 
+                      v-for="(level, points) in pointBuyLevels" 
+                      :key="points" 
+                      :value="points"
+                    >
+                      {{ level.name }} ({{ points }} points)
+                    </option>
+                  </select>
+                </div>
+                <div>
+                  <small class="text-muted">
+                    <strong>{{ currentFantasyLevel.name }}:</strong><br>
+                    {{ currentFantasyLevel.description }}
+                  </small>
+                </div>
+              </div>
+            </div>
+            
+            <div class="pf-grid pf-grid--2">
+              <div v-for="ability in Object.keys(abilityNames)" :key="ability">
+                <div class="ability-score-control d-flex align-items-center justify-content-between p-3 border rounded">
+                  <div class="ability-info">
+                    <strong>{{ abilityNames[ability] }}</strong>
+                    <br>
+                    <small class="text-muted">{{ abilityDescriptions[ability] }}</small>
+                  </div>
+                  <div class="ability-controls d-flex align-items-center">
+                    <pf-button 
+                      size="sm" 
+                      variant="secondary"
+                      outline
+                      :disabled="!canAffordDecrease[ability]"
+                      @click="decreaseScore(ability)"
+                    >
+                      <i class="fas fa-minus"></i>
+                    </pf-button>
+                    <div class="mx-3 text-center">
+                      <div class="h5 mb-0">{{ currentScores[ability] }}</div>
+                      <small class="text-muted">({{ getModifierText(abilityModifiers[ability]) }})</small>
+                      <br>
+                      <small class="badge bg-secondary">{{ getPointCost(currentScores[ability]) }} pts</small>
+                    </div>
+                    <pf-button 
+                      size="sm" 
+                      variant="secondary"
+                      outline
+                      :disabled="!canAffordIncrease[ability]"
+                      @click="increaseScore(ability)"
+                    >
+                      <i class="fas fa-plus"></i>
+                    </pf-button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </pf-card>
         </div>
       </div>
-      
-      <ability-score-adjuster
-        :scores="currentScores"
-        mode="point-buy"
-        :total-points="totalPoints"
-        :base-score="10"
-        :min-score="7"
-        :max-score="18"
-        :show-modifiers="true"
-        :show-point-costs="true"
-        :show-remaining-points="true"
-        layout="table"
-        @scores-changed="onScoresChanged"
-      />
     </div>
   `
 });
